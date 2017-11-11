@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Colorflood</string>
+    <item name="button_number" type="id"></item>
 </resources>
