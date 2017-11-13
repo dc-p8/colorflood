@@ -53,17 +53,23 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
         canvas.drawRGB(50, 50, 50);
 
-        Log.d(getClass().getName(),"" + caseWidth);
-        Log.d(getClass().getName(), "" + caseHeight);
+
+
+        float caseheight = (float)getHeight() / (float)nbCasesHeight;
+        float casewidth =  (float)getWidth() / (float)nbCasesWidth;
+        /*
+        Log.d(getClass().getName(),"" + casewidth + " " + (float)nbCasesWidth);
+        Log.d(getClass().getName(), "" + caseheight);
+        */
 
         for(int i = 0; i < nbCasesHeight; i++)
         {
-            int y = caseHeight * i;
+            float y = caseheight * i;
             for(int j = 0; j < nbCasesWidth; j++)
             {
-                int x = caseWidth * j;
+                float x = casewidth * j;
                 p.setColor(casesColors[cases[i][j]]);
-                canvas.drawRect(new Rect(x, y, x + caseWidth, y + caseHeight), p);
+                canvas.drawRect(x, y, x + casewidth, y + caseheight, p);//new Rect(x, y, x + caseWidth, y + caseHeight), p);
             }
         }
     }
