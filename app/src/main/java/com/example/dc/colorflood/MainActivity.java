@@ -1,8 +1,11 @@
 package com.example.dc.colorflood;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     int w = 10, h = 10;
     int[][] cases;
     Random random;
+    Context context;
 
     public MainActivity() {
         super();
@@ -58,11 +62,25 @@ public class MainActivity extends AppCompatActivity {
 
         myGame.setLevel(cases, w, h, colors);
 
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1.0f
         );
+
+
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                5,
+                r.getDisplayMetrics()
+        );
+        params.setMargins(px, px, px, px);
+
+        LinearLayout.LayoutParams param = params;
+
+
+
 
         for(int i = 0; i < 5; i++)
         {
