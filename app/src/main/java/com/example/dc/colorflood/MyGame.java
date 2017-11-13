@@ -12,6 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 
 public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callback{
@@ -19,7 +20,7 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
     volatile boolean running = false;
     Thread thread;
     Random random;
-
+    Semaphore semaphore;
     public int nbCasesWidth;
     public int nbCasesHeight;
     public int[][] cases;
@@ -31,7 +32,7 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
     public MyGame(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-
+        semaphore = new Semaphore(0);
         holder = getHolder();
         holder.addCallback(this);
         setWillNotDraw(false);
@@ -73,7 +74,8 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
         while (running)
         {
             try {
-                Thread.sleep(500);
+                semaphore.acquire();
+                Log.d(getClass().getSimpleName(), "after sem wait");
                 canvas = holder.lockCanvas();
                 if(canvas != null)
                 {
@@ -94,24 +96,27 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
     }
 
-//    public void update()
-//    {
-//        Canvas canvas = null;
-//        try {
-//            canvas = holder.lockCanvas();
-//            if(canvas != null)
-//            {
-//                nDraw(canvas);
-//            }
-//        }
-//        catch (Exception e){
-//            Log.e(getClass().getSimpleName(), e.getMessage());
-//        }
-//        finally {
-//            if(canvas != null)
-//                holder.unlockCanvasAndPost(canvas);
-//        }
-//    }
+    public void update()
+    {
+        semaphore.release();
+        /*
+        Canvas canvas = null;
+        try {
+            canvas = holder.lockCanvas();
+            if(canvas != null)
+            {
+                nDraw(canvas);
+            }
+        }
+        catch (Exception e){
+            Log.e(getClass().getSimpleName(), e.getMessage());
+        }
+        finally {
+            if(canvas != null)
+                holder.unlockCanvasAndPost(canvas);
+        }
+        */
+    }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {

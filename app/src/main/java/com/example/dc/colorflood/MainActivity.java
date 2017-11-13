@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     myGame.cases[0][0] = (int)bt.getTag(R.id.button_number);
+                    myGame.update();
                 }
             });
             bt.setTag(R.id.button_number, i);
@@ -78,5 +79,7 @@ public class MainActivity extends AppCompatActivity {
             bt.setLayoutParams(param);
             colorsLayout.addView(bt);
         }
+
+        myGame.update();
     }
 }
