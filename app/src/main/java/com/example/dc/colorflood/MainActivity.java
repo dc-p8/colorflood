@@ -94,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             });
             bt.setTag(R.id.button_number, i);
             bt.setBackgroundColor(colors[i]);
+            
             bt.setLayoutParams(param);
             colorsLayout.addView(bt);
         }

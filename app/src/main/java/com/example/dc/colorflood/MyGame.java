@@ -105,6 +105,7 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
     public void update()
     {
         semaphore.release();
+
         /*
         Canvas canvas = null;
         try {
@@ -126,24 +127,27 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.d(getClass().getSimpleName(), "SurfaceCreated");
+
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.d(getClass().getSimpleName(), "SurfaceChanged");
+        caseWidth = getWidth() / nbCasesWidth;
+        caseHeight = getHeight() / nbCasesHeight;
         if (thread == null)
         {
             thread = new Thread(this);
             thread.start();
         }
         running = true;
-
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        caseWidth = getWidth() / nbCasesWidth;
-        caseHeight = getHeight() / nbCasesHeight;
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        Log.d(getClass().getSimpleName(), "SurfaceDestroyed");
         running = false;
         boolean retry = true;
         while (retry) {
