@@ -9,20 +9,23 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.concurrent.Semaphore;
 
 
 public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
     volatile boolean running = false;
     Thread thread;
+    Semaphore semaphore;
     volatile Level lvl;
 
 
     public MyGame(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        this.holder = getHolder();
-        this.holder.addCallback(this);
+        semaphore = new Semaphore(0);
+        holder = getHolder();
+        holder.addCallback(this);
         setWillNotDraw(false);
         this.lvl = new Level();
 
@@ -34,7 +37,8 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
         while (running)
         {
             try {
-                Thread.sleep(500);
+                semaphore.acquire();
+                Log.d(getClass().getSimpleName(), "after sem wait");
                 canvas = holder.lockCanvas();
                 synchronized (holder) {
                         lvl.draw(canvas);
@@ -49,8 +53,23 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
         }
     }
 
+    public void update()
+    {
+        semaphore.release();
+    }
+
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.d(getClass().getSimpleName(), "SurfaceCreated");
+
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        Log.d(getClass().getSimpleName(), "SurfaceChanged");
+        this.lvl.setCaseWidth(getWidth() / this.lvl.getNbCasesWidth());
+        this.lvl.setCaseHeight(getHeight() / this.lvl.getNbCasesHeight());
         if (thread == null)
         {
             thread = new Thread(this);
@@ -58,12 +77,6 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
         }
         running = true;
 
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        this.lvl.setCaseWidth(getWidth() / this.lvl.getNbCasesWidth());
-        this.lvl.setCaseHeight(getHeight() / this.lvl.getNbCasesHeight());
     }
 
     void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors){
@@ -76,6 +89,7 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d(getClass().getSimpleName(), "SurfaceDestroyed");
         running = false;
         boolean retry = true;
         while (retry) {

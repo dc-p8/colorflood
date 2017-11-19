@@ -1,8 +1,11 @@
 package com.example.dc.colorflood;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     MyGame myGame;
     int lvlHeight = 10, lvlWidth = 10;
     int nbColors = 5;
+    Context context;
 
     public MainActivity() {
         super();
@@ -29,11 +33,25 @@ public class MainActivity extends AppCompatActivity {
         myGame = (MyGame)findViewById(R.id.mygame);
         myGame.initLevel(lvlWidth, lvlHeight, nbColors);
 
-        LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 1.0f
         );
+
+
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                5,
+                r.getDisplayMetrics()
+        );
+        params.setMargins(px, px, px, px);
+
+        LinearLayout.LayoutParams param = params;
+
+
+
 
         for(int i = 0; i < nbColors; i++)
         {
@@ -42,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     myGame.lvl.changeColor((int)bt.getTag(R.id.button_number));
+                    myGame.update();
                 }
             });
             bt.setTag(R.id.button_number, i);
@@ -49,5 +68,7 @@ public class MainActivity extends AppCompatActivity {
             bt.setLayoutParams(param);
             colorsLayout.addView(bt);
         }
+
+        myGame.update();
     }
 }
