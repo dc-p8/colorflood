@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         this.colorsButtonsLayout = findViewById(R.id.colors);
         this.myGame = findViewById(R.id.mygame);
+
         this.myGame.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -53,6 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         this.colorsButtonsLayout.addButtons(this.myGame.lvl.getCasesColors());
 
-        this.myGame.update();
+        //this.myGame.update();
     }
 }

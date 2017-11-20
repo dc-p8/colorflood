@@ -4,26 +4,31 @@ import android.content.Context;
 import android.graphics.Canvas;
 
 
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
     volatile boolean running = false;
     Thread thread;
-    Semaphore semaphore;
+    volatile Lock l;
     volatile Level lvl;
 
 
     public MyGame(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        semaphore = new Semaphore(0);
         holder = getHolder();
         holder.addCallback(this);
         setWillNotDraw(false);
@@ -34,48 +39,81 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
     @Override
     public void run() {
         Canvas canvas = null;
+        boolean first = true;
         while (running)
         {
             try {
-                semaphore.acquire();
-                Log.d(getClass().getSimpleName(), "after sem wait");
-                canvas = holder.lockCanvas();
-                synchronized (holder) {
-                        lvl.draw(canvas);
+                if(!first)
+                {
+                    synchronized (this)
+                    {
+                        wait();
+                    }
+
                 }
+                else
+                {
+
+                }
+                first = false;
+
+                Log.d("run", "after sem wait");
+                canvas = holder.lockCanvas();
+                if(canvas != null)
+                    lvl.draw(canvas);
+
             }
             catch (Exception e){
                 Log.e(getClass().getSimpleName(), e.getMessage());
             }
             finally {
-                holder.unlockCanvasAndPost(canvas);
+                if(canvas != null)
+                    holder.unlockCanvasAndPost(canvas);
             }
         }
     }
 
     public void update()
     {
-        semaphore.release();
+        Log.d("Update", "calling update");
+        synchronized (this) {
+            notify();
+        }
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d(getClass().getSimpleName(), "SurfaceCreated");
-
+        Log.d("SufaceCreated", "SurfaceCreated");
 
     }
+
+
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.d(getClass().getSimpleName(), "SurfaceChanged");
+
+        if(thread == null)
+            Log.d(getClass().getSimpleName(), "thread null");
+        else
+        {
+            Log.d(getClass().getSimpleName(), "thread non null");
+            Log.d("surfacechanged", thread.getState().name());
+        }
+
+
+
+
         this.lvl.setCaseWidth(getWidth() / this.lvl.getNbCasesWidth());
         this.lvl.setCaseHeight(getHeight() / this.lvl.getNbCasesHeight());
-        if (thread == null)
-        {
+
+        if(thread == null || thread.getState() == Thread.State.TERMINATED) {
             thread = new Thread(this);
             thread.start();
         }
+
         running = true;
+        update();
 
     }
 
@@ -89,11 +127,16 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d(getClass().getSimpleName(), "SurfaceDestroyed");
+        Log.d("surfacedestroyed", "SurfaceDestroyed");
         running = false;
         boolean retry = true;
         while (retry) {
             try {
+                synchronized (this)
+                {
+                    notifyAll();
+                }
+
                 thread.join();
                 retry = false;
             } catch (InterruptedException e) {
