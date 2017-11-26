@@ -19,12 +19,12 @@ class Level {
     private int nbCasesHeight;
     private int[][] cases;
     private int[] casesColors;
-    private int caseWidth, caseHeight;
+    private float caseWidth, caseHeight;
     private final static Random random = new Random();
 
-    Level(){}
+    public Level(){}
 
-    Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, int caseWidth, int caseHeight) {
+    public Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight) {
         this.nbCasesWidth = nbCasesWidth;
         this.nbCasesHeight = nbCasesHeight;
         this.cases = cases;
@@ -33,7 +33,7 @@ class Level {
         this.caseHeight = caseHeight;
     }
 
-    Level(Level lvl){
+    public Level(Level lvl){
         this.nbCasesWidth = lvl.nbCasesWidth;
         this.nbCasesHeight = lvl.nbCasesHeight;
         this.cases = new int[lvl.nbCasesWidth][lvl.nbCasesHeight];
@@ -76,19 +76,19 @@ class Level {
         this.casesColors = casesColors;
     }
 
-    int getCaseWidth() {
+    float getCaseWidth() {
         return caseWidth;
     }
 
-    void setCaseWidth(int caseWidth) {
+    void setCaseWidth(float caseWidth) {
         this.caseWidth = caseWidth;
     }
 
-    int getCaseHeight() {
+    float getCaseHeight() {
         return caseHeight;
     }
 
-    void setCaseHeight(int caseHeight) {
+    void setCaseHeight(float caseHeight) {
         this.caseHeight = caseHeight;
     }
 
@@ -97,17 +97,19 @@ class Level {
 
         canvas.drawRGB(50, 50, 50);
 
+
         Log.d(getClass().getName(),"" + caseWidth);
         Log.d(getClass().getName(), "" + caseHeight);
 
+
         for(int i = 0; i < nbCasesHeight; i++)
         {
-            int y = caseHeight * i;
+            float y = caseHeight * (float)i;
             for(int j = 0; j < nbCasesWidth; j++)
             {
-                int x = caseWidth * j;
+                float x = caseWidth * (float)j;
                 p.setColor(casesColors[cases[i][j]]);
-                canvas.drawRect(new Rect(x, y, x + caseWidth, y + caseHeight), p);
+                canvas.drawRect(x, y, x + caseWidth, y + caseHeight, p);
             }
         }
     }
@@ -198,8 +200,8 @@ class Level {
     void saveState(Bundle state) {
         state.putInt("nbCasesWidth", this.nbCasesWidth);
         state.putInt("nbCasesHeight", this.nbCasesHeight);
-        state.putInt("caseWidth", this.caseWidth);
-        state.putInt("caseHeight", this.caseHeight);
+        state.putFloat("caseWidth", this.caseWidth);
+        state.putFloat("caseHeight", this.caseHeight);
         state.putIntArray("casesColors", this.casesColors);
         for(int i = 0 ; i < this.nbCasesWidth ; i++) {
             state.putIntArray("cases" + i, this.cases[i]);
@@ -209,8 +211,8 @@ class Level {
     void restoreState(Bundle state) {
         this.nbCasesWidth = state.getInt("nbCasesWidth");
         this.nbCasesHeight = state.getInt("nbCasesHeight");
-        this.caseWidth = state.getInt("caseWidth");
-        this.caseHeight = state.getInt("caseHeight");
+        this.caseWidth = state.getFloat("caseWidth");
+        this.caseHeight = state.getFloat("caseHeight");
         this.casesColors = state.getIntArray("casesColors");
         this.cases = new int[this.nbCasesWidth][this.nbCasesHeight];
         for(int i=0 ; i < this.nbCasesWidth ; i++)

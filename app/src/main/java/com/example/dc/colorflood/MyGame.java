@@ -105,8 +105,8 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
 
 
-        this.lvl.setCaseWidth(getWidth() / this.lvl.getNbCasesWidth());
-        this.lvl.setCaseHeight(getHeight() / this.lvl.getNbCasesHeight());
+        this.lvl.setCaseWidth((float)getWidth() / (float)this.lvl.getNbCasesWidth());
+        this.lvl.setCaseHeight((float)getHeight() / (float)this.lvl.getNbCasesHeight());
 
         if(thread == null || thread.getState() == Thread.State.TERMINATED) {
             thread = new Thread(this);
@@ -121,8 +121,8 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
     void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors){
         this.lvl.setNbCasesWidth(nbCasesWidth);
         this.lvl.setNbCasesHeight(nbCasesHeight);
-        this.lvl.setCaseWidth(getWidth() / nbCasesWidth);
-        this.lvl.setCaseHeight(getHeight() / nbCasesHeight);
+        this.lvl.setCaseWidth((float)getWidth() / (float)nbCasesWidth);
+        this.lvl.setCaseHeight((float)getHeight() / (float)nbCasesHeight);
         this.lvl.initLevel(nbColors);
     }
 
