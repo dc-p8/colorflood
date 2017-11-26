@@ -12,15 +12,15 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Launcher extends AppCompatActivity {
-    Button buttonPlay;
-    Button buttonCredits;
-    Button buttonSystem;
+    private Button buttonPlay;
+    private Button buttonCredits;
+    private Button buttonSystem;
 
-    TextView textExtraTry;
-    TextView textCurrentLevel;
-    int extraTry = 0;
-    int currentLevel = 0;
-    StatsViewModel statsViewModel;
+    private TextView textExtraTry;
+    private TextView textCurrentLevel;
+    private int extraTry = 0;
+    private int currentLevel = 0;
+    private StatsViewModel statsViewModel;
 
     @Override
     protected void onDestroy() {

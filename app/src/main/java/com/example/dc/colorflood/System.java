@@ -9,9 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class System extends AppCompatActivity {
-    Button buttonReset;
-    Button toggleAudio;
-    StatsViewModel statsViewModel;
+    private StatsViewModel statsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +17,7 @@ public class System extends AppCompatActivity {
         statsViewModel = StatsViewModel.getInstance();
         setContentView(R.layout.activity_system);
         final Context c = this;
-        buttonReset = findViewById(R.id.button_reset);
+        Button buttonReset = findViewById(R.id.button_reset);
         buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,13 +33,13 @@ public class System extends AppCompatActivity {
                         .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                statsViewModel.updateStats(-1, -1);
+                                statsViewModel.updateStats(1, 0);
                             }
                         }).show();
             }
         });
 
-        toggleAudio = findViewById(R.id.toggle_audio);
+        Button toggleAudio = findViewById(R.id.toggle_audio);
         toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

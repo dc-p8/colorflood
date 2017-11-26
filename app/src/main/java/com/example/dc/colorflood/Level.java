@@ -20,18 +20,22 @@ class Level {
     private int[][] cases;
     private int[] casesColors;
     private float caseWidth, caseHeight;
+    private int maxNbMoves;
+    private int nbMoves = 0;
     private final static Random random = new Random();
     private OnWinEventListener winEventListener;
 
     public Level(){}
 
-    public Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight) {
+    public Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight, int maxNbMoves) {
         this.nbCasesWidth = nbCasesWidth;
         this.nbCasesHeight = nbCasesHeight;
         this.cases = cases;
         this.casesColors = casesColors;
         this.caseWidth = caseWidth;
         this.caseHeight = caseHeight;
+        this.maxNbMoves = maxNbMoves;
+        this.maxNbMoves = maxNbMoves;
     }
 
     public Level(Level lvl){
@@ -43,6 +47,8 @@ class Level {
         this.casesColors = lvl.casesColors.clone();
         this.caseWidth = lvl.caseWidth;
         this.caseHeight = lvl.caseHeight;
+        this.maxNbMoves = lvl.maxNbMoves;
+        this.nbMoves = lvl.nbMoves;
     }
 
     void setWinEventListener(OnWinEventListener eventListener) {
@@ -97,6 +103,18 @@ class Level {
         this.caseHeight = caseHeight;
     }
 
+    int getMaxNbMoves() {
+        return maxNbMoves;
+    }
+
+    void setMaxNbMoves(int maxNbMoves) {
+        this.maxNbMoves = maxNbMoves;
+    }
+
+    int getNbMoves() {
+        return nbMoves;
+    }
+
     void draw(Canvas canvas) {
         Paint p = new Paint();
 
@@ -120,6 +138,7 @@ class Level {
     }
 
     void play(int newColor) {
+        this.nbMoves++;
         int nbCaseColored = 0;
         LinkedList<Pair<Integer,Integer>> changeFifo = new LinkedList<>();
         LinkedList<Pair<Integer,Integer>> winFifo = new LinkedList<>();
@@ -183,6 +202,7 @@ class Level {
 
 
     void initLevel(int nbColors) {
+        this.nbMoves = 0;
         this.cases = new int[this.nbCasesHeight][this.nbCasesWidth];
         this.casesColors = new int[nbColors];
 

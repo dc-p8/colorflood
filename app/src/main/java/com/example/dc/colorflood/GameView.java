@@ -52,10 +52,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                     }
 
                 }
-                else
-                {
-
-                }
                 first = false;
 
                 Log.d("run", "after sem wait");
@@ -116,11 +112,12 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     }
 
-    void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors){
+    void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors, int maxNbCount){
         this.lvl.setNbCasesWidth(nbCasesWidth);
         this.lvl.setNbCasesHeight(nbCasesHeight);
         this.lvl.setCaseWidth((float)getWidth() / (float)nbCasesWidth);
         this.lvl.setCaseHeight((float)getHeight() / (float)nbCasesHeight);
+        this.lvl.setMaxNbMoves(maxNbCount);
         this.lvl.initLevel(nbColors);
     }
 

@@ -16,7 +16,7 @@ public class StatsViewModel extends AndroidViewModel {
 
     public StatsViewModel(Application application) {
         super(application);
-        sP = PreferenceManager.getDefaultSharedPreferences(application);
+        this.sP = PreferenceManager.getDefaultSharedPreferences(application);
     }
 
     void resetInstance(){
@@ -40,11 +40,11 @@ public class StatsViewModel extends AndroidViewModel {
     }
 
     LiveData<Pair<Integer, Integer>> getStats(){
-        if (stats == null) {
-            stats = new MutableLiveData<>();
+        if (this.stats == null) {
+            this.stats = new MutableLiveData<>();
             loadStats();
         }
-        return stats;
+        return this.stats;
     }
 
     private void loadStats() {
