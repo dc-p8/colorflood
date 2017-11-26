@@ -7,7 +7,6 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.system.Os;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -19,13 +18,13 @@ public class Game extends AppCompatActivity implements Runnable
 {
     ButtonBar colorsButtonsLayout;
     MyGame myGame;
-    TextView text_timer;
+    TextView textTimer;
     int lvlHeight = 10, lvlWidth = 10;
     int nbColors = 5;
-    private long timer_from_resume;
+    private long timerFromResume;
     private Handler timerHandler;
     private Thread thread;
-    private long timer_total = 0;
+    private long timerTotal = 0;
 
 
     public Game() {
@@ -59,7 +58,7 @@ public class Game extends AppCompatActivity implements Runnable
     protected void onResume() {
         super.onResume();
         Log.e(getClass().getSimpleName(), "RESUMED");
-        timer_from_resume = java.lang.System.currentTimeMillis();
+        timerFromResume = java.lang.System.currentTimeMillis();
         thread.start();
     }
 
@@ -73,7 +72,7 @@ public class Game extends AppCompatActivity implements Runnable
     @Override
     protected void onPause() {
         super.onPause();
-        timer_total += (java.lang.System.currentTimeMillis() - timer_from_resume);
+        timerTotal += (java.lang.System.currentTimeMillis() - timerFromResume);
         Log.e(getClass().getSimpleName(), "PAUSED");
         timerHandler.removeCallbacks(this);
     }
@@ -84,7 +83,7 @@ public class Game extends AppCompatActivity implements Runnable
         setContentView(R.layout.activity_game);
         this.colorsButtonsLayout = findViewById(R.id.colors);
         this.myGame = findViewById(R.id.mygame);
-        this.text_timer = findViewById(R.id.text_timer);
+        this.textTimer = findViewById(R.id.text_timer);
         this.myGame.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors);
         this.myGame.lvl.setWinEventListener(new Level.OnWinEventListener() {
             public void onWin() {
@@ -136,13 +135,13 @@ public class Game extends AppCompatActivity implements Runnable
 
     @Override
     public void run() {
-        long delay = (java.lang.System.currentTimeMillis() - timer_from_resume) + timer_total;
+        long delay = (java.lang.System.currentTimeMillis() - timerFromResume) + timerTotal;
         final long currenttime = delay / 1000;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.e(getClass().getSimpleName(), "running");
-                text_timer.setText(String.valueOf(currenttime));
+                textTimer.setText(String.valueOf(currenttime));
             }
         });
         timerHandler.postDelayed(this, 1000);

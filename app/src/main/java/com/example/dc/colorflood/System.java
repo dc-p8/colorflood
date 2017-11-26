@@ -9,15 +9,15 @@ import android.view.View;
 import android.widget.Button;
 
 public class System extends AppCompatActivity {
-    Button button_reset;
-    Button toggle_audio;
+    Button buttonReset;
+    Button toggleAudio;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system);
         final Context c = this;
-        button_reset = findViewById(R.id.button_reset);
-        button_reset.setOnClickListener(new View.OnClickListener() {
+        buttonReset = findViewById(R.id.button_reset);
+        buttonReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.playSoundEffect(android.view.SoundEffectConstants.CLICK);
@@ -43,8 +43,8 @@ public class System extends AppCompatActivity {
             }
         });
 
-        toggle_audio = findViewById(R.id.toggle_audio);
-        toggle_audio.setOnClickListener(new View.OnClickListener() {
+        toggleAudio = findViewById(R.id.toggle_audio);
+        toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 /*

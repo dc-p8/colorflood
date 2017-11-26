@@ -2,12 +2,7 @@ package com.example.dc.colorflood;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,12 +12,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Launcher extends AppCompatActivity {
-    Button button_play;
-    Button button_credits;
-    Button button_system;
+    Button buttonPlay;
+    Button buttonCredits;
+    Button buttonSystem;
 
-    TextView text_extraTry;
-    TextView text_currentLevel;
+    TextView textExtraTry;
+    TextView textCurrentLevel;
     int extraTry = 0;
     int currentLevel = 0;
     StatsViewModel statsViewModel;
@@ -53,11 +48,11 @@ public class Launcher extends AppCompatActivity {
         statsViewModel = ViewModelProviders.of(this).get(StatsViewModel.class);
         setContentView(R.layout.activity_launcher);
 
-        text_currentLevel = findViewById(R.id.text_currentLevel);
-        text_extraTry = findViewById(R.id.text_extraTry);
+        textCurrentLevel = findViewById(R.id.text_currentLevel);
+        textExtraTry = findViewById(R.id.text_extraTry);
 
-        button_play = findViewById(R.id.button_play);
-        button_play.setOnClickListener(new View.OnClickListener() {
+        buttonPlay = findViewById(R.id.button_play);
+        buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Game.class);
@@ -65,8 +60,8 @@ public class Launcher extends AppCompatActivity {
             }
         });
 
-        button_credits = findViewById(R.id.button_credits);
-        button_credits.setOnClickListener(new View.OnClickListener() {
+        buttonCredits = findViewById(R.id.button_credits);
+        buttonCredits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Credits.class);
@@ -74,8 +69,8 @@ public class Launcher extends AppCompatActivity {
             }
         });
 
-        button_system = findViewById(R.id.button_system);
-        button_system.setOnClickListener(new View.OnClickListener() {
+        buttonSystem = findViewById(R.id.button_system);
+        buttonSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, System.class);
@@ -97,7 +92,7 @@ public class Launcher extends AppCompatActivity {
             }
         });
 
-        text_extraTry.setText("Extra try : " + String.valueOf(extraTry));
-        text_currentLevel.setText("Niveau actuel : " + String.valueOf(currentLevel));
+        textExtraTry.setText("Extra try : " + String.valueOf(extraTry));
+        textCurrentLevel.setText("Niveau actuel : " + String.valueOf(currentLevel));
     }
 }
