@@ -3,6 +3,7 @@ package com.example.dc.colorflood;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,19 +13,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class Game extends AppCompatActivity
+public class Game extends AppCompatActivity implements Runnable
 {
     ButtonBar colorsButtonsLayout;
     MyGame myGame;
     TextView text_timer;
     int lvlHeight = 10, lvlWidth = 10;
     int nbColors = 5;
-    Context context;
     private long timer_from_resume;
-    private long timer_from_pause = 0;
-    //private Handler timerHandler;
+    private Handler timerHandler;
     private Thread thread;
-    private boolean running = true;
     private long timer_total = 0;
 
 
@@ -60,7 +58,6 @@ public class Game extends AppCompatActivity
         super.onResume();
         Log.e(getClass().getSimpleName(), "RESUMED");
         timer_from_resume = System.currentTimeMillis();
-        running = true;
         thread.start();
     }
 
@@ -76,16 +73,7 @@ public class Game extends AppCompatActivity
         super.onPause();
         timer_total += (System.currentTimeMillis() - timer_from_resume);
         Log.e(getClass().getSimpleName(), "PAUSED");
-        running = false;
-        try
-        {
-            thread.join();
-        }
-        catch (Exception e)
-        {
-            Log.e(getClass().getSimpleName(), e.getMessage());
-        }
-        //timerHandler.removeCallbacks(this);
+        timerHandler.removeCallbacks(this);
     }
 
     @Override
@@ -121,33 +109,9 @@ public class Game extends AppCompatActivity
         });
 
         this.colorsButtonsLayout.addButtons(this.myGame.lvl.getCasesColors());
-        //timerHandler = new Handler();
+        timerHandler = new Handler();
+        thread = new Thread(this);
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (running) {
-
-                    long delay = (System.currentTimeMillis() - timer_from_resume) + timer_total;
-                    final long currenttime = delay / 1000;
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Log.e(getClass().getSimpleName(), "running");
-                            text_timer.setText(String.valueOf(currenttime));
-                        }
-                    });
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (Exception e) {
-                    }
-                    //timerHandler.postDelayed(this, 1000);
-
-                }
-            }
-        };
-        thread = new Thread(runnable);
     }
 
     @Override
@@ -163,4 +127,17 @@ public class Game extends AppCompatActivity
     }
 
 
+    @Override
+    public void run() {
+        long delay = (System.currentTimeMillis() - timer_from_resume) + timer_total;
+        final long currenttime = delay / 1000;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e(getClass().getSimpleName(), "running");
+                text_timer.setText(String.valueOf(currenttime));
+            }
+        });
+        timerHandler.postDelayed(this, 1000);
+    }
 }
