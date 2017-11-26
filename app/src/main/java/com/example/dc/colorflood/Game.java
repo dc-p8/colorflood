@@ -150,5 +150,17 @@ public class Game extends AppCompatActivity
         thread = new Thread(runnable);
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        this.myGame.lvl.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.myGame.lvl.restoreState(savedInstanceState);
+    }
+
 
 }
