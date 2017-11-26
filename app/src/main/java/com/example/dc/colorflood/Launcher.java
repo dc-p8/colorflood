@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,7 +19,8 @@ import android.widget.TextView;
 public class Launcher extends AppCompatActivity {
     Button button_play;
     Button button_credits;
-    Button button_reset;
+    Button button_system;
+
     TextView text_extraTry;
     TextView text_currentLevel;
     int extraTry = 0;
@@ -74,25 +74,12 @@ public class Launcher extends AppCompatActivity {
             }
         });
 
-        final Context c = this;
-        button_reset = findViewById(R.id.button_reset);
-        button_reset.setOnClickListener(new View.OnClickListener() {
+        button_system = findViewById(R.id.button_system);
+        button_system.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(c)
-                        .setMessage("En êtes-vous sûr ?.")
-                        .setTitle("Reinitialiser votre progression ?")
-                        .setCancelable(false)
-                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {}
-                        })
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                statsViewModel.updateStats(1, 0);
-                            }
-                        }).show();
+            public void onClick(View view) {
+                Intent myIntent = new Intent(Launcher.this, System.class);
+                Launcher.this.startActivity(myIntent);
             }
         });
 

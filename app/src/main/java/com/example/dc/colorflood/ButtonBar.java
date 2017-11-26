@@ -35,6 +35,7 @@ public class ButtonBar extends LinearLayout {
         for(int i = colors.length-1; i >= 0; i--)
         {
             final Button bt = new Button(this.getContext());
+            bt.setSoundEffectsEnabled(false);
             bt.setOnClickListener(this.btnCallback);
             bt.setTag(R.id.button_number, i);
             bt.setBackgroundColor(colors[i]);
