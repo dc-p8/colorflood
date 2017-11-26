@@ -3,18 +3,16 @@ package com.example.dc.colorflood;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity
+public class Game extends AppCompatActivity
 {
     ButtonBar colorsButtonsLayout;
     MyGame myGame;
@@ -22,13 +20,15 @@ public class MainActivity extends AppCompatActivity
     int lvlHeight = 10, lvlWidth = 10;
     int nbColors = 5;
     Context context;
-    private long timer;
+    private long timer_from_resume;
+    private long timer_from_pause = 0;
     //private Handler timerHandler;
     private Thread thread;
     private boolean running = true;
+    private long timer_total = 0;
 
 
-    public MainActivity() {
+    public Game() {
         super();
     }
 
@@ -56,8 +56,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
+    protected void onResume() {
+        super.onResume();
+        Log.e(getClass().getSimpleName(), "RESUMED");
+        timer_from_resume = System.currentTimeMillis();
         running = true;
         thread.start();
     }
@@ -72,16 +74,24 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
+        timer_total += (System.currentTimeMillis() - timer_from_resume);
         Log.e(getClass().getSimpleName(), "PAUSED");
         running = false;
-        thread.interrupt();
+        try
+        {
+            thread.join();
+        }
+        catch (Exception e)
+        {
+            Log.e(getClass().getSimpleName(), e.getMessage());
+        }
         //timerHandler.removeCallbacks(this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
         this.colorsButtonsLayout = findViewById(R.id.colors);
         this.myGame = findViewById(R.id.mygame);
         this.text_timer = findViewById(R.id.text_timer);
@@ -112,18 +122,19 @@ public class MainActivity extends AppCompatActivity
 
         this.colorsButtonsLayout.addButtons(this.myGame.lvl.getCasesColors());
         //timerHandler = new Handler();
-        timer = System.currentTimeMillis();
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 while (running) {
-                    Log.e(getClass().getSimpleName(), "running");
-                    long delay = System.currentTimeMillis() - timer;
-                    final long n_delay = delay / 1000;
+
+                    long delay = (System.currentTimeMillis() - timer_from_resume) + timer_total;
+                    final long currenttime = delay / 1000;
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            text_timer.setText(String.valueOf(n_delay));
+                            Log.e(getClass().getSimpleName(), "running");
+                            text_timer.setText(String.valueOf(currenttime));
                         }
                     });
 
