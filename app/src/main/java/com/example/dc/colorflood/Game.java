@@ -17,7 +17,7 @@ import android.widget.TextView;
 public class Game extends AppCompatActivity implements Runnable
 {
     ButtonBar colorsButtonsLayout;
-    MyGame myGame;
+    GameView myGame;
     TextView textTimer;
     int lvlHeight = 10, lvlWidth = 10;
     int nbColors = 5;

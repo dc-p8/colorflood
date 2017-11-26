@@ -19,7 +19,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 
-public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callback{
+public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
     volatile boolean running = false;
     Thread thread;
@@ -27,7 +27,7 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
     volatile Level lvl;
 
 
-    public MyGame(Context context, AttributeSet attrs) {
+    public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         holder = getHolder();
