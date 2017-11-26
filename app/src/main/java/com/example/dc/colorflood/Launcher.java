@@ -1,14 +1,18 @@
 package com.example.dc.colorflood;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,7 +25,7 @@ public class Launcher extends AppCompatActivity {
     TextView text_currentLevel;
     int extraTry = 0;
     int currentLevel = 0;
-    SharedPreferences sP;
+    StatsViewModel statsViewModel;
 
     @Override
     protected void onDestroy() {
@@ -33,10 +37,7 @@ public class Launcher extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d("ONPAUSE", "TEST");
-        sP.edit()
-                .putInt("extra_try", extraTry)
-                .putInt("current_level", currentLevel)
-                .commit();
+        statsViewModel.updateStats(currentLevel, extraTry);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class Launcher extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("ONCREATE", "TEST");
-        sP = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        statsViewModel = ViewModelProviders.of(this).get(StatsViewModel.class);
         setContentView(R.layout.activity_launcher);
 
         text_currentLevel = findViewById(R.id.text_currentLevel);
@@ -89,11 +90,7 @@ public class Launcher extends AppCompatActivity {
                         .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-
-                                sP.edit()
-                                        .putInt("extraTry", 0)
-                                        .putInt("curentLevel", 1)
-                                        .commit();
+                                statsViewModel.updateStats(1, 0);
                             }
                         }).show();
             }
@@ -105,8 +102,13 @@ public class Launcher extends AppCompatActivity {
 
     public void updateStat()
     {
-        extraTry = sP.getInt("extraTry", 0);
-        currentLevel = sP.getInt("currentLevel", 1);
+        statsViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
+            @Override
+            public void onChanged(Pair<Integer, Integer> stats) {
+                currentLevel = stats.first;
+                extraTry = stats.second;
+            }
+        });
 
         text_extraTry.setText("Extra try : " + String.valueOf(extraTry));
         text_currentLevel.setText("Niveau actuel : " + String.valueOf(currentLevel));
