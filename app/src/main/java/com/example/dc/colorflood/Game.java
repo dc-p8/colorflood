@@ -84,6 +84,11 @@ public class Game extends AppCompatActivity implements Runnable
         this.myGame = findViewById(R.id.mygame);
         this.text_timer = findViewById(R.id.text_timer);
         this.myGame.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors);
+        this.myGame.lvl.setWinEventListener(new Level.OnWinEventListener() {
+            public void onWin() {
+                myGame.initLevel(lvlWidth, lvlHeight, nbColors);
+            }
+        });
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,

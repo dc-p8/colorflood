@@ -21,6 +21,7 @@ class Level {
     private int[] casesColors;
     private float caseWidth, caseHeight;
     private final static Random random = new Random();
+    private OnWinEventListener winEventListener;
 
     public Level(){}
 
@@ -42,6 +43,10 @@ class Level {
         this.casesColors = lvl.casesColors.clone();
         this.caseWidth = lvl.caseWidth;
         this.caseHeight = lvl.caseHeight;
+    }
+
+    void setWinEventListener(OnWinEventListener eventListener) {
+        this.winEventListener = eventListener;
     }
 
     int getNbCasesWidth() {
@@ -154,7 +159,7 @@ class Level {
     }
 
     private void win(){
-        this.initLevel(this.casesColors.length);
+        this.winEventListener.onWin();
     }
 
     private boolean hasWon(int nbCaseColored, LinkedList<Pair<Integer,Integer>> winFifo, int winColor, HashSet<Pair<Integer,Integer>> checked) {
@@ -217,5 +222,9 @@ class Level {
         this.cases = new int[this.nbCasesWidth][this.nbCasesHeight];
         for(int i=0 ; i < this.nbCasesWidth ; i++)
             this.cases[i] = state.getIntArray("cases"+i);
+    }
+
+    public interface OnWinEventListener {
+        void onWin();
     }
 }

@@ -88,8 +88,6 @@ public class MyGame extends SurfaceView implements Runnable, SurfaceHolder.Callb
 
     }
 
-
-
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         Log.d(getClass().getSimpleName(), "SurfaceChanged");
