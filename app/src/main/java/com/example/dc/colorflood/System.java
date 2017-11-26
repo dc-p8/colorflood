@@ -11,9 +11,12 @@ import android.widget.Button;
 public class System extends AppCompatActivity {
     Button buttonReset;
     Button toggleAudio;
+    StatsViewModel statsViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        statsViewModel = StatsViewModel.getInstance();
         setContentView(R.layout.activity_system);
         final Context c = this;
         buttonReset = findViewById(R.id.button_reset);
@@ -23,7 +26,7 @@ public class System extends AppCompatActivity {
                 v.playSoundEffect(android.view.SoundEffectConstants.CLICK);
                 new AlertDialog.Builder(c)
                         .setMessage("En êtes-vous sûr ?.")
-                        .setTitle("Reinitialiser votre progression ?")
+                        .setTitle("Réinitialiser votre progression ?")
                         .setCancelable(false)
                         .setNegativeButton("Non", new DialogInterface.OnClickListener() {
                             @Override
@@ -32,12 +35,7 @@ public class System extends AppCompatActivity {
                         .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                            /*
-                                sP.edit()
-                                        .putInt("extraTry", 0)
-                                        .putInt("curentLevel", 1)
-                                        .commit();
-                                        */
+                                statsViewModel.updateStats(-1, -1);
                             }
                         }).show();
             }

@@ -25,6 +25,7 @@ public class Launcher extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.statsViewModel.resetInstance();
         Log.e(getClass().getSimpleName(), "ONDESTROY");
     }
 
@@ -46,6 +47,7 @@ public class Launcher extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Log.d("ONCREATE", "TEST");
         statsViewModel = ViewModelProviders.of(this).get(StatsViewModel.class);
+        this.statsViewModel.provideInstance();
         setContentView(R.layout.activity_launcher);
 
         textCurrentLevel = findViewById(R.id.text_currentLevel);

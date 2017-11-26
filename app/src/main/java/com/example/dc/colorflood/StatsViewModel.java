@@ -12,13 +12,27 @@ import android.util.Pair;
 public class StatsViewModel extends AndroidViewModel {
     private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
+    private static StatsViewModel instance = null;
 
     public StatsViewModel(Application application) {
         super(application);
         sP = PreferenceManager.getDefaultSharedPreferences(application);
     }
 
+    void resetInstance(){
+        StatsViewModel.instance = null;
+    }
+
+    void provideInstance(){
+        StatsViewModel.instance = this;
+    }
+
+    static StatsViewModel getInstance(){
+        return StatsViewModel.instance;
+    }
+
     void updateStats(int currentLvl, int extraTry) {
+        this.stats.setValue(new Pair<>(currentLvl, extraTry));
         sP.edit()
                 .putInt("extraTry", extraTry)
                 .putInt("currentLevel", currentLvl)
