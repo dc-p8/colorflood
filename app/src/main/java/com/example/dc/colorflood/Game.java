@@ -7,11 +7,13 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.system.Os;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 
 public class Game extends AppCompatActivity implements Runnable
 {
@@ -57,7 +59,7 @@ public class Game extends AppCompatActivity implements Runnable
     protected void onResume() {
         super.onResume();
         Log.e(getClass().getSimpleName(), "RESUMED");
-        timer_from_resume = System.currentTimeMillis();
+        timer_from_resume = java.lang.System.currentTimeMillis();
         thread.start();
     }
 
@@ -71,7 +73,7 @@ public class Game extends AppCompatActivity implements Runnable
     @Override
     protected void onPause() {
         super.onPause();
-        timer_total += (System.currentTimeMillis() - timer_from_resume);
+        timer_total += (java.lang.System.currentTimeMillis() - timer_from_resume);
         Log.e(getClass().getSimpleName(), "PAUSED");
         timerHandler.removeCallbacks(this);
     }
@@ -134,7 +136,7 @@ public class Game extends AppCompatActivity implements Runnable
 
     @Override
     public void run() {
-        long delay = (System.currentTimeMillis() - timer_from_resume) + timer_total;
+        long delay = (java.lang.System.currentTimeMillis() - timer_from_resume) + timer_total;
         final long currenttime = delay / 1000;
         runOnUiThread(new Runnable() {
             @Override
