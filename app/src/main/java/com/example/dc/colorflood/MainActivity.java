@@ -53,7 +53,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         this.colorsButtonsLayout.addButtons(this.myGame.lvl.getCasesColors());
+    }
 
-        //this.myGame.update();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        this.myGame.lvl.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        this.myGame.lvl.restoreState(savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

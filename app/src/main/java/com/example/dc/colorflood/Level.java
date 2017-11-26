@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.Random;
@@ -27,6 +28,17 @@ class Level {
         this.casesColors = casesColors;
         this.caseWidth = caseWidth;
         this.caseHeight = caseHeight;
+    }
+
+    Level(Level lvl){
+        this.nbCasesWidth = lvl.nbCasesWidth;
+        this.nbCasesHeight = lvl.nbCasesHeight;
+        this.cases = new int[lvl.nbCasesWidth][lvl.nbCasesHeight];
+        for(int i=0 ; i < lvl.nbCasesWidth ; i++)
+            this.cases[i] = lvl.cases[i].clone();
+        this.casesColors = lvl.casesColors.clone();
+        this.caseWidth = lvl.caseWidth;
+        this.caseHeight = lvl.caseHeight;
     }
 
     int getNbCasesWidth() {
@@ -120,5 +132,27 @@ class Level {
                 this.cases[i][j] = Level.random.nextInt(nbColors);
             }
         }
+    }
+
+    void saveState(Bundle state) {
+        state.putInt("nbCasesWidth", this.nbCasesWidth);
+        state.putInt("nbCasesHeight", this.nbCasesHeight);
+        state.putInt("caseWidth", this.caseWidth);
+        state.putInt("caseHeight", this.caseHeight);
+        state.putIntArray("casesColors", this.casesColors);
+        for(int i = 0 ; i < this.nbCasesWidth ; i++) {
+            state.putIntArray("cases" + i, this.cases[i]);
+        }
+    }
+
+    void restoreState(Bundle state) {
+        this.nbCasesWidth = state.getInt("nbCasesWidth");
+        this.nbCasesHeight = state.getInt("nbCasesHeight");
+        this.caseWidth = state.getInt("caseWidth");
+        this.caseHeight = state.getInt("caseHeight");
+        this.casesColors = state.getIntArray("casesColors");
+        this.cases = new int[this.nbCasesWidth][this.nbCasesHeight];
+        for(int i=0 ; i < this.nbCasesWidth ; i++)
+            this.cases[i] = state.getIntArray("cases"+i);
     }
 }
