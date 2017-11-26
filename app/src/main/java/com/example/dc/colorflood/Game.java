@@ -115,7 +115,7 @@ public class Game extends AppCompatActivity
         this.colorsButtonsLayout.setBtnCallback(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myGame.lvl.changeColor((int)v.getTag(R.id.button_number));
+                myGame.lvl.play((int)v.getTag(R.id.button_number));
                 myGame.update();
             }
         });
@@ -139,7 +139,7 @@ public class Game extends AppCompatActivity
                     });
 
                     try {
-                        thread.sleep(1000);
+                        Thread.sleep(1000);
                     } catch (Exception e) {
                     }
                     //timerHandler.postDelayed(this, 1000);

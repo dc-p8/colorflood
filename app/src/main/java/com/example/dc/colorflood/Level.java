@@ -7,7 +7,10 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 class Level {
@@ -109,8 +112,66 @@ class Level {
         }
     }
 
-    void changeColor(int newColor) {
-        this.cases[0][0] = newColor;
+    void play(int newColor) {
+        int nbCaseColored = 0;
+        LinkedList<Pair<Integer,Integer>> changeFifo = new LinkedList<>();
+        LinkedList<Pair<Integer,Integer>> winFifo = new LinkedList<>();
+        HashSet<Pair<Integer,Integer>> checked = new HashSet<>();
+        Pair<Integer,Integer> currentCase = new Pair<>(0,0);
+        changeFifo.add(currentCase);
+        checked.add(currentCase);
+        int oldColor = this.cases[0][0];
+        while(!changeFifo.isEmpty()){
+            nbCaseColored++;
+            currentCase = changeFifo.poll();
+            this.cases[currentCase.first][currentCase.second] = newColor;
+            for(int i = -1; i<2; i++){
+                for (int j = -1; j<2 ; j++){
+                    if(Math.abs(i)==Math.abs(j))
+                        continue;
+                    Pair<Integer,Integer> nextCase = new Pair<>(currentCase.first + i, currentCase.second + j);
+                    if (nextCase.first < this.nbCasesWidth && nextCase.first >= 0
+                            && nextCase.second < this.nbCasesHeight && nextCase.second >= 0) {
+                        updateFifo(checked, changeFifo, nextCase, oldColor);
+                        updateFifo(checked, winFifo, nextCase, newColor);
+                    }
+                }
+            }
+        }
+        if (hasWon(nbCaseColored, winFifo, newColor, checked))
+            this.win();
+    }
+
+    private void updateFifo(HashSet<Pair<Integer,Integer>> checked, LinkedList<Pair<Integer,Integer>> fifo, Pair<Integer,Integer> nextCase, int color){
+        if (this.cases[nextCase.first][nextCase.second] == color) {
+            if (!checked.contains(nextCase)) {
+                fifo.add(nextCase);
+                checked.add(nextCase);
+            }
+        }
+    }
+
+    private void win(){
+        this.initLevel(this.casesColors.length);
+    }
+
+    private boolean hasWon(int nbCaseColored, LinkedList<Pair<Integer,Integer>> winFifo, int winColor, HashSet<Pair<Integer,Integer>> checked) {
+        while(!winFifo.isEmpty()){
+            nbCaseColored++;
+            Pair<Integer,Integer> currentCase = winFifo.poll();
+            for(int i = -1; i<2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if(Math.abs(i)==Math.abs(j))
+                        continue;
+                    Pair<Integer, Integer> nextCase = new Pair<>(currentCase.first + i, currentCase.second + j);
+                    if (nextCase.first < this.nbCasesWidth && nextCase.first >= 0
+                            && nextCase.second < this.nbCasesHeight && nextCase.second >= 0) {
+                        updateFifo(checked, winFifo, nextCase, winColor);
+                    }
+                }
+            }
+        }
+        return nbCaseColored == this.nbCasesHeight * this.nbCasesWidth;
     }
 
 
