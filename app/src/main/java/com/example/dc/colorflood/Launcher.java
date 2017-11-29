@@ -27,13 +27,13 @@ public class Launcher extends MusicActivity {
         super.onDestroy();
         this.statsViewModel.resetInstance();
         Log.e(getClass().getSimpleName(), "ONDESTROY");
+        statsViewModel.updateInfosMusic(-1, -1);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         Log.d("ONPAUSE", "TEST");
-        statsViewModel.updateStats(currentLevel, extraTry);
     }
 
     @Override
