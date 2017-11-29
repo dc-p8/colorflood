@@ -31,8 +31,6 @@ public class Game extends AppCompatActivity implements Runnable
     private long timerFromResume;
     private Handler timerHandler;
     private long timerTotal = 0;
-    private int extraTry = 0;
-    private int currentLevel = 0;
     private StatsViewModel statsViewModel;
 
 
@@ -89,24 +87,26 @@ public class Game extends AppCompatActivity implements Runnable
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         this.statsViewModel = StatsViewModel.getInstance();
         this.statsViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {
-                currentLevel = stats.first;
-                extraTry = stats.second;
+                gameView.lvl.setCurrentLevel(stats.first);
+                gameView.lvl.setExtraMoves(stats.second);
 
-                textCurrentLevel.setText(String.valueOf("lvl:"+currentLevel));
-                if(extraTry == 0)
+                textCurrentLevel.setText(String.valueOf("lvl:"+gameView.lvl.getCurrentLevel()));
+                if(gameView.lvl.getExtraMoves() == 0)
                     textExtraMoves.setText("");
                 else
-                    textExtraMoves.setText('+'+String.valueOf(extraTry));
+                    textExtraMoves.setText('+'+String.valueOf(gameView.lvl.getExtraMoves()));
             }
         });
 
         setContentView(R.layout.activity_game);
         this.colorsButtonsLayout = findViewById(R.id.colors);
         this.gameView = findViewById(R.id.mygame);
+
         this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
 
         this.textTimer = findViewById(R.id.text_timer);
@@ -116,11 +116,17 @@ public class Game extends AppCompatActivity implements Runnable
         this.textExtraMoves = findViewById(R.id.text_extra);
         this.textExtraMoves.setText("");
         this.textCurrentLevel = findViewById(R.id.text_currentLevel);
-        this.textCurrentLevel.setText(String.valueOf("lvl:"+currentLevel));
+        this.textCurrentLevel.setText(String.valueOf("lvl:"+gameView.lvl.getCurrentLevel()));
 
-        this.gameView.lvl.setWinEventListener(new LevelOnPlay.OnWinEventListener() {
+        this.gameView.lvl.setOnLevelEventListener(new LevelOnPlay.OnLevelEventListener() {
             public void onWin() {
                 nextLevel();
+            }
+            public void onLose() {
+                restartLevel();
+            }
+            public void decExtraMoves(){
+                statsViewModel.updateStats(gameView.lvl.getCurrentLevel(), gameView.lvl.getExtraMoves()-1);
             }
         });
 
@@ -154,8 +160,15 @@ public class Game extends AppCompatActivity implements Runnable
     }
 
     private void nextLevel(){
-        this.statsViewModel.updateStats(this.currentLevel+1,
-                this.extraTry+(this.gameView.lvl.getMaxNbMoves()-this.gameView.lvl.getNbMoves()));
+        this.statsViewModel.updateStats(this.gameView.lvl.getCurrentLevel()+1,
+                this.gameView.lvl.getExtraMoves()+(this.gameView.lvl.getMaxNbMoves()-this.gameView.lvl.getNbMoves()));
+        this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
+        this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
+        this.timerTotal = 0;
+        timerFromResume = java.lang.System.currentTimeMillis();
+    }
+
+    private void restartLevel(){
         this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
         this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;

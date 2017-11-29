@@ -13,23 +13,27 @@ import java.util.LinkedList;
 class LevelOnPlay {
     private Level lvl;
     private int nbMoves = 0;
-    private OnWinEventListener winEventListener;
+    private OnLevelEventListener onLevelEventListener;
+    private int extraMoves = 0;
+    private int currentLevel = 0;
 
-    public LevelOnPlay(){
+    LevelOnPlay(){
         this.lvl = new Level();
     }
 
-    public LevelOnPlay(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight, int maxNbMoves) {
+    LevelOnPlay(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight, int maxNbMoves) {
         this.lvl = new Level(nbCasesWidth, nbCasesHeight, cases, casesColors, caseWidth, caseHeight, maxNbMoves);
     }
 
-    public LevelOnPlay(LevelOnPlay lvl){
+    LevelOnPlay(LevelOnPlay lvl){
         this.lvl = new Level(lvl.lvl);
         this.nbMoves = lvl.nbMoves;
+        this.extraMoves = lvl.extraMoves;
+        this.currentLevel = lvl.currentLevel;
     }
 
-    void setWinEventListener(OnWinEventListener eventListener) {
-        this.winEventListener = eventListener;
+    void setOnLevelEventListener(OnLevelEventListener eventListener) {
+        this.onLevelEventListener = eventListener;
     }
 
     int getNbCasesWidth() {
@@ -92,6 +96,22 @@ class LevelOnPlay {
         return nbMoves;
     }
 
+    int getExtraMoves() {
+        return extraMoves;
+    }
+
+    void setExtraMoves(int extraMoves) {
+        this.extraMoves = extraMoves;
+    }
+
+    int getCurrentLevel() {
+        return currentLevel;
+    }
+
+    void setCurrentLevel(int currentLevel) {
+        this.currentLevel = currentLevel;
+    }
+
     void draw(Canvas canvas) {
         Paint p = new Paint();
 
@@ -115,7 +135,7 @@ class LevelOnPlay {
     }
 
     void play(int newColor) {
-        this.nbMoves++;
+        this.updateMoves();
         int nbCaseColored = 0;
         LinkedList<Pair<Integer,Integer>> changeFifo = new LinkedList<>();
         LinkedList<Pair<Integer,Integer>> winFifo = new LinkedList<>();
@@ -141,8 +161,12 @@ class LevelOnPlay {
                 }
             }
         }
-        if (hasWon(nbCaseColored, winFifo, newColor, checked))
+        if (hasWon(nbCaseColored, winFifo, newColor, checked)) {
             this.win();
+            return;
+        }
+        if (this.hasLost())
+            this.lose();
     }
 
     private void updateFifo(HashSet<Pair<Integer,Integer>> checked, LinkedList<Pair<Integer,Integer>> fifo, Pair<Integer,Integer> nextCase, int color){
@@ -155,7 +179,11 @@ class LevelOnPlay {
     }
 
     private void win(){
-        this.winEventListener.onWin();
+        this.onLevelEventListener.onWin();
+    }
+
+    private void lose(){
+        this.onLevelEventListener.onLose();
     }
 
     private boolean hasWon(int nbCaseColored, LinkedList<Pair<Integer,Integer>> winFifo, int winColor, HashSet<Pair<Integer,Integer>> checked) {
@@ -177,6 +205,17 @@ class LevelOnPlay {
         return nbCaseColored == this.lvl.getNbCasesHeight() * this.lvl.getNbCasesWidth();
     }
 
+    private boolean hasLost() {
+        return this.nbMoves == this.lvl.getMaxNbMoves() + this.extraMoves;
+    }
+
+    private void updateMoves(){
+        if (this.nbMoves != this.lvl.getMaxNbMoves())
+            this.nbMoves++;
+        else
+            this.onLevelEventListener.decExtraMoves();
+    }
+
 
     void initLevel(int nbColors) {
         this.nbMoves = 0;
@@ -193,7 +232,9 @@ class LevelOnPlay {
         this.nbMoves = state.getInt("nbMoves");
     }
 
-    public interface OnWinEventListener {
+    public interface OnLevelEventListener {
         void onWin();
+        void onLose();
+        void decExtraMoves();
     }
 }
