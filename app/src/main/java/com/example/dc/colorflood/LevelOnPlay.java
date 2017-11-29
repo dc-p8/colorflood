@@ -199,6 +199,10 @@ class LevelOnPlay {
         this.nbMoves = state.getInt("nbMoves");
     }
 
+    int getStartingCase(){
+        return this.lvl.getCases()[0][0];
+    }
+
     public interface OnLevelEventListener {
         void onWin();
         void onLose();

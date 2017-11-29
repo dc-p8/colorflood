@@ -31,6 +31,7 @@ public class Game extends MusicActivity implements Runnable
     private long timerFromResume;
     private Handler timerHandler;
     private long timerTotal = 0;
+    private int lastPressed;
     private StatsViewModel statsViewModel;
 
 
@@ -108,6 +109,7 @@ public class Game extends MusicActivity implements Runnable
         this.gameView = findViewById(R.id.mygame);
 
         this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
+        this.lastPressed = this.gameView.lvl.getStartingCase();
 
         this.textTimer = findViewById(R.id.text_timer);
         this.textTimer.setText(String.valueOf(0));
@@ -148,9 +150,13 @@ public class Game extends MusicActivity implements Runnable
         this.colorsButtonsLayout.setBtnCallback(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gameView.lvl.play((int)v.getTag(R.id.button_number));
-                gameView.update();
-                textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
+                int pressed = (int)v.getTag(R.id.button_number);
+                if (pressed != lastPressed){
+                    lastPressed = pressed;
+                    gameView.lvl.play(pressed);
+                    gameView.update();
+                    textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
+                }
             }
         });
 
