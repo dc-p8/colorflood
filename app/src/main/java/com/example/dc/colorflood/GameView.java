@@ -99,7 +99,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
         running = true;
         update();
-
     }
 
     void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors, int maxNbCount){

@@ -169,7 +169,7 @@ public class Game extends MusicActivity implements Runnable
     }
 
     private void restartLevel(){
-        this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
+        this.gameView.lvl.restart();
         this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
         timerFromResume = java.lang.System.currentTimeMillis();

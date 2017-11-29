@@ -1,10 +1,7 @@
 package com.example.dc.colorflood;
 
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 
 import java.util.HashSet;
@@ -12,6 +9,7 @@ import java.util.LinkedList;
 
 class LevelOnPlay {
     private Level lvl;
+    private Level savedLvl;
     private int nbMoves = 0;
     private OnLevelEventListener onLevelEventListener;
     private int extraMoves = 0;
@@ -178,19 +176,26 @@ class LevelOnPlay {
             this.onLevelEventListener.decExtraMoves();
     }
 
-
     void initLevel(int nbColors) {
         this.nbMoves = 0;
         this.lvl.init(nbColors);
+        this.savedLvl = new Level(this.lvl);
+    }
+
+    void restart(){
+        this.nbMoves = 0;
+        this.lvl = new Level(this.savedLvl);
     }
 
     void saveState(Bundle state) {
         this.lvl.saveState(state, "principal");
+        this.savedLvl.saveState(state, "backup");
         state.putInt("nbMoves", this.nbMoves);
     }
 
     void restoreState(Bundle state) {
         this.lvl.restoreState(state, "principal");
+        this.savedLvl.restoreState(state, "backup");
         this.nbMoves = state.getInt("nbMoves");
     }
 
