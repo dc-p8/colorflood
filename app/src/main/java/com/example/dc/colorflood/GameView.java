@@ -4,19 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
 
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
@@ -24,7 +17,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     volatile boolean running = false;
     Thread thread;
     volatile Lock l;
-    volatile Level lvl;
+    volatile LevelOnPlay lvl;
 
 
     public GameView(Context context, AttributeSet attrs) {
@@ -33,7 +26,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         holder = getHolder();
         holder.addCallback(this);
         setWillNotDraw(false);
-        this.lvl = new Level();
+        this.lvl = new LevelOnPlay();
 
     }
 

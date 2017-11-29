@@ -118,7 +118,7 @@ public class Game extends AppCompatActivity implements Runnable
         this.textCurrentLevel = findViewById(R.id.text_currentLevel);
         this.textCurrentLevel.setText(String.valueOf("lvl:"+currentLevel));
 
-        this.gameView.lvl.setWinEventListener(new Level.OnWinEventListener() {
+        this.gameView.lvl.setWinEventListener(new LevelOnPlay.OnWinEventListener() {
             public void onWin() {
                 nextLevel();
             }
@@ -166,12 +166,17 @@ public class Game extends AppCompatActivity implements Runnable
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         this.gameView.lvl.saveState(outState);
+        outState.putLong("timerFromResume", this.timerFromResume);
+        outState.putLong("timerTotal", this.timerTotal);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         this.gameView.lvl.restoreState(savedInstanceState);
+        this.timerFromResume = savedInstanceState.getLong("timerFromResume");
+        this.timerTotal = savedInstanceState.getLong("timerTotal");
+        textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
     }
 
 
