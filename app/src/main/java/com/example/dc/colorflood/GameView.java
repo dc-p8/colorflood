@@ -4,20 +4,20 @@ import android.content.Context;
 import android.graphics.Canvas;
 
 
+import android.graphics.Paint;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import java.util.concurrent.locks.Lock;
 
 
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
     volatile boolean running = false;
     Thread thread;
-    volatile Lock l;
     volatile LevelOnPlay lvl;
+    volatile private float caseWidth, caseHeight;
 
 
     public GameView(Context context, AttributeSet attrs) {
@@ -50,7 +50,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                 Log.d("run", "after sem wait");
                 canvas = holder.lockCanvas();
                 if(canvas != null)
-                    lvl.draw(canvas);
+                    drawLevel(canvas);
 
             }
             catch (Exception e){
@@ -89,11 +89,8 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             Log.d("surfacechanged", thread.getState().name());
         }
 
-
-
-
-        this.lvl.setCaseWidth((float)getWidth() / (float)this.lvl.getNbCasesWidth());
-        this.lvl.setCaseHeight((float)getHeight() / (float)this.lvl.getNbCasesHeight());
+        this.caseWidth = (float)getWidth() / (float)this.lvl.getNbCasesWidth();
+        this.caseHeight = (float)getHeight() / (float)this.lvl.getNbCasesHeight();
 
         if(thread == null || thread.getState() == Thread.State.TERMINATED) {
             thread = new Thread(this);
@@ -106,12 +103,34 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     }
 
     void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors, int maxNbCount){
+        this.caseWidth = (float)getWidth() / (float)nbCasesWidth;
+        this.caseHeight = (float)getHeight() / (float)nbCasesHeight;
         this.lvl.setNbCasesWidth(nbCasesWidth);
         this.lvl.setNbCasesHeight(nbCasesHeight);
-        this.lvl.setCaseWidth((float)getWidth() / (float)nbCasesWidth);
-        this.lvl.setCaseHeight((float)getHeight() / (float)nbCasesHeight);
         this.lvl.setMaxNbMoves(maxNbCount);
         this.lvl.initLevel(nbColors);
+    }
+
+    void drawLevel(Canvas canvas) {
+        Paint p = new Paint();
+
+        canvas.drawRGB(50, 50, 50);
+
+
+        Log.d(getClass().getName(),"" + this.caseWidth);
+        Log.d(getClass().getName(), "" + this.caseHeight);
+
+
+        for(int i = 0; i < lvl.getNbCasesHeight(); i++)
+        {
+            float y = this.caseHeight * (float)i;
+            for(int j = 0; j < lvl.getNbCasesWidth(); j++)
+            {
+                float x = this.caseWidth * (float)j;
+                p.setColor(lvl.getCasesColors()[lvl.getCases()[i][j]]);
+                canvas.drawRect(x, y, x + this.caseWidth, y + this.caseHeight, p);
+            }
+        }
     }
 
     @Override
@@ -133,5 +152,17 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                 Log.e(getClass().getSimpleName(), e.getMessage());
             }
         }
+    }
+
+    void saveState(Bundle state) {
+        state.putFloat("caseWidth", this.caseWidth);
+        state.putFloat("caseHeight", this.caseHeight);
+        this.lvl.saveState(state);
+    }
+
+    void restoreState(Bundle state) {
+        this.caseWidth = state.getFloat("caseWidth");
+        this.caseHeight = state.getFloat("caseHeight");
+        this.lvl.restoreState(state);
     }
 }

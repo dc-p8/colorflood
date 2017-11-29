@@ -6,37 +6,32 @@ import android.os.Bundle;
 
 import java.util.Random;
 
-public class Level {
+class Level {
 
     private int nbCasesWidth;
     private int nbCasesHeight;
     private int[][] cases;
     private int[] casesColors;
-    private float caseWidth, caseHeight;
     private int maxNbMoves;
     private final static Random random = new Random();
 
-    public Level(){}
+    Level(){}
 
-    public Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight, int maxNbMoves) {
+    Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, int maxNbMoves) {
         this.nbCasesWidth = nbCasesWidth;
         this.nbCasesHeight = nbCasesHeight;
         this.cases = cases;
         this.casesColors = casesColors;
-        this.caseWidth = caseWidth;
-        this.caseHeight = caseHeight;
         this.maxNbMoves = maxNbMoves;
     }
 
-    public Level(Level lvl){
+    Level(Level lvl){
         this.nbCasesWidth = lvl.nbCasesWidth;
         this.nbCasesHeight = lvl.nbCasesHeight;
         this.cases = new int[lvl.nbCasesWidth][lvl.nbCasesHeight];
         for(int i=0 ; i < lvl.nbCasesWidth ; i++)
             this.cases[i] = lvl.cases[i].clone();
         this.casesColors = lvl.casesColors.clone();
-        this.caseWidth = lvl.caseWidth;
-        this.caseHeight = lvl.caseHeight;
         this.maxNbMoves = lvl.maxNbMoves;
     }
 
@@ -80,22 +75,6 @@ public class Level {
         this.casesColors = casesColors;
     }
 
-    float getCaseWidth() {
-        return caseWidth;
-    }
-
-    void setCaseWidth(float caseWidth) {
-        this.caseWidth = caseWidth;
-    }
-
-    float getCaseHeight() {
-        return caseHeight;
-    }
-
-    void setCaseHeight(float caseHeight) {
-        this.caseHeight = caseHeight;
-    }
-
     int getMaxNbMoves() {
         return maxNbMoves;
     }
@@ -127,8 +106,6 @@ public class Level {
     void saveState(Bundle state, String id) {
         state.putInt(id+"nbCasesWidth", this.nbCasesWidth);
         state.putInt(id+"nbCasesHeight", this.nbCasesHeight);
-        state.putFloat(id+"caseWidth", this.caseWidth);
-        state.putFloat(id+"caseHeight", this.caseHeight);
         state.putIntArray(id+"casesColors", this.casesColors);
         for(int i = 0 ; i < this.nbCasesWidth ; i++) {
             state.putIntArray(id+"cases" + i, this.cases[i]);
@@ -138,8 +115,6 @@ public class Level {
     void restoreState(Bundle state, String id) {
         this.nbCasesWidth = state.getInt(id+"nbCasesWidth");
         this.nbCasesHeight = state.getInt(id+"nbCasesHeight");
-        this.caseWidth = state.getFloat(id+"caseWidth");
-        this.caseHeight = state.getFloat(id+"caseHeight");
         this.casesColors = state.getIntArray(id+"casesColors");
         this.cases = new int[this.nbCasesWidth][this.nbCasesHeight];
         for(int i=0 ; i < this.nbCasesWidth ; i++)

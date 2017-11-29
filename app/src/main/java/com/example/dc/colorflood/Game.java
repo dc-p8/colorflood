@@ -178,7 +178,7 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        this.gameView.lvl.saveState(outState);
+        this.gameView.saveState(outState);
         outState.putLong("timerFromResume", this.timerFromResume);
         outState.putLong("timerTotal", this.timerTotal);
     }
@@ -186,7 +186,7 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        this.gameView.lvl.restoreState(savedInstanceState);
+        this.gameView.restoreState(savedInstanceState);
         this.timerFromResume = savedInstanceState.getLong("timerFromResume");
         this.timerTotal = savedInstanceState.getLong("timerTotal");
         textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));

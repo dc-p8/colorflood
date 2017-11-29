@@ -22,7 +22,7 @@ class LevelOnPlay {
     }
 
     LevelOnPlay(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight, int maxNbMoves) {
-        this.lvl = new Level(nbCasesWidth, nbCasesHeight, cases, casesColors, caseWidth, caseHeight, maxNbMoves);
+        this.lvl = new Level(nbCasesWidth, nbCasesHeight, cases, casesColors, maxNbMoves);
     }
 
     LevelOnPlay(LevelOnPlay lvl){
@@ -68,22 +68,6 @@ class LevelOnPlay {
         this.lvl.setCasesColors(casesColors);
     }
 
-    float getCaseWidth() {
-        return this.lvl.getCaseWidth();
-    }
-
-    void setCaseWidth(float caseWidth) {
-        this.lvl.setCaseWidth(caseWidth);
-    }
-
-    float getCaseHeight() {
-        return this.lvl.getCaseHeight();
-    }
-
-    void setCaseHeight(float caseHeight) {
-        this.lvl.setCaseHeight(caseHeight);
-    }
-
     int getMaxNbMoves() {
         return this.lvl.getMaxNbMoves();
     }
@@ -110,28 +94,6 @@ class LevelOnPlay {
 
     void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
-    }
-
-    void draw(Canvas canvas) {
-        Paint p = new Paint();
-
-        canvas.drawRGB(50, 50, 50);
-
-
-        Log.d(getClass().getName(),"" + lvl.getCaseWidth());
-        Log.d(getClass().getName(), "" + lvl.getCaseHeight());
-
-
-        for(int i = 0; i < lvl.getNbCasesHeight(); i++)
-        {
-            float y = lvl.getCaseHeight() * (float)i;
-            for(int j = 0; j < lvl.getNbCasesWidth(); j++)
-            {
-                float x = lvl.getCaseWidth() * (float)j;
-                p.setColor(lvl.getCasesColors()[lvl.getCases()[i][j]]);
-                canvas.drawRect(x, y, x + lvl.getCaseWidth(), y + lvl.getCaseHeight(), p);
-            }
-        }
     }
 
     void play(int newColor) {
