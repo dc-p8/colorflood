@@ -62,7 +62,7 @@ public class StatsViewModel extends AndroidViewModel {
     }
 
     private void loadInfosMusic() {
-        Pair<Long, Integer> infos = new Pair<>(sP.getLong("songTime", 0), sP.getInt("idSong", 0));
+        Pair<Long, Integer> infos = new Pair<>(sP.getLong("songTime", -1), sP.getInt("idSong", -1));
         this.infosMusic.setValue(infos);
     }
 
