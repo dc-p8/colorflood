@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class Game extends AppCompatActivity implements Runnable
+public class Game extends MusicActivity implements Runnable
 {
     private ButtonBar colorsButtonsLayout;
     private GameView gameView;

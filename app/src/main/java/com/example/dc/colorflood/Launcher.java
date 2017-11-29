@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Launcher extends AppCompatActivity {
+public class Launcher extends MusicActivity {
     private Button buttonPlay;
     private Button buttonCredits;
     private Button buttonSystem;
