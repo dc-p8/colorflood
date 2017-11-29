@@ -12,6 +12,7 @@ import android.util.Pair;
 public class StatsViewModel extends AndroidViewModel {
     private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
+    private MutableLiveData<Pair<Long, Integer>> infosMusic;
     private static StatsViewModel instance = null;
 
     public StatsViewModel(Application application) {
@@ -52,4 +53,24 @@ public class StatsViewModel extends AndroidViewModel {
         this.stats.setValue(s);
     }
 
+    LiveData<Pair<Long, Integer>> getInfosMusic(){
+        if (this.infosMusic == null) {
+            this.infosMusic = new MutableLiveData<>();
+            loadInfosMusic();
+        }
+        return this.infosMusic;
+    }
+
+    private void loadInfosMusic() {
+        Pair<Long, Integer> infos = new Pair<>(sP.getLong("songTime", 0), sP.getInt("idSong", 0));
+        this.infosMusic.setValue(infos);
+    }
+
+    void updateInfosMusic(long songTime, int idSong) {
+        this.infosMusic.setValue(new Pair<>(songTime, idSong));
+        sP.edit()
+                .putLong("songTime", songTime)
+                .putInt("idSong", idSong)
+                .apply();
+    }
 }
