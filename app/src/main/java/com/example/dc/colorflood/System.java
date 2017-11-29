@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class System extends AppCompatActivity {
+public class System extends MusicActivity {
     private StatsViewModel statsViewModel;
 
     @Override

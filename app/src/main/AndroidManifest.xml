@@ -18,7 +18,14 @@
             </intent-filter>
         </activity>
         <activity android:name=".Credits" />
-        <activity android:name=".System"></activity>
+        <activity android:name=".System" />
+
+        <service
+            android:name=".MusicService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".MusicActivity"></activity>
     </application>
 
 </manifest>
