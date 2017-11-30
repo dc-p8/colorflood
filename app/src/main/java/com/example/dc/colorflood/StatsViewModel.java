@@ -32,14 +32,6 @@ public class StatsViewModel extends AndroidViewModel {
         return StatsViewModel.instance;
     }
 
-    void updateStats(int currentLvl, int extraTry) {
-        this.stats.setValue(new Pair<>(currentLvl, extraTry));
-        sP.edit()
-                .putInt("extraTry", extraTry)
-                .putInt("currentLevel", currentLvl)
-                .apply();
-    }
-
     LiveData<Pair<Integer, Integer>> getStats(){
         if (this.stats == null) {
             this.stats = new MutableLiveData<>();
@@ -51,6 +43,16 @@ public class StatsViewModel extends AndroidViewModel {
     private void loadStats() {
         Pair<Integer, Integer> s = new Pair<>(sP.getInt("currentLevel", 1), sP.getInt("extraTry", 0));
         this.stats.setValue(s);
+    }
+
+    void updateStats(int currentLvl, int extraTry) {
+        if (this.stats == null)
+            this.stats = new MutableLiveData<>();
+        this.stats.setValue(new Pair<>(currentLvl, extraTry));
+        sP.edit()
+                .putInt("extraTry", extraTry)
+                .putInt("currentLevel", currentLvl)
+                .apply();
     }
 
     LiveData<Pair<Long, Integer>> getInfosMusic(){
@@ -67,6 +69,8 @@ public class StatsViewModel extends AndroidViewModel {
     }
 
     void updateInfosMusic(long songTime, int idSong) {
+        if (this.infosMusic == null)
+            this.infosMusic = new MutableLiveData<>();
         this.infosMusic.setValue(new Pair<>(songTime, idSong));
         sP.edit()
                 .putLong("songTime", songTime)

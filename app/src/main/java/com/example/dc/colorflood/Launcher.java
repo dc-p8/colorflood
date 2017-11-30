@@ -25,9 +25,9 @@ public class Launcher extends MusicActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        this.statsViewModel.updateInfosMusic(-1, -1);
         this.statsViewModel.resetInstance();
         Log.e(getClass().getSimpleName(), "ONDESTROY");
-        statsViewModel.updateInfosMusic(-1, -1);
     }
 
     @Override
