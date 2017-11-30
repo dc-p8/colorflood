@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -32,7 +31,7 @@ public class Game extends MusicActivity implements Runnable
     private Handler timerHandler;
     private long timerTotal = 0;
     private int lastPressed;
-    private StatsViewModel statsViewModel;
+    private GameViewModel statsViewModel;
 
 
     public Game() {
@@ -89,7 +88,7 @@ public class Game extends MusicActivity implements Runnable
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.statsViewModel = StatsViewModel.getInstance();
+        this.statsViewModel = GameViewModel.getInstance();
         this.statsViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {

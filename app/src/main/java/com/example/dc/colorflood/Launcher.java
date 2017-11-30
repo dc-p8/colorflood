@@ -3,7 +3,6 @@ package com.example.dc.colorflood;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -20,7 +19,7 @@ public class Launcher extends MusicActivity {
     private TextView textCurrentLevel;
     private int extraTry = 0;
     private int currentLevel = 0;
-    private StatsViewModel statsViewModel;
+    private GameViewModel statsViewModel;
 
     @Override
     protected void onDestroy() {
@@ -46,7 +45,7 @@ public class Launcher extends MusicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("ONCREATE", "TEST");
-        statsViewModel = ViewModelProviders.of(this).get(StatsViewModel.class);
+        statsViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
         this.statsViewModel.provideInstance();
         setContentView(R.layout.activity_launcher);
 

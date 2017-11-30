@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
-public class ScoreDatabaseManager extends SQLiteOpenHelper {
+public class ScoresDatabaseManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "highscores.db";
     private static final String TABLE_NAME = "highscores";
     private static final int DATABASE_VERSION = 1;
     private static final String ID_COLUMN = "_id";
     private static final String TIME_TAKEN_COLUMN = "time_taken";
 
-    public ScoreDatabaseManager(Context context) {
+    ScoresDatabaseManager(Context context) {
         super(context, DATABASE_NAME+".db", null, DATABASE_VERSION);
     }
 
@@ -93,7 +93,7 @@ public class ScoreDatabaseManager extends SQLiteOpenHelper {
     private class SelectAllAsyncTask extends AsyncTask<Void, Void, Cursor> {
         private AsyncCursorResponse delegate = null;
 
-        public SelectAllAsyncTask(AsyncCursorResponse delegate){
+        SelectAllAsyncTask(AsyncCursorResponse delegate){
             this.delegate = delegate;
         }
 

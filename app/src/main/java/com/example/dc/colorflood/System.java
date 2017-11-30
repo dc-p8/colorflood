@@ -3,18 +3,17 @@ package com.example.dc.colorflood;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 public class System extends MusicActivity {
-    private StatsViewModel statsViewModel;
+    private GameViewModel statsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        statsViewModel = StatsViewModel.getInstance();
+        statsViewModel = GameViewModel.getInstance();
         setContentView(R.layout.activity_system);
         final Context c = this;
         Button buttonReset = findViewById(R.id.button_reset);

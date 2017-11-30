@@ -6,31 +6,37 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.util.Pair;
 
-public class StatsViewModel extends AndroidViewModel {
+public class GameViewModel extends AndroidViewModel {
     private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
     private MutableLiveData<Pair<Long, Integer>> infosMusic;
-    private static StatsViewModel instance = null;
+    private MutableLiveData<Cursor> scores;
+    private static GameViewModel instance = null;
+    private ScoresDatabaseManager scoresManager;
 
-    public StatsViewModel(Application application) {
+    public GameViewModel(Application application) {
         super(application);
         this.sP = PreferenceManager.getDefaultSharedPreferences(application);
+        this.scoresManager = new ScoresDatabaseManager(application);
     }
 
     void resetInstance(){
-        StatsViewModel.instance = null;
+        GameViewModel.instance = null;
     }
 
     void provideInstance(){
-        StatsViewModel.instance = this;
+        GameViewModel.instance = this;
     }
 
-    static StatsViewModel getInstance(){
-        return StatsViewModel.instance;
+    static GameViewModel getInstance(){
+        return GameViewModel.instance;
     }
+
+
 
     void updateStats(int currentLvl, int extraTry) {
         this.stats.setValue(new Pair<>(currentLvl, extraTry));
@@ -53,6 +59,8 @@ public class StatsViewModel extends AndroidViewModel {
         this.stats.setValue(s);
     }
 
+
+
     LiveData<Pair<Long, Integer>> getInfosMusic(){
         if (this.infosMusic == null) {
             this.infosMusic = new MutableLiveData<>();
@@ -72,5 +80,44 @@ public class StatsViewModel extends AndroidViewModel {
                 .putLong("songTime", songTime)
                 .putInt("idSong", idSong)
                 .apply();
+    }
+
+
+
+    LiveData<Cursor> getScores(){
+        if (this.scores == null) {
+            this.scores = new MutableLiveData<>();
+            loadScores();
+        }
+        return this.scores;
+    }
+
+    private void loadScores() {
+        this.scoresManager.executeSelectAll(new ScoresDatabaseManager.AsyncCursorResponse() {
+            @Override
+            public void processResult(Cursor res) {
+                setScores(res);
+            }
+        });
+    }
+
+    private void setScores(Cursor cursor){
+        if (this.scores != null){
+            if (this.scores.getValue() != null && !this.scores.getValue().isClosed())
+                this.scores.getValue().close();
+        } else {
+            this.scores = new MutableLiveData<>();
+        }
+        this.scores.setValue(cursor);
+    }
+
+    void deleteScores(){
+        this.scoresManager.executeDeleteAll();
+        loadScores();
+    }
+
+    void updateScores(int lvl, int score){
+        this.scoresManager.executeAddOrUpdateIfBetter(lvl, score);
+        loadScores();
     }
 }
