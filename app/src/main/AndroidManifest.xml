@@ -19,6 +19,7 @@
         </activity>
         <activity android:name=".Credits" />
         <activity android:name=".System" />
+        <activity android:name=".Highscores" />
 
         <service
             android:name=".MusicService"

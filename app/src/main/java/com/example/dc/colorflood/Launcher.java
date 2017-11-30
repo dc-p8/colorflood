@@ -79,6 +79,15 @@ public class Launcher extends MusicActivity {
             }
         });
 
+        buttonSystem = findViewById(R.id.button_highscores);
+        buttonSystem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(Launcher.this, Highscores.class);
+                Launcher.this.startActivity(myIntent);
+            }
+        });
+
 
 
     }

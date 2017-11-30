@@ -12,8 +12,8 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "highscores.db";
     private static final String TABLE_NAME = "highscores";
     private static final int DATABASE_VERSION = 1;
-    private static final String ID_COLUMN = "_id";
-    private static final String TIME_TAKEN_COLUMN = "time_taken";
+    static final String ID_COLUMN = "_id";
+    static final String TIME_TAKEN_COLUMN = "time_taken";
 
     ScoresDatabaseManager(Context context) {
         super(context, DATABASE_NAME+".db", null, DATABASE_VERSION);
@@ -21,7 +21,7 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE " + DATABASE_NAME + " ("
+        sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_NAME + " ("
                 +ID_COLUMN+" INTEGER PRIMARY KEY AUTOINCREMENT,"
                 +TIME_TAKEN_COLUMN+" INTEGER NOT NULL"
                 +");"
