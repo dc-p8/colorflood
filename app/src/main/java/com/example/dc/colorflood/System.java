@@ -33,6 +33,7 @@ public class System extends MusicActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 statsViewModel.updateStats(1, 0);
+                                statsViewModel.deleteScores();
                             }
                         }).show();
             }

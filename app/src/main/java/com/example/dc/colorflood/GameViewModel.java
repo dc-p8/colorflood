@@ -116,7 +116,7 @@ public class GameViewModel extends AndroidViewModel {
         loadScores();
     }
 
-    void updateScores(int lvl, int score){
+    void updateScores(int lvl, long score){
         this.scoresManager.executeAddOrUpdateIfBetter(lvl, score);
         loadScores();
     }

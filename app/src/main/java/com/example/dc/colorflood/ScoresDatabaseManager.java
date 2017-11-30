@@ -39,7 +39,7 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
         return this.getReadableDatabase().query(TABLE_NAME, null, null, null, null, null, ID_COLUMN);
     }
 
-    private void addOrUpdateIfBetter(int lvl, int score){
+    private void addOrUpdateIfBetter(int lvl, long score){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, ID_COLUMN+" = ?", new String[] {String.valueOf(lvl)}, null, null, null);
         if (cursor.getCount() == 0)
@@ -52,14 +52,14 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    private void insert(int lvl, int score, SQLiteDatabase db){
+    private void insert(int lvl, long score, SQLiteDatabase db){
         ContentValues newScore = new ContentValues();
         newScore.put(ID_COLUMN, lvl);
         newScore.put(TIME_TAKEN_COLUMN, score);
         db.insert(TABLE_NAME, null, newScore);
     }
 
-    private void update(int lvl, int score, SQLiteDatabase db){
+    private void update(int lvl, long score, SQLiteDatabase db){
         ContentValues newScore = new ContentValues();
         newScore.put(ID_COLUMN, lvl);
         newScore.put(TIME_TAKEN_COLUMN, score);
@@ -79,13 +79,13 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
         }
     }
 
-    private class AddOrUpdateIfBetterAsyncTask extends AsyncTask<Integer, Void, Void> {
+    private class AddOrUpdateIfBetterAsyncTask extends AsyncTask<Long, Void, Void> {
 
         @Override
-        protected Void doInBackground(Integer... args) throws IllegalArgumentException {
+        protected Void doInBackground(Long... args) throws IllegalArgumentException {
             if (args.length != 2)
                 throw new IllegalArgumentException("wrong number of arguments");
-            addOrUpdateIfBetter(args[0], args[1]);
+            addOrUpdateIfBetter(args[0].intValue(), args[1]);
             return null;
         }
     }
@@ -117,8 +117,8 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
         new DeleteAllAsyncTask().execute();
     }
 
-    void executeAddOrUpdateIfBetter(int lvl, int score){
-        new AddOrUpdateIfBetterAsyncTask().execute(lvl, score);
+    void executeAddOrUpdateIfBetter(int lvl, long score){
+        new AddOrUpdateIfBetterAsyncTask().execute(((long) lvl), score);
     }
 
     void executeSelectAll(AsyncCursorResponse callback){

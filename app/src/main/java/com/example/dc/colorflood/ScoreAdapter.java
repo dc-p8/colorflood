@@ -25,7 +25,7 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
 
         void bind(Score score){
             levelView.setText("Niveau :"+score.lvl);
-            levelView.setText(score.score);
+            levelView.setText(String.valueOf(score.score));
         }
     }
 
@@ -63,9 +63,9 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
 
     class Score{
         int lvl;
-        int score;
+        long score;
 
-        Score(int lvl, int score) {
+        Score(int lvl, long score) {
             this.lvl = lvl;
             this.score = score;
         }

@@ -121,6 +121,7 @@ public class Game extends MusicActivity implements Runnable
 
         this.gameView.lvl.setOnLevelEventListener(new LevelOnPlay.OnLevelEventListener() {
             public void onWin() {
+                statsViewModel.updateScores(gameView.lvl.getCurrentLevel(), timerTotal);
                 nextLevel();
             }
             public void onLose() {
