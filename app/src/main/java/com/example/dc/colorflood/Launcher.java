@@ -81,7 +81,6 @@ public class Launcher extends MusicActivity {
         });
 
 
-
     }
 
     public void updateStat()

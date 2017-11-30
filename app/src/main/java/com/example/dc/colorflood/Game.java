@@ -1,6 +1,5 @@
 package com.example.dc.colorflood;
 
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
@@ -9,7 +8,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
