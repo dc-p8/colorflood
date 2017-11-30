@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 
 public class ScoreDatabaseManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "highscores.db";
@@ -30,15 +31,15 @@ public class ScoreDatabaseManager extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
 
-    void deleteAll(){
+    private void deleteAll(){
         this.getWritableDatabase().delete(TABLE_NAME, null, null);
     }
 
-    Cursor selectAll(){
+    private Cursor selectAll(){
         return this.getReadableDatabase().query(TABLE_NAME, null, null, null, null, null, ID_COLUMN);
     }
 
-    void addOrUpdateIfBetter(int lvl, int score){
+    private void addOrUpdateIfBetter(int lvl, int score){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, ID_COLUMN+" = ?", new String[] {String.valueOf(lvl)}, null, null, null);
         if (cursor.getCount() == 0)
@@ -63,5 +64,64 @@ public class ScoreDatabaseManager extends SQLiteOpenHelper {
         newScore.put(ID_COLUMN, lvl);
         newScore.put(TIME_TAKEN_COLUMN, score);
         db.update(TABLE_NAME, newScore, ID_COLUMN+" = ?", new String[] {String.valueOf(lvl)});
+    }
+
+    public interface AsyncCursorResponse {
+        void processResult(Cursor res);
+    }
+
+    private class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... unused) {
+            deleteAll();
+            return null;
+        }
+    }
+
+    private class AddOrUpdateIfBetterAsyncTask extends AsyncTask<Integer, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Integer... args) throws IllegalArgumentException {
+            if (args.length != 2)
+                throw new IllegalArgumentException("wrong number of arguments");
+            addOrUpdateIfBetter(args[0], args[1]);
+            return null;
+        }
+    }
+
+    private class SelectAllAsyncTask extends AsyncTask<Void, Void, Cursor> {
+        private AsyncCursorResponse delegate = null;
+
+        public SelectAllAsyncTask(AsyncCursorResponse delegate){
+            this.delegate = delegate;
+        }
+
+        @Override
+        protected Cursor doInBackground(Void... args) throws IllegalArgumentException {
+            return selectAll();
+        }
+
+        @Override
+        protected void onCancelled(Cursor cursor) {
+            cursor.close();
+        }
+
+        @Override
+        protected void onPostExecute(Cursor cursor) {
+            delegate.processResult(cursor);
+        }
+    }
+
+    void executeDeleteAll(){
+        new DeleteAllAsyncTask().execute();
+    }
+
+    void executeAddOrUpdateIfBetter(int lvl, int score){
+        new AddOrUpdateIfBetterAsyncTask().execute(lvl, score);
+    }
+
+    void executeSelectAll(AsyncCursorResponse callback){
+        new SelectAllAsyncTask(callback).execute();
     }
 }
