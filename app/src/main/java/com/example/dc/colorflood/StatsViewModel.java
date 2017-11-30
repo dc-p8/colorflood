@@ -12,7 +12,7 @@ import android.util.Pair;
 public class StatsViewModel extends AndroidViewModel {
     private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
-    private MutableLiveData<Pair<Long, Integer>> infosMusic;
+    private MutableLiveData<Pair<Integer, String>> infosMusic;
     private static StatsViewModel instance = null;
 
     public StatsViewModel(Application application) {
@@ -55,7 +55,7 @@ public class StatsViewModel extends AndroidViewModel {
                 .apply();
     }
 
-    LiveData<Pair<Long, Integer>> getInfosMusic(){
+    LiveData<Pair<Integer, String>> getInfosMusic(){
         if (this.infosMusic == null) {
             this.infosMusic = new MutableLiveData<>();
             loadInfosMusic();
@@ -64,17 +64,17 @@ public class StatsViewModel extends AndroidViewModel {
     }
 
     private void loadInfosMusic() {
-        Pair<Long, Integer> infos = new Pair<>(sP.getLong("songTime", -1), sP.getInt("idSong", -1));
+        Pair<Integer, String> infos = new Pair<>(sP.getInt("songTime", -1), sP.getString("songName", null));
         this.infosMusic.setValue(infos);
     }
 
-    void updateInfosMusic(long songTime, int idSong) {
+    void updateInfosMusic(int songTime, String songName) {
         if (this.infosMusic == null)
             this.infosMusic = new MutableLiveData<>();
-        this.infosMusic.setValue(new Pair<>(songTime, idSong));
+        this.infosMusic.setValue(new Pair<>(songTime, songName));
         sP.edit()
-                .putLong("songTime", songTime)
-                .putInt("idSong", idSong)
+                .putInt("songTime", songTime)
+                .putString("idSong", songName)
                 .apply();
     }
 }
