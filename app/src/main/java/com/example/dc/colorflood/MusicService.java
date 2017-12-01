@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.util.Log;
 import android.util.Pair;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -19,8 +20,6 @@ public class MusicService extends Service {
     private final IBinder mBinder = new LocalBinder();
     AssetManager assetManager;
     MediaPlayer musicPlayer = null;
-    MediaPlayer soundPlayer = null;
-
     String current_music;
     int current_sec;
     StatsViewModel statsViewModel;
@@ -41,10 +40,11 @@ public class MusicService extends Service {
 
 
             Log.e(getClass().getSimpleName(), "getting song : " + current_sec + " " + current_music);
+
             if(current_music == null)
             {
-                current_sec = 0;
-                current_music = musics.get(rdn.nextInt(musics.size()));
+                newSong();
+
             }
             if(current_sec == -1)
             {
@@ -53,47 +53,65 @@ public class MusicService extends Service {
 
             Log.e(getClass().getSimpleName(), "current music : " + current_music);
 
+            setMusic();
 
-            try{
-                AssetFileDescriptor afd = assetManager.openFd("musics/" + current_music);
-                musicPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-                //
-                afd.close();
-                musicPlayer.prepare();
-                musicPlayer.setVolume(0.5f, 0.5f);
-                musicPlayer.start();
-                musicPlayer.seekTo(current_sec);
-
-            }catch (Exception ex){
-                Log.e(getClass().getSimpleName(), ex.getMessage());
-            }
 
         }
     };
 
+    public void newSong()
+    {
+        current_sec = 0;
+        if(musics.size() > 0)
+            current_music = musics.get(rdn.nextInt(musics.size()));
+        else
+            current_music = null;
+    }
+    public void setMusic()
+    {
+        if(current_music == null)
+            return;
+
+        try{
+            musicPlayer.reset();
+            AssetFileDescriptor afd = assetManager.openFd("musics/" + current_music);
+            musicPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            //
+            afd.close();
+            musicPlayer.prepare();
+            musicPlayer.setVolume(0.5f, 0.5f);
+            musicPlayer.start();
+            musicPlayer.seekTo(current_sec);
+
+        }
+        catch (IOException ex)
+        {
+            ex.printStackTrace();
+            newSong();
+            setMusic();
+        }
+    }
+
     public void meuh()
     {
         try {
-            soundPlayer.reset();
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                }
+            });
+
             AssetFileDescriptor afd = assetManager.openFd("sounds/" + sounds.get(rdn.nextInt(sounds.size())));
-            soundPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             //
             afd.close();
-            soundPlayer.prepare();
+            mediaPlayer.prepare();
 
-            soundPlayer.start();
-            soundPlayer.seekTo(0);
+            mediaPlayer.start();
+            //soundPlayer.seekTo(0);
         }
-        /*
-        try {
-            AssetFileDescriptor afd = getAssets().openFd("sounds/meuh1.mp3");
-            MediaPlayer player = new MediaPlayer();
-            player.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            afd.close();
-            player.prepare();
-            player.start();
-        }
-        */
         catch (IOException e) {
             e.printStackTrace();
         }
@@ -129,7 +147,14 @@ public class MusicService extends Service {
         }
 
         musicPlayer = new MediaPlayer();
-        soundPlayer = new MediaPlayer();
+        musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                Log.e(getClass().getSimpleName(), "music ended");
+                newSong();
+                setMusic();
+            }
+        });
 
 
         statsViewModel = StatsViewModel.getInstance();
@@ -152,10 +177,6 @@ public class MusicService extends Service {
         {
             musicPlayer.release();
             musicPlayer = null;
-        }
-        if(soundPlayer != null) {
-            soundPlayer.release();
-            soundPlayer = null;
         }
         if(statsViewModel != null)
         {
