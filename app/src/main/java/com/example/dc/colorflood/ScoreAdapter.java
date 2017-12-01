@@ -23,7 +23,17 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
 
         void bind(Score score){
             levelView.setText(String.valueOf(score.lvl));
-            scoreView.setText(String.valueOf(score.score)); //TODO bel affichage temps
+            scoreView.setText(prettifyTime(score.score));
+        }
+
+        String prettifyTime(long time){
+            long minutes = time / 60;
+            final long seconds = time % 60;
+            final long hours = minutes / 60;
+            minutes %= 60;
+            return (hours != 0 ? hours + "h" : "") +
+                    (minutes != 0 ? minutes + "m" : "") +
+                    seconds + "s";
         }
     }
 
