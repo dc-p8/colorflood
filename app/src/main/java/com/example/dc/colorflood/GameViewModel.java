@@ -75,6 +75,8 @@ public class GameViewModel extends AndroidViewModel {
     }
 
     void updateInfosMusic(long songTime, int idSong) {
+        if (this.infosMusic == null)
+            this.infosMusic = new MutableLiveData<>();
         this.infosMusic.setValue(new Pair<>(songTime, idSong));
         sP.edit()
                 .putLong("songTime", songTime)
