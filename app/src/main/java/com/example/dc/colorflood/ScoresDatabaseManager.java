@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
 public class ScoresDatabaseManager extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "highscores.db";
+    private static final String DATABASE_NAME = "highscores";
     private static final String TABLE_NAME = "highscores";
     private static final int DATABASE_VERSION = 1;
     static final String ID_COLUMN = "_id";

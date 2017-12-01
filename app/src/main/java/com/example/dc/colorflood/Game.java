@@ -121,7 +121,7 @@ public class Game extends MusicActivity implements Runnable
 
         this.gameView.lvl.setOnLevelEventListener(new LevelOnPlay.OnLevelEventListener() {
             public void onWin() {
-                statsViewModel.updateScores(gameView.lvl.getCurrentLevel(), timerTotal);
+                statsViewModel.updateScores(gameView.lvl.getCurrentLevel(), Long.parseLong(textTimer.getText().toString()));
                 nextLevel();
             }
             public void onLose() {
@@ -201,15 +201,19 @@ public class Game extends MusicActivity implements Runnable
 
     @Override
     public void run() {
-        long delay = (java.lang.System.currentTimeMillis() - this.timerFromResume) + this.timerTotal;
-        final long currenttime = delay / 1000;
+        final long currentTime = this.getCurrentTime();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 Log.e(getClass().getSimpleName(), "running");
-                textTimer.setText(String.valueOf(currenttime));
+                textTimer.setText(String.valueOf(currentTime));
             }
         });
         this.timerHandler.postDelayed(this, 1000);
+    }
+
+    private long getCurrentTime(){
+        long delay = (java.lang.System.currentTimeMillis() - this.timerFromResume) + this.timerTotal;
+        return delay / 1000;
     }
 }

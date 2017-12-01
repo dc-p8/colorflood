@@ -19,21 +19,15 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
             super(v);
             levelView = (TextView) v.findViewById(R.id.level);
             scoreView = (TextView) v.findViewById(R.id.score);
-            levelView.setTypeface(null, Typeface.BOLD);
-            levelView.setText("Chargement...");
         }
 
         void bind(Score score){
-            levelView.setText("Niveau :"+score.lvl);
-            levelView.setText(String.valueOf(score.score));
+            levelView.setText(String.valueOf(score.lvl));
+            scoreView.setText(String.valueOf(score.score)); //TODO bel affichage temps
         }
     }
 
     ScoreAdapter(Cursor scores) {
-        this.data = scores;
-    }
-
-    void setData(Cursor scores){
         this.data = scores;
     }
 
