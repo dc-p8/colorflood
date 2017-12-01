@@ -172,6 +172,7 @@ public class Game extends MusicActivity implements Runnable
         this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
         timerFromResume = java.lang.System.currentTimeMillis();
+        this.lastPressed = this.gameView.lvl.getStartingCase();
     }
 
     private void restartLevel(){
@@ -179,6 +180,7 @@ public class Game extends MusicActivity implements Runnable
         this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
         timerFromResume = java.lang.System.currentTimeMillis();
+        this.lastPressed = this.gameView.lvl.getStartingCase();
     }
 
     @Override
