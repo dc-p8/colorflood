@@ -128,6 +128,7 @@ public class Game extends MusicActivity implements Runnable
         this.gameViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {
+                boolean init = gameView.lvl.getCurrentLevel() != stats.first;
                 gameView.lvl.setCurrentLevel(stats.first);
                 gameView.lvl.setExtraMoves(stats.second);
 
@@ -136,9 +137,11 @@ public class Game extends MusicActivity implements Runnable
                     textExtraMoves.setText("");
                 else
                     textExtraMoves.setText('+'+String.valueOf(gameView.lvl.getExtraMoves()));
-                initLevel(gameView.lvl.getCurrentLevel());
-                lastPressed = gameView.lvl.getStartingCase();
-                textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
+                if(init) {
+                    initLevel(gameView.lvl.getCurrentLevel());
+                    lastPressed = gameView.lvl.getStartingCase();
+                    textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves() + "/" + gameView.lvl.getMaxNbMoves()));
+                }
             }
         });
 
