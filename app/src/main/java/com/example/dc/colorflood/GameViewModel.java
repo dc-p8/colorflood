@@ -13,7 +13,7 @@ import android.util.Pair;
 public class GameViewModel extends AndroidViewModel {
     private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
-    private MutableLiveData<Pair<Integer, String>> infosMusic;
+    private MutableLiveData<InfoMusic> infosMusic;
     private MutableLiveData<Cursor> scores;
     private static GameViewModel instance = null;
     private ScoresDatabaseManager scoresManager;
@@ -40,18 +40,21 @@ public class GameViewModel extends AndroidViewModel {
 
     LiveData<Pair<Integer, Integer>> getStats(){
         if (this.stats == null) {
-            this.stats = new MutableLiveData<>();
             loadStats();
         }
         return this.stats;
     }
 
     private void loadStats() {
+        this.stats = new MutableLiveData<>();
         Pair<Integer, Integer> s = new Pair<>(sP.getInt("currentLevel", 1), sP.getInt("extraTry", 0));
         this.stats.setValue(s);
     }
 
     void updateStats(int currentLvl, int extraTry) {
+        if (this.stats == null) {
+            this.stats = new MutableLiveData<>();
+        }
         this.stats.setValue(new Pair<>(currentLvl, extraTry));
         sP.edit()
                 .putInt("extraTry", extraTry)
@@ -61,27 +64,53 @@ public class GameViewModel extends AndroidViewModel {
 
 
 
-    LiveData<Pair<Integer, String>> getInfosMusic(){
+    LiveData<InfoMusic> getInfosMusic(){
         if (this.infosMusic == null) {
-            this.infosMusic = new MutableLiveData<>();
             loadInfosMusic();
         }
         return this.infosMusic;
     }
 
     private void loadInfosMusic() {
-        Pair<Integer, String> infos = new Pair<>(sP.getInt("songTime", -1), sP.getString("songName", null));
+        this.infosMusic = new MutableLiveData<>();
+        InfoMusic infos = new InfoMusic(sP.getInt("songTime", -1), sP.getString("songName", null), sP.getBoolean("songMute", false));
         this.infosMusic.setValue(infos);
     }
 
     void updateInfosMusic(int songTime, String songName) {
         if (this.infosMusic == null)
             this.infosMusic = new MutableLiveData<>();
-        this.infosMusic.setValue(new Pair<>(songTime, songName));
+        this.infosMusic.setValue(new InfoMusic(songTime, songName, this.infosMusic.getValue() != null && this.infosMusic.getValue().mute));
         sP.edit()
                 .putInt("songTime", songTime)
                 .putString("idSong", songName)
                 .apply();
+    }
+
+    void inverseMuteMusic() {
+        boolean mute;
+        if (this.infosMusic == null) {
+            loadInfosMusic();
+            mute = !this.infosMusic.getValue().mute;
+        } else {
+            mute = !this.infosMusic.getValue().mute;
+            this.infosMusic.setValue(new InfoMusic(this.infosMusic.getValue().songTime, this.infosMusic.getValue().songName, mute));
+        }
+        sP.edit()
+                .putBoolean("songMute", mute)
+                .apply();
+    }
+
+    class InfoMusic{
+        int songTime;
+        String songName;
+        boolean mute = false;
+
+        InfoMusic(int songTime, String songName, boolean mute) {
+            this.songTime = songTime;
+            this.songName = songName;
+            this.mute = mute;
+        }
     }
 
 

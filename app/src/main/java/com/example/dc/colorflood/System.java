@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 
 public class System extends MusicActivity {
-    private GameViewModel statsViewModel;
+    private GameViewModel gameViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        statsViewModel = GameViewModel.getInstance();
+        gameViewModel = GameViewModel.getInstance();
         setContentView(R.layout.activity_system);
         final Context c = this;
         Button buttonReset = findViewById(R.id.button_reset);
@@ -32,8 +32,8 @@ public class System extends MusicActivity {
                         .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                statsViewModel.updateStats(1, 0);
-                                statsViewModel.deleteScores();
+                                gameViewModel.updateStats(1, 0);
+                                gameViewModel.deleteScores();
                             }
                         }).show();
             }
@@ -43,9 +43,7 @@ public class System extends MusicActivity {
         toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* TODO:
-                audio logic
-                 */
+                gameViewModel.inverseMuteMusic();
             }
         });
     }

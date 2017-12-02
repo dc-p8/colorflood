@@ -8,9 +8,7 @@ import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.util.Pair;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -22,42 +20,12 @@ public class MusicService extends Service {
     MediaPlayer musicPlayer = null;
     String current_music;
     int current_sec;
-    StatsViewModel statsViewModel;
+    GameViewModel gameViewModel;
     List<String> musics = null;
     List<String> sounds = null;
     Random rdn;
 
-    android.arch.lifecycle.Observer<Pair<Integer, String>> observer = new android.arch.lifecycle.Observer<Pair<Integer, String>>() {
-        @Override
-        public void onChanged(Pair<Integer, String> stats) {
-            Log.e(getClass().getSimpleName(), "changed");
-            if(musicPlayer == null)
-                return;
-
-            current_sec = stats.first;
-            current_music = stats.second;
-
-
-
-            Log.e(getClass().getSimpleName(), "getting song : " + current_sec + " " + current_music);
-
-            if(current_music == null)
-            {
-                newSong();
-
-            }
-            if(current_sec == -1)
-            {
-                current_sec = 0;
-            }
-
-            Log.e(getClass().getSimpleName(), "current music : " + current_music);
-
-            setMusic();
-
-
-        }
-    };
+    android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer;
 
     public void newSong()
     {
@@ -119,9 +87,40 @@ public class MusicService extends Service {
     }
 
     public MusicService() {
+        this.observer = new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
+            @Override
+            public void onChanged(GameViewModel.InfoMusic infos) {
+                Log.e(getClass().getSimpleName(), "changed");
+                if(musicPlayer == null)
+                    return;
+
+                current_sec = infos.songTime;
+                current_music = infos.songName;
+
+
+
+                Log.e(getClass().getSimpleName(), "getting song : " + current_sec + " " + current_music);
+
+                if(current_music == null)
+                {
+                    newSong();
+
+                }
+                if(current_sec == -1)
+                {
+                    current_sec = 0;
+                }
+
+                Log.e(getClass().getSimpleName(), "current music : " + current_music);
+
+                setMusic();
+
+
+            }
+        };
     }
 
-    public class LocalBinder extends Binder {
+    class LocalBinder extends Binder {
         MusicService getService() {
             // Return this instance of LocalService so clients can call public methods
             return MusicService.this;
@@ -157,9 +156,9 @@ public class MusicService extends Service {
         });
 
 
-        statsViewModel = StatsViewModel.getInstance();
+        gameViewModel = GameViewModel.getInstance();
 
-        statsViewModel.getInfosMusic().observeForever(observer);
+        gameViewModel.getInfosMusic().observeForever(this.observer);
 
 
 
@@ -170,7 +169,7 @@ public class MusicService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.e(getClass().getSimpleName(), "destroyed");
-        //statsViewModel.updateInfosMusic();
+        //gameViewModel.updateInfosMusic();
         current_sec =  musicPlayer.getCurrentPosition();
         Log.e(getClass().getSimpleName(), "time : " + current_sec);
         if(musicPlayer != null)
@@ -178,11 +177,11 @@ public class MusicService extends Service {
             musicPlayer.release();
             musicPlayer = null;
         }
-        if(statsViewModel != null)
+        if(gameViewModel != null)
         {
             Log.e(getClass().getSimpleName(), "putting : " + current_sec + " " + current_music);
-            statsViewModel.getInfosMusic().removeObserver(observer);
-            statsViewModel.updateInfosMusic(current_sec, current_music);
+            gameViewModel.getInfosMusic().removeObserver(this.observer);
+            gameViewModel.updateInfosMusic(current_sec, current_music);
         }
 
 
