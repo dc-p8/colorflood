@@ -22,13 +22,6 @@ public class GameViewModel extends AndroidViewModel {
         super(application);
         this.sP = PreferenceManager.getDefaultSharedPreferences(application);
         this.scoresManager = new ScoresDatabaseManager(application);
-    }
-
-    void resetInstance(){
-        GameViewModel.instance = null;
-    }
-
-    void provideInstance(){
         GameViewModel.instance = this;
     }
 
@@ -150,5 +143,13 @@ public class GameViewModel extends AndroidViewModel {
     void updateScores(int lvl, long score){
         this.scoresManager.executeAddOrUpdateIfBetter(lvl, score);
         loadScores();
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        GameViewModel.instance = null;
+        if (this.scores != null && this.scores.getValue() != null && !this.scores.getValue().isClosed())
+                this.scores.getValue().close();
     }
 }

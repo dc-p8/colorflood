@@ -36,11 +36,4 @@ public class Highscores extends MusicActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (scores != null && !scores.isClosed())
-            scores.close();
-    }
 }
