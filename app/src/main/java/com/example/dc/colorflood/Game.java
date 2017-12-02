@@ -121,11 +121,36 @@ public class Game extends MusicActivity implements Runnable
 
         this.gameView.lvl.setOnLevelEventListener(new LevelOnPlay.OnLevelEventListener() {
             public void onWin() {
-                statsViewModel.updateScores(gameView.lvl.getCurrentLevel(), Long.parseLong(textTimer.getText().toString()));
-                nextLevel();
+                timerHandler.removeCallbacks(Game.this);
+                new AlertDialog.Builder(Game.this)
+                        .setCancelable(false)
+                        .setTitle("Gagné !")
+                        .setMessage("Niveau suivant : " + (gameView.lvl.getCurrentLevel()+1))
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                statsViewModel.updateScores(gameView.lvl.getCurrentLevel(), Long.parseLong(textTimer.getText().toString()));
+                                nextLevel();
+                                thread.start();
+                            }
+                        })
+                        .create()
+                        .show();
+
             }
             public void onLose() {
-                restartLevel();
+                timerHandler.removeCallbacks(Game.this);
+                new AlertDialog.Builder(Game.this)
+                        .setCancelable(false)
+                        .setTitle("Perdu !")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                restartLevel();
+                                thread.start();
+                            }
+                        })
+                        .create()
+                        .show();
+
             }
             public void decExtraMoves(){
                 statsViewModel.updateStats(gameView.lvl.getCurrentLevel(), gameView.lvl.getExtraMoves()-1);
@@ -170,18 +195,20 @@ public class Game extends MusicActivity implements Runnable
         this.statsViewModel.updateStats(this.gameView.lvl.getCurrentLevel()+1,
                 this.gameView.lvl.getExtraMoves()+(this.gameView.lvl.getMaxNbMoves()-this.gameView.lvl.getNbMoves()));
         this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
-        this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
-        this.timerTotal = 0;
-        timerFromResume = java.lang.System.currentTimeMillis();
-        this.lastPressed = this.gameView.lvl.getStartingCase();
+        this.startLevel();
     }
 
     private void restartLevel(){
         this.gameView.lvl.restart();
+        this.startLevel();
+    }
+
+    private void startLevel(){
         this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
         timerFromResume = java.lang.System.currentTimeMillis();
         this.lastPressed = this.gameView.lvl.getStartingCase();
+        gameView.update();
     }
 
     @Override
