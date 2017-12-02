@@ -23,15 +23,12 @@ public class Game extends MusicActivity implements Runnable
     private TextView textNbMoves;
     private TextView textExtraMoves;
     private TextView textCurrentLevel;
-    private int lvlHeight = 10, lvlWidth = 10;
-    private int nbColors = 5;
-    private int maxNbMoves = 22;
     private Thread thread;
     private long timerFromResume;
     private Handler timerHandler;
     private long timerTotal = 0;
     private int lastPressed;
-    private GameViewModel statsViewModel;
+    private GameViewModel gameViewModel;
 
 
     public Game() {
@@ -88,8 +85,47 @@ public class Game extends MusicActivity implements Runnable
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.statsViewModel = GameViewModel.getInstance();
-        this.statsViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
+        setContentView(R.layout.activity_game);
+        this.gameView = findViewById(R.id.mygame);
+        this.gameViewModel = GameViewModel.getInstance();
+        this.colorsButtonsLayout = findViewById(R.id.colors);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1.0f
+        );
+        Resources r = getResources();
+        int px = (int) TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                5,
+                r.getDisplayMetrics()
+        );
+        params.setMargins(px, px, px, px);
+        this.colorsButtonsLayout.setParams(params);
+        this.colorsButtonsLayout.setBtnCallback(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pressed = (int)v.getTag(R.id.button_number);
+                if (pressed != lastPressed){
+                    makeASound();
+                    lastPressed = pressed;
+                    gameView.lvl.play(pressed);
+                    gameView.update();
+                    textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
+                }
+            }
+        });
+
+        this.textTimer = findViewById(R.id.text_timer);
+        this.textTimer.setText(String.valueOf(0));
+        this.textNbMoves = findViewById(R.id.text_try);
+        this.textExtraMoves = findViewById(R.id.text_extra);
+        this.textExtraMoves.setText("");
+        this.textCurrentLevel = findViewById(R.id.text_currentLevel);
+        this.textCurrentLevel.setText(String.valueOf("lvl:"+gameView.lvl.getCurrentLevel()));
+
+        this.gameViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {
                 gameView.lvl.setCurrentLevel(stats.first);
@@ -100,24 +136,11 @@ public class Game extends MusicActivity implements Runnable
                     textExtraMoves.setText("");
                 else
                     textExtraMoves.setText('+'+String.valueOf(gameView.lvl.getExtraMoves()));
+                initLevel(gameView.lvl.getCurrentLevel());
+                lastPressed = gameView.lvl.getStartingCase();
+                textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
             }
         });
-
-        setContentView(R.layout.activity_game);
-        this.colorsButtonsLayout = findViewById(R.id.colors);
-        this.gameView = findViewById(R.id.mygame);
-
-        this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
-        this.lastPressed = this.gameView.lvl.getStartingCase();
-
-        this.textTimer = findViewById(R.id.text_timer);
-        this.textTimer.setText(String.valueOf(0));
-        this.textNbMoves = findViewById(R.id.text_try);
-        this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
-        this.textExtraMoves = findViewById(R.id.text_extra);
-        this.textExtraMoves.setText("");
-        this.textCurrentLevel = findViewById(R.id.text_currentLevel);
-        this.textCurrentLevel.setText(String.valueOf("lvl:"+gameView.lvl.getCurrentLevel()));
 
         this.gameView.lvl.setOnLevelEventListener(new LevelOnPlay.OnLevelEventListener() {
             public void onWin() {
@@ -128,7 +151,7 @@ public class Game extends MusicActivity implements Runnable
                         .setMessage("Niveau suivant : " + (gameView.lvl.getCurrentLevel()+1))
                         .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                statsViewModel.updateScores(gameView.lvl.getCurrentLevel(), Long.parseLong(textTimer.getText().toString()));
+                                gameViewModel.updateScores(gameView.lvl.getCurrentLevel(), Long.parseLong(textTimer.getText().toString()));
                                 nextLevel();
                                 thread.start();
                             }
@@ -153,53 +176,23 @@ public class Game extends MusicActivity implements Runnable
 
             }
             public void decExtraMoves(){
-                statsViewModel.updateStats(gameView.lvl.getCurrentLevel(), gameView.lvl.getExtraMoves()-1);
+                gameViewModel.updateStats(gameView.lvl.getCurrentLevel(), gameView.lvl.getExtraMoves()-1);
             }
         });
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-        );
-
-        Resources r = getResources();
-        int px = (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                5,
-                r.getDisplayMetrics()
-        );
-        params.setMargins(px, px, px, px);
-
-        this.colorsButtonsLayout.setParams(params);
-        this.colorsButtonsLayout.setBtnCallback(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pressed = (int)v.getTag(R.id.button_number);
-                if (pressed != lastPressed){
-                    makeASound();
-                    lastPressed = pressed;
-                    gameView.lvl.play(pressed);
-                    gameView.update();
-                    textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
-                }
-            }
-        });
-
-        this.colorsButtonsLayout.addButtons(this.gameView.lvl.getCasesColors());
         timerHandler = new Handler();
         thread = new Thread(this);
     }
 
     private void nextLevel(){
-        this.statsViewModel.updateStats(this.gameView.lvl.getCurrentLevel()+1,
+        this.gameViewModel.updateStats(this.gameView.lvl.getCurrentLevel()+1,
                 this.gameView.lvl.getExtraMoves()+(this.gameView.lvl.getMaxNbMoves()-this.gameView.lvl.getNbMoves()));
-        this.gameView.initLevel(this.lvlWidth, this.lvlHeight, this.nbColors, this.maxNbMoves);
         this.startLevel();
     }
 
     private void restartLevel(){
         this.gameView.lvl.restart();
+        this.lastPressed = this.gameView.lvl.getStartingCase();
         this.startLevel();
     }
 
@@ -207,8 +200,17 @@ public class Game extends MusicActivity implements Runnable
         this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
         timerFromResume = java.lang.System.currentTimeMillis();
-        this.lastPressed = this.gameView.lvl.getStartingCase();
         gameView.update();
+    }
+
+    private void initLevel(int currentLevel){
+        int size = 3+currentLevel/7;
+        int nbColors = 3+((currentLevel/15)%12);
+        int maxNbMoves = 10+(currentLevel/5);
+        this.gameView.initLevel(size, size, nbColors, maxNbMoves);
+        if (nbColors != colorsButtonsLayout.getLenght()){
+            colorsButtonsLayout.initButtons(gameView.lvl.getCasesColors());
+        }
     }
 
     @Override

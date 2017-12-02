@@ -31,7 +31,8 @@ public class ButtonBar extends LinearLayout {
         this.params = params;
     }
 
-    public void addButtons(int[] colors){
+    public void initButtons(int[] colors){
+        this.removeAllViews();
         for(int i = colors.length-1; i >= 0; i--)
         {
             final Button bt = new Button(this.getContext());
@@ -43,5 +44,9 @@ public class ButtonBar extends LinearLayout {
             this.addView(bt);
         }
 
+    }
+
+    public int getLenght(){
+        return this.getChildCount();
     }
 }
