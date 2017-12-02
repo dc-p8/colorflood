@@ -13,7 +13,7 @@ import android.util.Pair;
 public class GameViewModel extends AndroidViewModel {
     private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
-    private MutableLiveData<Pair<Long, Integer>> infosMusic;
+    private MutableLiveData<Pair<Integer, String>> infosMusic;
     private MutableLiveData<Cursor> scores;
     private static GameViewModel instance = null;
     private ScoresDatabaseManager scoresManager;
@@ -38,14 +38,6 @@ public class GameViewModel extends AndroidViewModel {
 
 
 
-    void updateStats(int currentLvl, int extraTry) {
-        this.stats.setValue(new Pair<>(currentLvl, extraTry));
-        sP.edit()
-                .putInt("extraTry", extraTry)
-                .putInt("currentLevel", currentLvl)
-                .apply();
-    }
-
     LiveData<Pair<Integer, Integer>> getStats(){
         if (this.stats == null) {
             this.stats = new MutableLiveData<>();
@@ -59,9 +51,17 @@ public class GameViewModel extends AndroidViewModel {
         this.stats.setValue(s);
     }
 
+    void updateStats(int currentLvl, int extraTry) {
+        this.stats.setValue(new Pair<>(currentLvl, extraTry));
+        sP.edit()
+                .putInt("extraTry", extraTry)
+                .putInt("currentLevel", currentLvl)
+                .apply();
+    }
 
 
-    LiveData<Pair<Long, Integer>> getInfosMusic(){
+
+    LiveData<Pair<Integer, String>> getInfosMusic(){
         if (this.infosMusic == null) {
             this.infosMusic = new MutableLiveData<>();
             loadInfosMusic();
@@ -70,17 +70,17 @@ public class GameViewModel extends AndroidViewModel {
     }
 
     private void loadInfosMusic() {
-        Pair<Long, Integer> infos = new Pair<>(sP.getLong("songTime", -1), sP.getInt("idSong", -1));
+        Pair<Integer, String> infos = new Pair<>(sP.getInt("songTime", -1), sP.getString("songName", null));
         this.infosMusic.setValue(infos);
     }
 
-    void updateInfosMusic(long songTime, int idSong) {
+    void updateInfosMusic(int songTime, String songName) {
         if (this.infosMusic == null)
             this.infosMusic = new MutableLiveData<>();
-        this.infosMusic.setValue(new Pair<>(songTime, idSong));
+        this.infosMusic.setValue(new Pair<>(songTime, songName));
         sP.edit()
-                .putLong("songTime", songTime)
-                .putInt("idSong", idSong)
+                .putInt("songTime", songTime)
+                .putString("idSong", songName)
                 .apply();
     }
 

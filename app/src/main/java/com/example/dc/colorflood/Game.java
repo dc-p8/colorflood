@@ -152,6 +152,7 @@ public class Game extends MusicActivity implements Runnable
             public void onClick(View v) {
                 int pressed = (int)v.getTag(R.id.button_number);
                 if (pressed != lastPressed){
+                    makeASound();
                     lastPressed = pressed;
                     gameView.lvl.play(pressed);
                     gameView.update();

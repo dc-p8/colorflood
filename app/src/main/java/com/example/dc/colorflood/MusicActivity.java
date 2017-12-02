@@ -7,9 +7,17 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 public class MusicActivity extends AppCompatActivity {
     static MusicService mService;
+
+    public void makeASound()
+    {
+        Log.e(getClass().getSimpleName(), "calling meuh");
+        mService.meuh();
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
