@@ -36,7 +36,7 @@ public class ScoresDatabaseManager extends SQLiteOpenHelper {
     }
 
     private Cursor selectAll(){
-        return this.getReadableDatabase().query(TABLE_NAME, null, null, null, null, null, ID_COLUMN);
+        return this.getReadableDatabase().query(TABLE_NAME, null, null, null, null, null, ID_COLUMN+" DESC");
     }
 
     private void addOrUpdateIfBetter(int lvl, long score){
