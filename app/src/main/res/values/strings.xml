@@ -14,10 +14,6 @@
     <string name="highscore">Meilleurs scores</string>
     <string name="system">Système</string>
     <string name="credits">Crédits</string>
-    <string name="audio">Audio :</string>
-    <string name="audio_with">Avec</string>
-    <string name="audio_without">Sans</string>
-    <string name="reset_stats">Reset progression</string>
     <string name="extra_try_prefix">+%1$d</string>
     <string name="dialog_quit_message">Quitter le jeu ?</string>
     <string name="dialog_quit_warning">Votre progression sur cette partie sera perdue.</string>
@@ -33,4 +29,9 @@
     <string name="dialog_system_reinit_warning">En êtes-vous sûr ?</string>
     <string name="dialog_system_reinit_agree">Oui</string>
     <string name="dialog_system_reinit_disagree">Non</string>
+    <string name="system_reset_stats">Reset progression</string>
+    <string name="system_leave">Quitter</string>
+    <string name="system_audio">Audio :</string>
+    <string name="system_audio_with">Avec</string>
+    <string name="system_audio_without">Sans</string>
 </resources>

@@ -38,7 +38,14 @@ public class Launcher extends MusicActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if( getIntent().getBooleanExtra("Exit", false)){
+            finish();
+            return;
+        }
+
         Log.d("ONCREATE", "TEST");
+        //todo : rectifier bug ici
         this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
         setContentView(R.layout.activity_launcher);
 
