@@ -12,7 +12,8 @@
         android:gravity="center"
         android:background="?android:selectableItemBackground"
         android:text="MEILLEURS SCORES"
-        android:textColor="#550055"/>
+        android:textColor="#550055"
+        style="@android:style/TextAppearance.Large"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"

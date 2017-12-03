@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Colorflood</string>
     <item name="button_number" type="id"></item>
+    <string name="app_title"><b><font color="red">C</font><font color="blue">O</font><font color="yellow">L</font><font color="cyan">O</font><font color="green">R</font><font color="green">F</font><font color="cyan">L</font><font color="yellow">O</font><font color="blue">O</font><font color="red">D</font></b></string>
 </resources>

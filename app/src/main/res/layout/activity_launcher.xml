@@ -12,7 +12,6 @@
 
     <android.support.constraint.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,6 +20,7 @@
             android:id="@+id/text_currentLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:text="Niveau actuel : "
@@ -44,11 +44,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="COLORFLOOD"
+            android:text="@string/app_title"
             app:layout_constraintTop_toBottomOf="@+id/text_extraTry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/menuButtons" />
+            app:layout_constraintBottom_toTopOf="@+id/menuButtons"
+            android:textSize="50sp"
+            android:shadowColor="#000000"
+            android:shadowRadius="5"/>
 
         <LinearLayout
             android:id="@+id/menuButtons"
