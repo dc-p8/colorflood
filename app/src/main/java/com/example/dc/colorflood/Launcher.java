@@ -3,14 +3,19 @@ package com.example.dc.colorflood;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.util.Pair;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class Launcher extends MusicActivity {
+public class Launcher extends MusicActivity{
     private Button buttonPlay;
     private Button buttonCredits;
     private Button buttonSystem;
@@ -19,12 +24,12 @@ public class Launcher extends MusicActivity {
     private TextView textCurrentLevel;
     private int extraTry = 0;
     private int currentLevel = 0;
-    private GameViewModel statsViewModel;
+    private GameViewModel gameViewModel;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.statsViewModel.updateInfosMusic(0, null);
+        this.gameViewModel.updateInfosMusic(0, null);
         Log.e(getClass().getSimpleName(), "ONDESTROY");
     }
 
@@ -44,14 +49,14 @@ public class Launcher extends MusicActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("ONCREATE", "TEST");
-        statsViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
+        this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
         setContentView(R.layout.activity_launcher);
 
-        textCurrentLevel = findViewById(R.id.text_currentLevel);
-        textExtraTry = findViewById(R.id.text_extraTry);
+        this.textCurrentLevel = findViewById(R.id.text_currentLevel);
+        this.textExtraTry = findViewById(R.id.text_extraTry);
 
-        buttonPlay = findViewById(R.id.button_play);
-        buttonPlay.setOnClickListener(new View.OnClickListener() {
+        this.buttonPlay = findViewById(R.id.button_play);
+        this.buttonPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Game.class);
@@ -59,8 +64,8 @@ public class Launcher extends MusicActivity {
             }
         });
 
-        buttonCredits = findViewById(R.id.button_credits);
-        buttonCredits.setOnClickListener(new View.OnClickListener() {
+        this.buttonCredits = findViewById(R.id.button_credits);
+        this.buttonCredits.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Credits.class);
@@ -68,8 +73,8 @@ public class Launcher extends MusicActivity {
             }
         });
 
-        buttonSystem = findViewById(R.id.button_system);
-        buttonSystem.setOnClickListener(new View.OnClickListener() {
+        this.buttonSystem = findViewById(R.id.button_system);
+        this.buttonSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, System.class);
@@ -77,21 +82,19 @@ public class Launcher extends MusicActivity {
             }
         });
 
-        buttonSystem = findViewById(R.id.button_highscores);
-        buttonSystem.setOnClickListener(new View.OnClickListener() {
+        this.buttonSystem = findViewById(R.id.button_highscores);
+        this.buttonSystem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Highscores.class);
                 Launcher.this.startActivity(myIntent);
             }
         });
-
-
     }
 
     public void updateStat()
     {
-        statsViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
+        gameViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {
                 currentLevel = stats.first;

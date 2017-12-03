@@ -74,7 +74,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         Log.d("SufaceCreated", "SurfaceCreated");
-
     }
 
     @Override
