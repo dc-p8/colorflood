@@ -63,6 +63,13 @@ public class Game extends MusicActivity implements Runnable
         super.onResume();
         Log.e(getClass().getSimpleName(), "RESUMED");
         timerFromResume = java.lang.System.currentTimeMillis();
+        if(thread != null)
+        {
+            Thread.State state = thread.getState();
+            Log.e(getClass().getSimpleName(), "state : " + state.name());
+        }
+
+        thread = new Thread(this);
         thread.start();
     }
 
@@ -184,7 +191,7 @@ public class Game extends MusicActivity implements Runnable
         });
 
         timerHandler = new Handler();
-        thread = new Thread(this);
+
     }
 
     private void nextLevel(){
