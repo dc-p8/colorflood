@@ -20,13 +20,13 @@ public class Launcher extends MusicActivity{
     protected void onDestroy() {
         super.onDestroy();
         this.gameViewModel.updateInfosMusic(0, null);
-        Log.e(getClass().getSimpleName(), "ONDESTROY");
+        Log.d(getClass().getSimpleName(), "ONDESTROY");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("ONPAUSE", "TEST");
+        Log.d(getClass().getSimpleName(), "TEST");
     }
 
     @Override

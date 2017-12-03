@@ -46,15 +46,13 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
                 }
                 first = false;
-
-                Log.d("run", "after sem wait");
                 canvas = holder.lockCanvas();
                 if(canvas != null)
                     drawLevel(canvas);
 
             }
             catch (Exception e){
-                Log.e(getClass().getSimpleName(), e.getMessage());
+                e.printStackTrace();
             }
             finally {
                 if(canvas != null)
@@ -65,7 +63,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     public void update()
     {
-        Log.d("Update", "calling update");
         synchronized (this) {
             notify();
         }
@@ -73,7 +70,6 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("SurfaceCreated", "SurfaceCreated");
     }
 
     @Override
@@ -84,8 +80,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             Log.d(getClass().getSimpleName(), "thread null");
         else
         {
-            Log.d(getClass().getSimpleName(), "thread non null");
-            Log.d("surfacechanged", thread.getState().name());
+            Log.d(getClass().getSimpleName(), "SurfaceChanged : thread state : " + thread.getState().name());
         }
 
         this.caseWidth = (float)getWidth() / (float)this.lvl.getNbCasesWidth();
@@ -115,8 +110,8 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         canvas.drawRGB(50, 50, 50);
 
 
-        Log.d(getClass().getName(),"" + this.caseWidth);
-        Log.d(getClass().getName(), "" + this.caseHeight);
+        Log.d(getClass().getSimpleName(),"" + this.caseWidth);
+        Log.d(getClass().getSimpleName(), "" + this.caseHeight);
 
 
         for(int i = 0; i < lvl.getNbCasesHeight(); i++)
@@ -133,7 +128,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        Log.d("surfacedestroyed", "SurfaceDestroyed");
+        Log.d(getClass().getSimpleName(), "SurfaceDestroyed");
         running = false;
         boolean retry = true;
         while (retry) {
@@ -147,7 +142,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
                 retry = false;
             } catch (InterruptedException e) {
                 // try until it works
-                Log.e(getClass().getSimpleName(), e.getMessage());
+                e.printStackTrace();
             }
         }
     }

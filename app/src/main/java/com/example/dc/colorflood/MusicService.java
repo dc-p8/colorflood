@@ -49,7 +49,6 @@ public class MusicService extends Service {
                 musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
-                        Log.e(getClass().getSimpleName(), "music ended");
                         newSong();
                         setMusic();
                     }
@@ -60,7 +59,6 @@ public class MusicService extends Service {
 
             AssetFileDescriptor afd = assetManager.openFd("musics/" + mInfoMusic.songName);
             musicPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
-            //
             afd.close();
             musicPlayer.prepare();
             musicPlayer.setVolume(0.5f, 0.5f);
@@ -126,8 +124,6 @@ public class MusicService extends Service {
         this.observer = new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
             @Override
             public void onChanged(GameViewModel.InfoMusic infos) {
-                Log.e(getClass().getSimpleName(), "changed");
-
                 mInfoMusic = infos;
 
                 if(mInfoMusic.mute) {
@@ -135,18 +131,10 @@ public class MusicService extends Service {
                     return;
                 }
 
-
-
-
-                Log.e(getClass().getSimpleName(), "getting song : " + mInfoMusic.songTime + " " + mInfoMusic.songName);
-
                 if(mInfoMusic.songName == null)
                 {
                     newSong();
-
                 }
-
-                Log.e(getClass().getSimpleName(), "current music : " + mInfoMusic.songName);
 
                 setMusic();
 
@@ -170,7 +158,7 @@ public class MusicService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.e(getClass().getSimpleName(), "create");
+        Log.d(getClass().getSimpleName(), "CREATE");
         rnd = new Random(java.lang.System.currentTimeMillis());
         assetManager = getAssets();
         try {
@@ -192,7 +180,7 @@ public class MusicService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.e(getClass().getSimpleName(), "destroyed");
+        Log.d(getClass().getSimpleName(), "DESTROY");
         //gameViewModel.updateInfosMusic();
         /*
         mInfoMusic.songTime =  musicPlayer.getCurrentPosition();
@@ -206,8 +194,7 @@ public class MusicService extends Service {
         }
         if(gameViewModel != null)
         {
-
-            Log.e(getClass().getSimpleName(), "putting : " + time + " " + mInfoMusic.songName);
+            Log.d(getClass().getSimpleName(), "putting : " + time + " " + mInfoMusic.songName);
             gameViewModel.getInfosMusic().removeObserver(this.observer);
             gameViewModel.updateInfosMusic(time, mInfoMusic.songName);
         }

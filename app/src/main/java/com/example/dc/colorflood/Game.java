@@ -55,18 +55,16 @@ public class Game extends MusicActivity implements Runnable
                         finish();
                     }
                 }).show();
-        Log.d(getClass().getSimpleName(), "DIALOG");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Log.e(getClass().getSimpleName(), "RESUMED");
+
         timerFromResume = java.lang.System.currentTimeMillis();
         if(thread != null)
         {
             Thread.State state = thread.getState();
-            Log.e(getClass().getSimpleName(), "state : " + state.name());
         }
 
         thread = new Thread(this);
@@ -76,7 +74,6 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.e(getClass().getSimpleName(), "ONDESTROY");
     }
 
 
@@ -84,7 +81,6 @@ public class Game extends MusicActivity implements Runnable
     protected void onPause() {
         super.onPause();
         this.timerTotal += (java.lang.System.currentTimeMillis() - timerFromResume);
-        Log.e(getClass().getSimpleName(), "PAUSED");
         this.timerHandler.removeCallbacks(this);
     }
 
@@ -247,7 +243,6 @@ public class Game extends MusicActivity implements Runnable
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.e(getClass().getSimpleName(), "running");
                 textTimer.setText(String.valueOf(currentTime));
             }
         });
