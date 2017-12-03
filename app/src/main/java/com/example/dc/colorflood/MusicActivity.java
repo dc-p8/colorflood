@@ -6,13 +6,12 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 public class MusicActivity extends AppCompatActivity {
-    static MusicService mService;
+    private static MusicService mService;
 
-    public void makeASound()
+    void makeASound()
     {
         Log.e(getClass().getSimpleName(), "calling meuh");
         mService.meuh();
@@ -32,12 +31,7 @@ public class MusicActivity extends AppCompatActivity {
         unbindService(mConnection);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    private static ServiceConnection mConnection = new ServiceConnection() {
+    final private static ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,

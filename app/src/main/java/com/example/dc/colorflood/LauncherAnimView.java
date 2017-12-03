@@ -6,20 +6,21 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.util.Random;
 
 public class LauncherAnimView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
-    private int[] casesColors;
-    private int[][] cases;
-    private Random rnd;
+    volatile private int[] casesColors;
+    volatile private int[][] cases;
+    final private Random rnd;
     private final Handler animHandler;
     private final SurfaceHolder holder;
-    Thread thread;
-    private int size, nbColors;
-    private float caseWidth, caseHeight;
+    private Thread thread;
+    final private int size, nbColors;
+    volatile private float caseWidth, caseHeight;
 
     LauncherAnimView(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -90,6 +91,7 @@ public class LauncherAnimView extends SurfaceView implements Runnable, SurfaceHo
                 this.thread.join();
                 retry = false;
             } catch (InterruptedException e) {
+                Log.e("threadJoinFailed", e.getLocalizedMessage());
             }
         }
     }

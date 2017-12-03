@@ -16,27 +16,26 @@ import java.util.Random;
 
 public class MusicService extends Service {
     private final IBinder mBinder = new LocalBinder();
-    AssetManager assetManager;
-    MediaPlayer musicPlayer = null;
+    private AssetManager assetManager;
+    private MediaPlayer musicPlayer = null;
 
-    GameViewModel gameViewModel;
-    List<String> musics = null;
-    List<String> sounds = null;
-    Random rdn;
-    int lastTime = -1;
+    private GameViewModel gameViewModel;
+    private List<String> musics = null;
+    private List<String> sounds = null;
+    private Random rnd;
 
-    GameViewModel.InfoMusic mInfoMusic;
-    android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer;
+    private GameViewModel.InfoMusic mInfoMusic;
+    final private android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer;
 
-    public void newSong()
+    private void newSong()
     {
         mInfoMusic.songTime = 0;
         if(musics.size() > 0)
-            mInfoMusic.songName = musics.get(rdn.nextInt(musics.size()));
+            mInfoMusic.songName = musics.get(rnd.nextInt(musics.size()));
         else
             mInfoMusic.songName = null;
     }
-    public void setMusic()
+    private void setMusic()
     {
         if(mInfoMusic.mute)
             return;
@@ -77,7 +76,7 @@ public class MusicService extends Service {
         }
     }
 
-    public int getTime()
+    private int getTime()
     {
         int time = 0;
         if(musicPlayer != null)
@@ -99,7 +98,7 @@ public class MusicService extends Service {
                 }
             });
 
-            AssetFileDescriptor afd = assetManager.openFd("sounds/" + sounds.get(rdn.nextInt(sounds.size())));
+            AssetFileDescriptor afd = assetManager.openFd("sounds/" + sounds.get(rnd.nextInt(sounds.size())));
             mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             //
             afd.close();
@@ -114,7 +113,7 @@ public class MusicService extends Service {
 
     }
 
-    public void stopMusic()
+    private void stopMusic()
     {
         if(musicPlayer != null)
         {
@@ -131,7 +130,7 @@ public class MusicService extends Service {
 
                 mInfoMusic = infos;
 
-                if(mInfoMusic.mute == true) {
+                if(mInfoMusic.mute) {
                     stopMusic();
                     return;
                 }
@@ -172,7 +171,7 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.e(getClass().getSimpleName(), "create");
-        rdn = new Random(java.lang.System.currentTimeMillis());
+        rnd = new Random(java.lang.System.currentTimeMillis());
         assetManager = getAssets();
         try {
             musics = Arrays.asList(assetManager.list("musics"));

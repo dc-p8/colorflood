@@ -8,8 +8,8 @@ import android.widget.LinearLayout;
 
 
 public class ButtonBar extends LinearLayout {
-    View.OnClickListener btnCallback;
-    LinearLayout.LayoutParams params;
+    private View.OnClickListener btnCallback;
+    private LinearLayout.LayoutParams params;
 
     public ButtonBar(Context context) {
         super(context);

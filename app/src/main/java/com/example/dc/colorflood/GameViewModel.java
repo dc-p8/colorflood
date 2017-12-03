@@ -11,13 +11,13 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
-public class GameViewModel extends AndroidViewModel {
-    private SharedPreferences sP;
+class GameViewModel extends AndroidViewModel {
+    final private SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
     private MutableLiveData<InfoMusic> infosMusic;
     private MutableLiveData<Cursor> scores;
     private static GameViewModel instance = null;
-    private ScoresDatabaseManager scoresManager;
+    final private ScoresDatabaseManager scoresManager;
 
     public GameViewModel(Application application) {
         super(application);

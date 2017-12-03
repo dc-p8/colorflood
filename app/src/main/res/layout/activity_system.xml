@@ -17,6 +17,9 @@
 
         <TextView
             android:paddingLeft="3dp"
+            android:paddingStart="3dp"
+            android:paddingRight="3dp"
+            android:paddingEnd="3dp"
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

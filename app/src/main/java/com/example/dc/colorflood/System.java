@@ -42,8 +42,8 @@ public class System extends MusicActivity {
         });
 
         ToggleButton toggleAudio = findViewById(R.id.toggle_audio);
-        Log.e(getClass().getSimpleName(), String.valueOf(GameViewModel.getInstance().getInfosMusic().getValue().mute));
-        toggleAudio.setChecked(!GameViewModel.getInstance().getInfosMusic().getValue().mute);
+        Log.e(getClass().getSimpleName(), String.valueOf(gameViewModel.getInfosMusic().getValue().mute));
+        toggleAudio.setChecked(!gameViewModel.getInfosMusic().getValue().mute);
         //toggleAudio.setActivated();
         toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
-public class ScoresDatabaseManager extends SQLiteOpenHelper {
+class ScoresDatabaseManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "highscores";
     private static final String TABLE_NAME = "highscores";
     private static final int DATABASE_VERSION = 1;

@@ -19,10 +19,6 @@ class LevelOnPlay {
         this.lvl = new Level();
     }
 
-    LevelOnPlay(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, float caseWidth, float caseHeight, int maxNbMoves) {
-        this.lvl = new Level(nbCasesWidth, nbCasesHeight, cases, casesColors, maxNbMoves);
-    }
-
     LevelOnPlay(LevelOnPlay lvl){
         this.lvl = new Level(lvl.lvl);
         this.nbMoves = lvl.nbMoves;

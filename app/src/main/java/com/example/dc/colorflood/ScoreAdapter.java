@@ -1,7 +1,6 @@
 package com.example.dc.colorflood;
 
 import android.database.Cursor;
-import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,16 +8,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> {
-    private Cursor data;
+    final private Cursor data;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView levelView;
-        private TextView scoreView;
+        final private TextView levelView;
+        final private TextView scoreView;
 
         ViewHolder(LinearLayout v) {
             super(v);
-            levelView = (TextView) v.findViewById(R.id.level);
-            scoreView = (TextView) v.findViewById(R.id.score);
+            levelView = v.findViewById(R.id.level);
+            scoreView = v.findViewById(R.id.score);
         }
 
         void bind(Score score){
@@ -66,8 +65,8 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
     }
 
     class Score{
-        int lvl;
-        long score;
+        final int lvl;
+        final long score;
 
         Score(int lvl, long score) {
             this.lvl = lvl;

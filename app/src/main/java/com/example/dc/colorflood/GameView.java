@@ -14,8 +14,8 @@ import android.view.SurfaceView;
 
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
-    volatile boolean running = false;
-    Thread thread;
+    volatile private boolean running = false;
+    private Thread thread;
     volatile LevelOnPlay lvl;
     volatile private float caseWidth, caseHeight;
 
@@ -109,7 +109,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         this.lvl.initLevel(nbColors);
     }
 
-    void drawLevel(Canvas canvas) {
+    private void drawLevel(Canvas canvas) {
         Paint p = new Paint();
 
         canvas.drawRGB(50, 50, 50);

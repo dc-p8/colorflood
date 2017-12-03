@@ -10,8 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 public class Highscores extends MusicActivity {
-    RecyclerView mRecyclerView;
-    Cursor scores;
+    private RecyclerView mRecyclerView;
+    private Cursor scores;
 
     public Highscores() {
         super();
@@ -32,7 +32,7 @@ public class Highscores extends MusicActivity {
         setContentView(R.layout.activity_highscores);
         ((TextView) findViewById(R.id.level_title)).setTypeface(null, Typeface.BOLD);
         ((TextView) findViewById(R.id.score_title)).setTypeface(null, Typeface.BOLD);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
