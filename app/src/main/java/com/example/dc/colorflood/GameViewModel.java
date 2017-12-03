@@ -8,6 +8,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.Pair;
 
 public class GameViewModel extends AndroidViewModel {
@@ -81,13 +82,17 @@ public class GameViewModel extends AndroidViewModel {
     }
 
     void inverseMuteMusic() {
+        Log.e(getClass().getSimpleName(), "inverse");
         boolean mute;
         if (this.infosMusic == null) {
             loadInfosMusic();
             mute = !this.infosMusic.getValue().mute;
         } else {
             mute = !this.infosMusic.getValue().mute;
-            this.infosMusic.setValue(new InfoMusic(this.infosMusic.getValue().songTime, this.infosMusic.getValue().songName, mute));
+            String songName = this.infosMusic.getValue().songName;
+            if(mute)
+                songName = null;
+            this.infosMusic.setValue(new InfoMusic(this.infosMusic.getValue().songTime, songName, mute));
         }
         sP.edit()
                 .putBoolean("songMute", mute)

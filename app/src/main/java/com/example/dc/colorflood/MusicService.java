@@ -18,38 +18,55 @@ public class MusicService extends Service {
     private final IBinder mBinder = new LocalBinder();
     AssetManager assetManager;
     MediaPlayer musicPlayer = null;
-    String current_music;
-    int current_sec;
+
     GameViewModel gameViewModel;
     List<String> musics = null;
     List<String> sounds = null;
     Random rdn;
+    int lastTime = -1;
 
+    GameViewModel.InfoMusic mInfoMusic;
     android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer;
 
     public void newSong()
     {
-        current_sec = 0;
+        mInfoMusic.songTime = 0;
         if(musics.size() > 0)
-            current_music = musics.get(rdn.nextInt(musics.size()));
+            mInfoMusic.songName = musics.get(rdn.nextInt(musics.size()));
         else
-            current_music = null;
+            mInfoMusic.songName = null;
     }
     public void setMusic()
     {
-        if(current_music == null)
+        if(mInfoMusic.mute)
+            return;
+
+        if(mInfoMusic.songName == null)
             return;
 
         try{
-            musicPlayer.reset();
-            AssetFileDescriptor afd = assetManager.openFd("musics/" + current_music);
+            if(musicPlayer == null) {
+                musicPlayer = new MediaPlayer();
+                musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        Log.e(getClass().getSimpleName(), "music ended");
+                        newSong();
+                        setMusic();
+                    }
+                });
+            }
+            else
+                musicPlayer.reset();
+
+            AssetFileDescriptor afd = assetManager.openFd("musics/" + mInfoMusic.songName);
             musicPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             //
             afd.close();
             musicPlayer.prepare();
             musicPlayer.setVolume(0.5f, 0.5f);
             musicPlayer.start();
-            musicPlayer.seekTo(current_sec);
+            musicPlayer.seekTo(mInfoMusic.songTime);
 
         }
         catch (IOException ex)
@@ -60,8 +77,19 @@ public class MusicService extends Service {
         }
     }
 
+    public int getTime()
+    {
+        int time = 0;
+        if(musicPlayer != null)
+            time = musicPlayer.getCurrentPosition();
+        return time;
+    }
+
     public void meuh()
     {
+        if(mInfoMusic.mute)
+            return;
+
         try {
             MediaPlayer mediaPlayer = new MediaPlayer();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -86,32 +114,40 @@ public class MusicService extends Service {
 
     }
 
+    public void stopMusic()
+    {
+        if(musicPlayer != null)
+        {
+            musicPlayer.release();
+            musicPlayer = null;
+        }
+    }
+
     public MusicService() {
         this.observer = new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
             @Override
             public void onChanged(GameViewModel.InfoMusic infos) {
                 Log.e(getClass().getSimpleName(), "changed");
-                if(musicPlayer == null)
+
+                mInfoMusic = infos;
+
+                if(mInfoMusic.mute == true) {
+                    stopMusic();
                     return;
-
-                current_sec = infos.songTime;
-                current_music = infos.songName;
+                }
 
 
 
-                Log.e(getClass().getSimpleName(), "getting song : " + current_sec + " " + current_music);
 
-                if(current_music == null)
+                Log.e(getClass().getSimpleName(), "getting song : " + mInfoMusic.songTime + " " + mInfoMusic.songName);
+
+                if(mInfoMusic.songName == null)
                 {
                     newSong();
 
                 }
-                if(current_sec == -1)
-                {
-                    current_sec = 0;
-                }
 
-                Log.e(getClass().getSimpleName(), "current music : " + current_music);
+                Log.e(getClass().getSimpleName(), "current music : " + mInfoMusic.songName);
 
                 setMusic();
 
@@ -145,17 +181,6 @@ public class MusicService extends Service {
             e.printStackTrace();
         }
 
-        musicPlayer = new MediaPlayer();
-        musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                Log.e(getClass().getSimpleName(), "music ended");
-                newSong();
-                setMusic();
-            }
-        });
-
-
         gameViewModel = GameViewModel.getInstance();
 
         gameViewModel.getInfosMusic().observeForever(this.observer);
@@ -170,8 +195,11 @@ public class MusicService extends Service {
         super.onDestroy();
         Log.e(getClass().getSimpleName(), "destroyed");
         //gameViewModel.updateInfosMusic();
-        current_sec =  musicPlayer.getCurrentPosition();
-        Log.e(getClass().getSimpleName(), "time : " + current_sec);
+        /*
+        mInfoMusic.songTime =  musicPlayer.getCurrentPosition();
+        Log.e(getClass().getSimpleName(), "time : " + mInfoMusic.songName);
+        */
+        int time = getTime();
         if(musicPlayer != null)
         {
             musicPlayer.release();
@@ -179,11 +207,10 @@ public class MusicService extends Service {
         }
         if(gameViewModel != null)
         {
-            Log.e(getClass().getSimpleName(), "putting : " + current_sec + " " + current_music);
+
+            Log.e(getClass().getSimpleName(), "putting : " + time + " " + mInfoMusic.songName);
             gameViewModel.getInfosMusic().removeObserver(this.observer);
-            gameViewModel.updateInfosMusic(current_sec, current_music);
+            gameViewModel.updateInfosMusic(time, mInfoMusic.songName);
         }
-
-
     }
 }

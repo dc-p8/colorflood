@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ToggleButton;
 
 public class System extends MusicActivity {
     private GameViewModel gameViewModel;
@@ -39,7 +41,10 @@ public class System extends MusicActivity {
             }
         });
 
-        Button toggleAudio = findViewById(R.id.toggle_audio);
+        ToggleButton toggleAudio = findViewById(R.id.toggle_audio);
+        Log.e(getClass().getSimpleName(), String.valueOf(GameViewModel.getInstance().getInfosMusic().getValue().mute));
+        toggleAudio.setChecked(!GameViewModel.getInstance().getInfosMusic().getValue().mute);
+        //toggleAudio.setActivated();
         toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

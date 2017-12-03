@@ -44,7 +44,7 @@ public class Game extends MusicActivity implements Runnable
         new AlertDialog.Builder(context)
                 .setMessage("Quitter le jeu ?")
                 .setTitle("Votre progression sur cette partie sera perdue.")
-                .setCancelable(false)
+                .setCancelable(true)
                 .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {}
