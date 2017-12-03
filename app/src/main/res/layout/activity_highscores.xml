@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:background="?android:selectableItemBackground"
-        android:text="MEILLEURS SCORES"
+        android:text="@string/highscore_title"
         android:textColor="#550055"
         style="@android:style/TextAppearance.Large"/>
 
@@ -29,7 +29,7 @@
             android:background="?android:selectableItemBackground"
             android:padding="20dp"
             android:textColor="#000055"
-            android:text="Niveaux"/>
+            android:text="@string/highscore_col1"/>
 
         <TextView
             android:id="@+id/score_title"
@@ -40,7 +40,7 @@
             android:background="?android:selectableItemBackground"
             android:padding="20dp"
             android:textColor="#000055"
-            android:text="Temps"/>
+            android:text="@string/highscore_col2"/>
     </LinearLayout>
 
 

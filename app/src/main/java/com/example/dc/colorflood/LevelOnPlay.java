@@ -19,13 +19,6 @@ class LevelOnPlay {
         this.lvl = new Level();
     }
 
-    LevelOnPlay(LevelOnPlay lvl){
-        this.lvl = new Level(lvl.lvl);
-        this.nbMoves = lvl.nbMoves;
-        this.extraMoves = lvl.extraMoves;
-        this.currentLevel = lvl.currentLevel;
-    }
-
     void setOnLevelEventListener(OnLevelEventListener eventListener) {
         this.onLevelEventListener = eventListener;
     }

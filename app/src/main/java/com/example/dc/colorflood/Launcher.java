@@ -88,7 +88,7 @@ public class Launcher extends MusicActivity{
             }
         });
 
-        textExtraTry.setText("Extra try : " + String.valueOf(extraTry));
-        textCurrentLevel.setText("Niveau actuel : " + String.valueOf(currentLevel));
+        textExtraTry.setText(getString(R.string.extra_try, extraTry));
+        textCurrentLevel.setText(getString(R.string.actual_lvl, currentLevel));
     }
 }

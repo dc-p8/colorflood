@@ -23,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:text="Niveau actuel : "
+            android:text="@string/actual_lvl"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -34,7 +34,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="8dp"
-            android:text="Extra try : "
+            android:text="@string/extra_try"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_currentLevel" />
 
@@ -71,7 +71,7 @@
                 android:id="@+id/button_play"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jouer"
+                android:text="@string/play"
                 app:layout_constraintBottom_toTopOf="@+id/button_credits"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -82,19 +82,19 @@
                 android:id="@+id/button_highscores"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Meilleurs Scores" />
+                android:text="@string/highscore" />
 
             <Button
                 android:id="@+id/button_system"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Système" />
+                android:text="@string/system" />
 
             <Button
                 android:id="@+id/button_credits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Crédits"
+                android:text="@string/credits"
                 app:layout_constraintBottom_toTopOf="@+id/button_reset"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"

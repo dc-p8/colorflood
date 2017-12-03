@@ -17,14 +17,6 @@ class Level {
 
     Level(){}
 
-    Level(int nbCasesWidth, int nbCasesHeight, int[][] cases, int[] casesColors, int maxNbMoves) {
-        this.nbCasesWidth = nbCasesWidth;
-        this.nbCasesHeight = nbCasesHeight;
-        this.cases = cases;
-        this.casesColors = casesColors;
-        this.maxNbMoves = maxNbMoves;
-    }
-
     Level(Level lvl){
         this.nbCasesWidth = lvl.nbCasesWidth;
         this.nbCasesHeight = lvl.nbCasesHeight;

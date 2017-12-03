@@ -16,8 +16,8 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     private final SurfaceHolder holder;
     volatile private boolean running = false;
     private Thread thread;
-    volatile LevelOnPlay lvl;
-    volatile private float caseWidth, caseHeight;
+    final LevelOnPlay lvl;
+    private float caseWidth, caseHeight;
 
 
     public GameView(Context context, AttributeSet attrs) {
@@ -73,7 +73,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        Log.d("SufaceCreated", "SurfaceCreated");
+        Log.d("SurfaceCreated", "SurfaceCreated");
     }
 
     @Override

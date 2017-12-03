@@ -42,14 +42,14 @@ public class Game extends MusicActivity implements Runnable
 
     private void dialogBox(Context context) {
         new AlertDialog.Builder(context)
-                .setMessage("Quitter le jeu ?")
-                .setTitle("Votre progression sur cette partie sera perdue.")
+                .setMessage(R.string.dialog_quit_message)
+                .setTitle(R.string.dialog_quit_warning)
                 .setCancelable(true)
-                .setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.dialog_quit_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {}
                 })
-                .setPositiveButton("Quitter", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_quit_agree, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
@@ -119,7 +119,7 @@ public class Game extends MusicActivity implements Runnable
                     lastPressed = pressed;
                     gameView.lvl.play(pressed);
                     gameView.update();
-                    textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
+                    textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
                 }
             }
         });
@@ -130,7 +130,7 @@ public class Game extends MusicActivity implements Runnable
         this.textExtraMoves = findViewById(R.id.text_extra);
         this.textExtraMoves.setText("");
         this.textCurrentLevel = findViewById(R.id.text_currentLevel);
-        this.textCurrentLevel.setText(String.valueOf("lvl:"+gameView.lvl.getCurrentLevel()));
+        this.textCurrentLevel.setText(getString(R.string.lvl_on_game, gameView.lvl.getCurrentLevel()));
 
         this.gameViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
@@ -139,15 +139,15 @@ public class Game extends MusicActivity implements Runnable
                 gameView.lvl.setCurrentLevel(stats.first);
                 gameView.lvl.setExtraMoves(stats.second);
 
-                textCurrentLevel.setText(String.valueOf("lvl:"+gameView.lvl.getCurrentLevel()));
+                textCurrentLevel.setText(getString(R.string.lvl_on_game, gameView.lvl.getCurrentLevel()));
                 if(gameView.lvl.getExtraMoves() == 0)
                     textExtraMoves.setText("");
                 else
-                    textExtraMoves.setText('+'+String.valueOf(gameView.lvl.getExtraMoves()));
+                    textExtraMoves.setText(getString(R.string.extra_try_prefix, gameView.lvl.getExtraMoves()));
                 if(init) {
                     initLevel(gameView.lvl.getCurrentLevel());
                     lastPressed = gameView.lvl.getStartingCase();
-                    textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves() + "/" + gameView.lvl.getMaxNbMoves()));
+                    textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
                 }
             }
         });
@@ -157,9 +157,9 @@ public class Game extends MusicActivity implements Runnable
                 timerHandler.removeCallbacks(Game.this);
                 new AlertDialog.Builder(Game.this)
                         .setCancelable(false)
-                        .setTitle("Gagné !")
-                        .setMessage("Niveau suivant : " + (gameView.lvl.getCurrentLevel()+1))
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_win_title)
+                        .setMessage(getString(R.string.dialog_win_msg, gameView.lvl.getCurrentLevel()+1))
+                        .setPositiveButton(R.string.dialog_winlose_agree, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 gameViewModel.updateScores(gameView.lvl.getCurrentLevel(), Long.parseLong(textTimer.getText().toString()));
                                 nextLevel();
@@ -174,8 +174,8 @@ public class Game extends MusicActivity implements Runnable
                 timerHandler.removeCallbacks(Game.this);
                 new AlertDialog.Builder(Game.this)
                         .setCancelable(false)
-                        .setTitle("Perdu !")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.dialog_lose_title)
+                        .setPositiveButton(R.string.dialog_winlose_agree, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 restartLevel();
                                 thread.start();
@@ -207,10 +207,10 @@ public class Game extends MusicActivity implements Runnable
     }
 
     private void startLevel(){
-        this.textNbMoves.setText(String.valueOf(this.gameView.lvl.getNbMoves()+"/"+this.gameView.lvl.getMaxNbMoves()));
+        this.textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
-        timerFromResume = java.lang.System.currentTimeMillis();
-        gameView.update();
+        this.timerFromResume = java.lang.System.currentTimeMillis();
+        this.gameView.update();
     }
 
     private void initLevel(int currentLevel){
@@ -218,7 +218,7 @@ public class Game extends MusicActivity implements Runnable
         int nbColors = 3+((currentLevel/15)%12);
         int maxNbMoves = 10+(currentLevel/5);
         this.gameView.initLevel(size, size, nbColors, maxNbMoves);
-        if (nbColors != colorsButtonsLayout.getLenght()){
+        if (nbColors != colorsButtonsLayout.getLength()){
             colorsButtonsLayout.initButtons(gameView.lvl.getCasesColors());
         }
     }
@@ -237,7 +237,7 @@ public class Game extends MusicActivity implements Runnable
         this.gameView.restoreState(savedInstanceState);
         this.timerFromResume = savedInstanceState.getLong("timerFromResume");
         this.timerTotal = savedInstanceState.getLong("timerTotal");
-        textNbMoves.setText(String.valueOf(gameView.lvl.getNbMoves()+"/"+gameView.lvl.getMaxNbMoves()));
+        this.textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
     }
 
 
@@ -255,7 +255,7 @@ public class Game extends MusicActivity implements Runnable
     }
 
     private long getCurrentTime(){
-        long delay = (java.lang.System.currentTimeMillis() - this.timerFromResume) + this.timerTotal;
+        final long delay = (java.lang.System.currentTimeMillis() - this.timerFromResume) + this.timerTotal;
         return delay / 1000;
     }
 }

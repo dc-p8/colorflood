@@ -46,7 +46,7 @@ public class ButtonBar extends LinearLayout {
 
     }
 
-    public int getLenght(){
+    public int getLength(){
         return this.getChildCount();
     }
 }

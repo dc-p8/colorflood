@@ -24,14 +24,14 @@ public class System extends MusicActivity {
             public void onClick(View v) {
                 v.playSoundEffect(android.view.SoundEffectConstants.CLICK);
                 new AlertDialog.Builder(c)
-                        .setMessage("En êtes-vous sûr ?.")
-                        .setTitle("Réinitialiser votre progression ?")
+                        .setTitle(R.string.dialog_system_reinit_title)
+                        .setMessage(R.string.dialog_system_reinit_warning)
                         .setCancelable(false)
-                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.dialog_system_reinit_disagree, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {}
                         })
-                        .setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.dialog_system_reinit_agree, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 gameViewModel.updateStats(1, 0);

@@ -23,15 +23,15 @@
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Audio :" />
+            android:text="@string/audio" />
 
         <ToggleButton
             android:id="@+id/toggle_audio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:textOff="Sans"
-            android:textOn="Avec"
+            android:textOff="@string/audio_without"
+            android:textOn="@string/audio_with"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent" />
 
@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/holo_red_light"
-            android:text="reset stats"
+            android:text="@string/reset_stats"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.092"

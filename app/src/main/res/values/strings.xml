@@ -2,4 +2,35 @@
     <string name="app_name">Colorflood</string>
     <item name="button_number" type="id">0</item>
     <string name="app_title"><b><font color="red">C</font><font color="blue">O</font><font color="yellow">L</font><font color="cyan">O</font><font color="green">R</font><font color="green">F</font><font color="cyan">L</font><font color="yellow">O</font><font color="blue">O</font><font color="red">D</font></b></string>
+    <string name="dev1_name">Julie Rymer</string>
+    <string name="dev2_name">Dorian Cardinal</string>
+    <string name="dev_role">Developper</string>
+    <string name="highscore_title">MEILLEURS SCORES</string>
+    <string name="highscore_col1">Niveaux</string>
+    <string name="highscore_col2">Temps</string>
+    <string name="actual_lvl">Niveau actuel : %1$d</string>
+    <string name="extra_try">Coups extra : %1$d</string>
+    <string name="play">Jouer</string>
+    <string name="highscore">Meilleurs scores</string>
+    <string name="system">Système</string>
+    <string name="credits">Crédits</string>
+    <string name="audio">Audio :</string>
+    <string name="audio_with">Avec</string>
+    <string name="audio_without">Sans</string>
+    <string name="reset_stats">Reset progression</string>
+    <string name="extra_try_prefix">+%1$d</string>
+    <string name="dialog_quit_message">Quitter le jeu ?</string>
+    <string name="dialog_quit_warning">Votre progression sur cette partie sera perdue.</string>
+    <string name="dialog_quit_cancel">Annuler</string>
+    <string name="dialog_quit_agree">Quitter</string>
+    <string name="nb_moves_left">%1$d/%2$d</string>
+    <string name="lvl_on_game">lvl:%1$d</string>
+    <string name="dialog_win_title">Gagné !</string>
+    <string name="dialog_lose_title">Perdu !</string>
+    <string name="dialog_winlose_agree">OK</string>
+    <string name="dialog_win_msg">Niveau suivant : %1$d</string>
+    <string name="dialog_system_reinit_title">Réinitialiser votre progression ?</string>
+    <string name="dialog_system_reinit_warning">En êtes-vous sûr ?</string>
+    <string name="dialog_system_reinit_agree">Oui</string>
+    <string name="dialog_system_reinit_disagree">Non</string>
 </resources>
