@@ -15,7 +15,7 @@ public class Launcher extends MusicActivity{
     private int extraTry = 0;
     private int currentLevel = 0;
     private GameViewModel gameViewModel;
-    static final int EXIT_REQUEST = 1;
+    static private final int EXIT_REQUEST = 1;
 
     @Override
     protected void onDestroy() {

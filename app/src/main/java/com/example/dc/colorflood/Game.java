@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.View;
@@ -62,20 +61,9 @@ public class Game extends MusicActivity implements Runnable
         super.onResume();
 
         timerFromResume = java.lang.System.currentTimeMillis();
-        if(thread != null)
-        {
-            Thread.State state = thread.getState();
-        }
-
         thread = new Thread(this);
         thread.start();
     }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
 
     @Override
     protected void onPause() {
