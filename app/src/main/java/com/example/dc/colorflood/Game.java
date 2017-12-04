@@ -199,8 +199,8 @@ public class Game extends MusicActivity implements Runnable
 
     private void initLevel(int currentLevel){
         int size = 3+currentLevel/7;
-        int nbColors = 3+((currentLevel/15)%12);
-        int maxNbMoves = 10+(currentLevel/5);
+        int nbColors = (3+(currentLevel/15))%15;
+        int maxNbMoves = (size*size*nbColors)/(size+size+nbColors);
         this.gameView.initLevel(size, size, nbColors, maxNbMoves);
         if (nbColors != colorsButtonsLayout.getLength()){
             colorsButtonsLayout.initButtons(gameView.lvl.getCasesColors());
