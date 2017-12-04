@@ -20,8 +20,7 @@ public class System extends MusicActivity {
         gameViewModel = GameViewModel.getInstance();
         setContentView(R.layout.activity_system);
         final Context c = this;
-        Button buttonReset = findViewById(R.id.button_reset);
-        buttonReset.setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button_reset).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 v.playSoundEffect(android.view.SoundEffectConstants.CLICK);
@@ -43,13 +42,12 @@ public class System extends MusicActivity {
             }
         });
 
-        ((Button)findViewById(R.id.leave)).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.leave).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(System.this, Launcher.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("Exit", true);
-                startActivity(intent);
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("Exit", true);
+                setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
         });

@@ -15,6 +15,7 @@ public class Launcher extends MusicActivity{
     private int extraTry = 0;
     private int currentLevel = 0;
     private GameViewModel gameViewModel;
+    static final int EXIT_REQUEST = 1;
 
     @Override
     protected void onDestroy() {
@@ -39,13 +40,7 @@ public class Launcher extends MusicActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if( getIntent().getBooleanExtra("Exit", false)){
-            finish();
-            return;
-        }
-
         Log.d("ONCREATE", "TEST");
-        //todo : rectifier bug ici
         this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
         setContentView(R.layout.activity_launcher);
 
@@ -56,7 +51,7 @@ public class Launcher extends MusicActivity{
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Game.class);
-                Launcher.this.startActivity(myIntent);
+                startActivity(myIntent);
             }
         });
 
@@ -64,7 +59,7 @@ public class Launcher extends MusicActivity{
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Credits.class);
-                Launcher.this.startActivity(myIntent);
+                startActivity(myIntent);
             }
         });
 
@@ -72,7 +67,7 @@ public class Launcher extends MusicActivity{
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, System.class);
-                Launcher.this.startActivity(myIntent);
+                startActivityForResult(myIntent, EXIT_REQUEST);
             }
         });
 
@@ -80,7 +75,7 @@ public class Launcher extends MusicActivity{
             @Override
             public void onClick(View view) {
                 Intent myIntent = new Intent(Launcher.this, Highscores.class);
-                Launcher.this.startActivity(myIntent);
+                startActivity(myIntent);
             }
         });
     }
@@ -97,5 +92,15 @@ public class Launcher extends MusicActivity{
 
         textExtraTry.setText(getString(R.string.extra_try, extraTry));
         textCurrentLevel.setText(getString(R.string.actual_lvl, currentLevel));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EXIT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                if (data.getBooleanExtra("Exit", false))
+                    finish();
+            }
+        }
     }
 }
