@@ -22,7 +22,7 @@ public class LauncherAnimView extends SurfaceView implements Runnable, SurfaceHo
     final private int size, nbColors;
     volatile private float caseWidth, caseHeight;
 
-    LauncherAnimView(Context context, AttributeSet attrs){
+    public LauncherAnimView(Context context, AttributeSet attrs){
         super(context, attrs);
         this.size = 10;
         this.nbColors = 5;
