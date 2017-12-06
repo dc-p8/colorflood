@@ -11,7 +11,9 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-
+/**
+ * Vue qui permet d'afficher le jeu
+ */
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
     volatile private boolean running = false;
@@ -39,8 +41,11 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             try {
                 if(!first)
                 {
+                    // Le thread ne doit pas s'endormir si on vient de le démarrer
+                    // On est obligé de synchroniser le thread si on veut pouvoir le réveiller et l'endormir
                     synchronized (this)
                     {
+                        // Le thread dort tant qu'il n'y a rien à afficher
                         wait();
                     }
 
@@ -63,7 +68,9 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     public void update()
     {
+        // On est obligé de synchroniser le thread si on veut pouvoir le réveiller et l'endormir
         synchronized (this) {
+            // On notifie le thread de mettre à jour l'affichage
             notify();
         }
     }
@@ -116,7 +123,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
         for(int i = 0; i < lvl.getNbCasesHeight(); i++)
         {
-            float y = this.caseHeight * (float)i;
+            float y = this.caseHeight * (float)i; // Tout l'affichage se fait en flotant pour éviter les bandes noires
             for(int j = 0; j < lvl.getNbCasesWidth(); j++)
             {
                 float x = this.caseWidth * (float)j;
