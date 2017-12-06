@@ -1,6 +1,7 @@
 package com.example.dc.colorflood;
 
 import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,8 +41,9 @@ public class Launcher extends MusicActivity{
         super.onCreate(savedInstanceState);
 
         Log.d("ONCREATE", "TEST");
-       // this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
-        this.gameViewModel = new GameViewModel(getApplication());
+
+        this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
+        //this.gameViewModel = new GameViewModel(getApplication());
         setContentView(R.layout.activity_launcher);
 
         this.textCurrentLevel = findViewById(R.id.text_currentLevel);

@@ -11,13 +11,13 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
-class GameViewModel extends AndroidViewModel {
-    final private SharedPreferences sP;
+public class GameViewModel extends AndroidViewModel {
+    private final SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
     private MutableLiveData<InfoMusic> infosMusic;
     private MutableLiveData<Cursor> scores;
     private static GameViewModel instance = null;
-    final private ScoresDatabaseManager scoresManager;
+    private final ScoresDatabaseManager scoresManager;
 
     public GameViewModel(Application application) {
         super(application);
@@ -26,13 +26,11 @@ class GameViewModel extends AndroidViewModel {
         GameViewModel.instance = this;
     }
 
-    static GameViewModel getInstance(){
+    public static GameViewModel getInstance(){
         return GameViewModel.instance;
     }
 
-
-
-    LiveData<Pair<Integer, Integer>> getStats(){
+    public LiveData<Pair<Integer, Integer>> getStats(){
         if (this.stats == null) {
             loadStats();
         }
@@ -45,7 +43,7 @@ class GameViewModel extends AndroidViewModel {
         this.stats.setValue(s);
     }
 
-    void updateStats(int currentLvl, int extraTry) {
+    public void updateStats(int currentLvl, int extraTry) {
         if (this.stats == null) {
             this.stats = new MutableLiveData<>();
         }
@@ -56,9 +54,7 @@ class GameViewModel extends AndroidViewModel {
                 .apply();
     }
 
-
-
-    LiveData<InfoMusic> getInfosMusic(){
+    public LiveData<InfoMusic> getInfosMusic(){
         if (this.infosMusic == null) {
             loadInfosMusic();
         }
@@ -71,7 +67,7 @@ class GameViewModel extends AndroidViewModel {
         this.infosMusic.setValue(infos);
     }
 
-    void updateInfosMusic(int songTime, String songName) {
+    public void updateInfosMusic(int songTime, String songName) {
         if (this.infosMusic == null)
             this.infosMusic = new MutableLiveData<>();
         this.infosMusic.setValue(new InfoMusic(songTime, songName, this.infosMusic.getValue() != null && this.infosMusic.getValue().mute));
@@ -81,7 +77,7 @@ class GameViewModel extends AndroidViewModel {
                 .apply();
     }
 
-    void inverseMuteMusic() {
+    public void inverseMuteMusic() {
         Log.e(getClass().getSimpleName(), "inverse");
         boolean mute;
         if (this.infosMusic == null) {
@@ -99,7 +95,7 @@ class GameViewModel extends AndroidViewModel {
                 .apply();
     }
 
-    class InfoMusic{
+    public class InfoMusic{
         int songTime;
         String songName;
         boolean mute = false;
@@ -111,9 +107,7 @@ class GameViewModel extends AndroidViewModel {
         }
     }
 
-
-
-    LiveData<Cursor> getScores(){
+    public LiveData<Cursor> getScores(){
         if (this.scores == null) {
             this.scores = new MutableLiveData<>();
             loadScores();
@@ -130,7 +124,7 @@ class GameViewModel extends AndroidViewModel {
         });
     }
 
-    private void setScores(Cursor cursor){
+    public void setScores(Cursor cursor){
         if (this.scores != null){
             if (this.scores.getValue() != null && !this.scores.getValue().isClosed())
                 this.scores.getValue().close();
@@ -140,12 +134,12 @@ class GameViewModel extends AndroidViewModel {
         this.scores.setValue(cursor);
     }
 
-    void deleteScores(){
+    public void deleteScores(){
         this.scoresManager.executeDeleteAll();
         loadScores();
     }
 
-    void updateScores(int lvl, long score){
+    public void updateScores(int lvl, long score){
         this.scoresManager.executeAddOrUpdateIfBetter(lvl, score);
         loadScores();
     }
@@ -155,6 +149,6 @@ class GameViewModel extends AndroidViewModel {
         super.onCleared();
         GameViewModel.instance = null;
         if (this.scores != null && this.scores.getValue() != null && !this.scores.getValue().isClosed())
-                this.scores.getValue().close();
+            this.scores.getValue().close();
     }
 }

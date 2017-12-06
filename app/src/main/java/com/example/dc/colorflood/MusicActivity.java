@@ -57,9 +57,6 @@ public class MusicActivity extends AppCompatActivity {
         Log.d(getClass().getSimpleName(), "DESTROY");
     }
 
-
-
-
     final private static ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
