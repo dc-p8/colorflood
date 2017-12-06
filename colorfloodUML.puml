@@ -1,0 +1,60 @@
+@startuml
+
+class ButtonBar
+class Credits
+class Game
+class GameView
+class GameViewModel {
+    class InfoMusic
+}
+class Highscores
+class Launcher
+class LauncherAnimView
+class Level
+class LevelOnPlay {
+    interface OnLevelEventListener
+}
+class MusicActivity
+class MusicService {
+    class LocalBinder
+}
+class ScoreAdapter {
+    static class ViewHolder extends RecyclerView.ViewHolder
+    class Score
+}
+class ScoresDatabaseManager {
+    interface AsyncCursorResponse
+    class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void>
+    class AddOrUpdateIfBetterAsyncTask extends AsyncTask<Long, Void, Void>
+    class SelectAllAsyncTask extends AsyncTask<Void, Void, Cursor>
+}
+class SystemMenu
+
+
+ButtonBar --* Game
+GameView --* Game
+GameViewModel --* Game
+LevelOnPlay --* GameView
+GameViewModel --* GameViewModel
+ScoresDatabaseManager --* GameViewModel
+GameViewModel --* Launcher
+Level --* LevelOnPlay
+Level --* LevelOnPlay
+MusicService --* MusicActivity
+GameViewModel --* MusicService
+GameViewModel --* SystemMenu
+
+MusicActivity <|-- Credits
+MusicActivity <|-- Game
+MusicActivity <|-- Highscores
+MusicActivity <|-- Launcher
+MusicActivity <|-- SystemMenu
+
+Launcher <.. LauncherAnimView
+Launcher <.. Credits
+Launcher <.. Game
+Launcher <.. Highscores
+Launcher <.. SystemMenu
+Highscores <.. ScoreAdapter
+
+@enduml
