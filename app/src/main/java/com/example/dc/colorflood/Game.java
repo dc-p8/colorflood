@@ -34,12 +34,14 @@ public class Game extends MusicActivity implements Runnable
         super();
     }
 
+
     @Override
     public void onBackPressed() {
-        dialogBox(this);
+        // On ne veut pas que l'utilisateur perde sa progression si il clique accidentellement sur retour
+        leaveDialog(this);
     }
 
-    private void dialogBox(Context context) {
+    private void leaveDialog(Context context) {
         new AlertDialog.Builder(context)
                 .setMessage(R.string.dialog_quit_message)
                 .setTitle(R.string.dialog_quit_warning)
@@ -59,7 +61,7 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onResume() {
         super.onResume();
-
+        // On met relance le timer de temps et on met à jour fimerFromResume
         timerFromResume = java.lang.System.currentTimeMillis();
         thread = new Thread(this);
         thread.start();
@@ -68,7 +70,10 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onPause() {
         super.onPause();
+        // On ajoute au temps total le temps qu'il s'est écoulé entre maintenant et le timer depuis le résume
         this.timerTotal += (java.lang.System.currentTimeMillis() - timerFromResume);
+
+        // On retire les callbacks car le thread ne sert plus à rien en dehos de l'activité
         this.timerHandler.removeCallbacks(this);
     }
 
@@ -81,6 +86,7 @@ public class Game extends MusicActivity implements Runnable
         this.gameViewModel = GameViewModel.getInstance();
         this.colorsButtonsLayout = findViewById(R.id.colors);
 
+        // Marge dynamique en dp et placements des bouttons automatique
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -97,9 +103,11 @@ public class Game extends MusicActivity implements Runnable
         this.colorsButtonsLayout.setBtnCallback(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // On récupère le numéro du boutton cliqué
                 int pressed = (int)v.getTag(R.id.button_number);
                 if (pressed != lastPressed){
                     makeASound();
+                    // Toute la logique du jeu vient ici
                     lastPressed = pressed;
                     gameView.lvl.play(pressed);
                     gameView.update();
@@ -119,6 +127,7 @@ public class Game extends MusicActivity implements Runnable
         this.gameViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {
+                // On met à jour l'affichage des stats lorsque l'on détecte un changement
                 boolean init = gameView.lvl.getCurrentLevel() != stats.first;
                 gameView.lvl.setCurrentLevel(stats.first);
                 gameView.lvl.setExtraMoves(stats.second);
@@ -137,6 +146,8 @@ public class Game extends MusicActivity implements Runnable
         });
 
         this.gameView.lvl.setOnLevelEventListener(new LevelOnPlay.OnLevelEventListener() {
+            // On écoute les évènements générés par LevelOnPlay
+            // En cas de victoire ou de défaite, on affiche un dialogue et on passe au niveau suivant ou on recommence
             public void onWin() {
                 timerHandler.removeCallbacks(Game.this);
                 new AlertDialog.Builder(Game.this)
@@ -178,18 +189,28 @@ public class Game extends MusicActivity implements Runnable
 
     }
 
+    /**
+     * Met à jour les données et démarre le niveau
+     */
     private void nextLevel(){
         this.gameViewModel.updateStats(this.gameView.lvl.getCurrentLevel()+1,
                 this.gameView.lvl.getExtraMoves()+(this.gameView.lvl.getMaxNbMoves()-this.gameView.lvl.getNbMoves()));
         this.startLevel();
     }
 
+    /**
+     * Reset les cases et démarre le nvieau
+     */
     private void restartLevel(){
         this.gameView.lvl.restart();
         this.lastPressed = this.gameView.lvl.getStartingCase();
         this.startLevel();
     }
 
+    /**
+     * Démarre le niveau
+     * reset du timer et mise à jour de l'affichage
+     */
     private void startLevel(){
         this.textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
         this.timerTotal = 0;
@@ -197,6 +218,11 @@ public class Game extends MusicActivity implements Runnable
         this.gameView.update();
     }
 
+    /**
+     * Initialise les éléments de gameplay en fonction du niveau
+     * Principale gestion de la difficulté
+     * @param currentLevel
+     */
     private void initLevel(int currentLevel){
         int size = 3+currentLevel/7;
         int nbColors = (3+(currentLevel/15))%15;
@@ -206,6 +232,7 @@ public class Game extends MusicActivity implements Runnable
             colorsButtonsLayout.initButtons(gameView.lvl.getCasesColors());
         }
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -227,10 +254,12 @@ public class Game extends MusicActivity implements Runnable
 
     @Override
     public void run() {
+        // mise à jour du timer
         final long currentTime = this.getCurrentTime();
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // Affichage du temps en secondes
                 textTimer.setText(String.valueOf(currentTime));
             }
         });

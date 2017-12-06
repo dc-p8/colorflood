@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ToggleButton;
 
+
 public class System extends MusicActivity {
     private GameViewModel gameViewModel;
 
@@ -43,6 +44,7 @@ public class System extends MusicActivity {
         findViewById(R.id.leave).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Intent de retour qui prévient le launcher qu'on veut quitter l'application
                 Intent returnIntent = new Intent();
                 returnIntent.putExtra("Exit", true);
                 setResult(Activity.RESULT_OK, returnIntent);
@@ -51,8 +53,10 @@ public class System extends MusicActivity {
         });
 
         ToggleButton toggleAudio = findViewById(R.id.toggle_audio);
+
+        // On initialise le tooglebutton en fonction des données
         toggleAudio.setChecked(!gameViewModel.getInfosMusic().getValue().mute);
-        //toggleAudio.setActivated();
+
         toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
