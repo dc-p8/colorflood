@@ -9,6 +9,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
+/**
+ * Activité qui gère les meilleures scores
+ */
 public class Highscores extends MusicActivity {
     private RecyclerView mRecyclerView;
     private Cursor scores;

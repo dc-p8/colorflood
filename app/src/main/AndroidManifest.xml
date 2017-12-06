@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Credits" />
-        <activity android:name=".System" />
+        <activity android:name=".SystemMenu" />
         <activity android:name=".Highscores" />
 
         <service

@@ -9,6 +9,11 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
+
+/**
+ * Menu principal de l'application
+ * se charge de démarrer toutes les autres activités
+ */
 public class Launcher extends MusicActivity{
     private TextView textExtraTry;
     private TextView textCurrentLevel;
@@ -68,7 +73,7 @@ public class Launcher extends MusicActivity{
         findViewById(R.id.button_system).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent myIntent = new Intent(Launcher.this, System.class);
+                Intent myIntent = new Intent(Launcher.this, SystemMenu.class);
                 startActivityForResult(myIntent, EXIT_REQUEST);
             }
         });

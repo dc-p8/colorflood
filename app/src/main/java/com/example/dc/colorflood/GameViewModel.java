@@ -11,6 +11,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.util.Pair;
 
+/**
+ * ViewModel qui gère les données afffichée dans l'UI
+ */
 public class GameViewModel extends AndroidViewModel {
     private final SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
@@ -26,11 +29,15 @@ public class GameViewModel extends AndroidViewModel {
         GameViewModel.instance = this;
     }
 
-    public static GameViewModel getInstance(){
+    /**
+     * Ceci est un hack en attendant des nouvelles de https://github.com/googlesamples/android-architecture-components/issues/29
+     * @return l'instance GameViewModel présentement utilisée par la dernière activité qui en a instancié
+     */
+    static GameViewModel getInstance(){
         return GameViewModel.instance;
     }
 
-    public LiveData<Pair<Integer, Integer>> getStats(){
+    LiveData<Pair<Integer, Integer>> getStats(){
         if (this.stats == null) {
             loadStats();
         }
@@ -43,7 +50,7 @@ public class GameViewModel extends AndroidViewModel {
         this.stats.setValue(s);
     }
 
-    public void updateStats(int currentLvl, int extraTry) {
+    void updateStats(int currentLvl, int extraTry) {
         if (this.stats == null) {
             this.stats = new MutableLiveData<>();
         }
@@ -54,7 +61,7 @@ public class GameViewModel extends AndroidViewModel {
                 .apply();
     }
 
-    public LiveData<InfoMusic> getInfosMusic(){
+    LiveData<InfoMusic> getInfosMusic(){
         if (this.infosMusic == null) {
             loadInfosMusic();
         }
@@ -67,7 +74,7 @@ public class GameViewModel extends AndroidViewModel {
         this.infosMusic.setValue(infos);
     }
 
-    public void updateInfosMusic(int songTime, String songName) {
+    void updateInfosMusic(int songTime, String songName) {
         if (this.infosMusic == null)
             this.infosMusic = new MutableLiveData<>();
         this.infosMusic.setValue(new InfoMusic(songTime, songName, this.infosMusic.getValue() != null && this.infosMusic.getValue().mute));
@@ -77,7 +84,7 @@ public class GameViewModel extends AndroidViewModel {
                 .apply();
     }
 
-    public void inverseMuteMusic() {
+    void inverseMuteMusic() {
         Log.e(getClass().getSimpleName(), "inverse");
         boolean mute;
         if (this.infosMusic == null) {
@@ -95,7 +102,10 @@ public class GameViewModel extends AndroidViewModel {
                 .apply();
     }
 
-    public class InfoMusic{
+    /**
+     * classe utilitaire pour stocker toute info liée à la musique
+     */
+    class InfoMusic{
         int songTime;
         String songName;
         boolean mute = false;
@@ -107,7 +117,7 @@ public class GameViewModel extends AndroidViewModel {
         }
     }
 
-    public LiveData<Cursor> getScores(){
+    LiveData<Cursor> getScores(){
         if (this.scores == null) {
             this.scores = new MutableLiveData<>();
             loadScores();
@@ -124,7 +134,7 @@ public class GameViewModel extends AndroidViewModel {
         });
     }
 
-    public void setScores(Cursor cursor){
+    private void setScores(Cursor cursor){
         if (this.scores != null){
             if (this.scores.getValue() != null && !this.scores.getValue().isClosed())
                 this.scores.getValue().close();
@@ -134,12 +144,12 @@ public class GameViewModel extends AndroidViewModel {
         this.scores.setValue(cursor);
     }
 
-    public void deleteScores(){
+    void deleteScores(){
         this.scoresManager.executeDeleteAll();
         loadScores();
     }
 
-    public void updateScores(int lvl, long score){
+    void updateScores(int lvl, long score){
         this.scoresManager.executeAddOrUpdateIfBetter(lvl, score);
         loadScores();
     }

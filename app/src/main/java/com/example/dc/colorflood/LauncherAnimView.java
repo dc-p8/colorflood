@@ -12,6 +12,9 @@ import android.view.SurfaceView;
 
 import java.util.Random;
 
+/**
+ * Simple affichage animé utilisé en fond d'écran du menu principal
+ */
 public class LauncherAnimView extends SurfaceView implements Runnable, SurfaceHolder.Callback {
     volatile private int[] casesColors;
     volatile private int[][] cases;

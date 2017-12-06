@@ -112,8 +112,7 @@ public class MusicService extends Service {
     }
 
     /**
-     * Retourne le temps d'une musique
-     * @return
+     * @return le temps où est une musiqueen train d'être jouée
      */
     private int getTime()
     {
@@ -207,11 +206,6 @@ public class MusicService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.d(getClass().getSimpleName(), "DESTROY");
-        //gameViewModel.updateInfosMusic();
-        /*
-        mInfoMusic.songTime =  musicPlayer.getCurrentPosition();
-        Log.e(getClass().getSimpleName(), "time : " + mInfoMusic.songName);
-        */
         int time = getTime();
         if(musicPlayer != null)
         {

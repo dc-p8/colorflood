@@ -8,6 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
+/**
+ * Classe qui gère toutes les requêtes en base de données pour la sauvegarde des meilleurs scores
+ */
 class ScoresDatabaseManager extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "highscores";
     private static final String TABLE_NAME = "highscores";
@@ -19,6 +22,11 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
         super(context, DATABASE_NAME+".db", null, DATABASE_VERSION);
     }
 
+    /**
+     * Crée la table qui contiendra le niveau et le meilleur score qui lui est associé
+     * puisqu'il n'y aura jamais plus d'un score par niveau, celui ci sert de clef primaire
+     * @param sqLiteDatabase la base de donnée qui va stocker cette table
+     */
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_NAME + " ("
@@ -28,17 +36,37 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Méthode vide car tant qu'aucune migrattion n'a été nécessaire,
+     * on ne peut pas anticiper la statégie qui sera choisi pour la mise à jour.
+     * Sera probablement remplie par un switchcase sur oldVersion qui fera la migration adapté à chaque mise à jour
+     * @param sqLiteDatabase la base de donnée concernée
+     * @param oldVersion ancienne version de la base
+     * @param newVersion nouvelle version de la base
+     */
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {}
 
+    /**
+     * Supprime tout les highscores
+     */
     private void deleteAll(){
         this.getWritableDatabase().delete(TABLE_NAME, null, null);
     }
 
+    /**
+     * @return un Cursor sur tous les highscores
+     */
     private Cursor selectAll(){
         return this.getReadableDatabase().query(TABLE_NAME, null, null, null, null, null, ID_COLUMN+" DESC");
     }
 
+    /**
+     * Ajoute un nouveau score si aucun n'existait pour ce niveau
+     * ou mets à jour le score du niveau seulement s'il est meilleur
+     * @param lvl le niveau concerné
+     * @param score le dernier score obtenu
+     */
     private void addOrUpdateIfBetter(int lvl, long score){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(TABLE_NAME, null, ID_COLUMN+" = ?", new String[] {String.valueOf(lvl)}, null, null, null);
@@ -66,10 +94,17 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
         db.update(TABLE_NAME, newScore, ID_COLUMN+" = ?", new String[] {String.valueOf(lvl)});
     }
 
+    /**
+     * interface fonctionnelle qui permet de définir ce que fera une AsyncTask après avoir fini son exécution
+     * lors de l'appel de cette AsyncTask et non pas seulement lors de sa déclaration
+     */
     public interface AsyncCursorResponse {
         void processResult(Cursor res);
     }
 
+    /**
+     * Tâche asynchrone qui supprimera tous les highscores
+     */
     private class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -79,6 +114,9 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Tâche asynchrone qui mettra éventuellement à jour une entrée ou en créera une nouvelle
+     */
     private class AddOrUpdateIfBetterAsyncTask extends AsyncTask<Long, Void, Void> {
 
         @Override
@@ -90,6 +128,13 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Tâche asynchrone qui permet de récupérer tout le contenu de la table highscores
+     * Si cette tâche est annulée, le Cursor sera fermé
+     * Sinon se sera la responsabilité de la classe appelante de définir ce qu'elle veut faire avec le Cursor
+     * (par le biais de l'interface fonctionnelle AsyncCursorResponse)
+     * et notament de le fermer
+     */
     private class SelectAllAsyncTask extends AsyncTask<Void, Void, Cursor> {
         private AsyncCursorResponse delegate = null;
 
@@ -121,6 +166,10 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
         new AddOrUpdateIfBetterAsyncTask().execute(((long) lvl), score);
     }
 
+    /**
+     *
+     * @param callback Décrit ce qu'il faut faire une fois le contenu de la table obtenu
+     */
     void executeSelectAll(AsyncCursorResponse callback){
         new SelectAllAsyncTask(callback).execute();
     }

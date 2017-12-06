@@ -11,7 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 /**
- * Toutes les activités souhaitant jouer un son ou/et continuer la musique en background doivent hériter de cette activité
+ * Toutes les activités souhaitant jouer un son et/ou continuer la musique en background doivent hériter de cette activité
  */
 public class MusicActivity extends AppCompatActivity {
     private static MusicService mService;

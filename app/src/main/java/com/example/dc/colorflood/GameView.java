@@ -12,7 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * Vue qui permet d'afficher le jeu
+ * Vue qui permet d'afficher le plateau de jeu
  */
 public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Callback{
     private final SurfaceHolder holder;
@@ -39,9 +39,9 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         while (running)
         {
             try {
+                // Le thread ne doit pas s'endormir si on vient de le démarrer
                 if(!first)
                 {
-                    // Le thread ne doit pas s'endormir si on vient de le démarrer
                     // On est obligé de synchroniser le thread si on veut pouvoir le réveiller et l'endormir
                     synchronized (this)
                     {
@@ -70,7 +70,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     {
         // On est obligé de synchroniser le thread si on veut pouvoir le réveiller et l'endormir
         synchronized (this) {
-            // On notifie le thread de mettre à jour l'affichage
+            // On notifie le thread pour qu'il mette à jour l'affichage
             notify();
         }
     }

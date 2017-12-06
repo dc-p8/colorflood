@@ -6,7 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-
+/**
+ * Layout pour afficher la barre de bouton du jeu
+ */
 public class ButtonBar extends LinearLayout {
     private View.OnClickListener btnCallback;
     private LinearLayout.LayoutParams params;

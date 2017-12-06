@@ -6,6 +6,10 @@ import android.os.Bundle;
 
 import java.util.Random;
 
+/**
+ * Classe qui possède toutes les propritétés d'un niveau
+ * @see LevelOnPlay
+ */
 class Level {
 
     private int nbCasesWidth;

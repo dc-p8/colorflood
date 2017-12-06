@@ -7,13 +7,24 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+/**
+ * Classe qui gère le RecyclerView qui affiche tous les scores
+ * @see RecyclerView
+ */
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> {
     final private Cursor data;
 
+    /**
+     * Représente une cellule du RecyclerView
+     */
     static class ViewHolder extends RecyclerView.ViewHolder {
         final private TextView levelView;
         final private TextView scoreView;
 
+        /**
+         * @param v le LinearLayout qui contient les deux TextView
+         *          qui affiche chacun le niveau et le meilleur temps obtenu sur ce niveau
+         */
         ViewHolder(LinearLayout v) {
             super(v);
             levelView = v.findViewById(R.id.level);
@@ -25,6 +36,12 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
             scoreView.setText(prettifyTime(score.score));
         }
 
+        /**
+         * Permet un de décomposer les secondes en heure(s), minute(s) et secondes
+         * pour un affichage plus esthétique
+         * @param time le temps en secondes
+         * @return un String représentant ces secondes près à l'affichage
+         */
         String prettifyTime(long time){
             long minutes = time / 60;
             final long seconds = time % 60;
@@ -36,6 +53,11 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
         }
     }
 
+    /**
+     * Les données de se RecyclerView sont stockées dans un Cursor
+     * car elle sont récupérée d'une base de donnée
+     * @param scores pointe sur tous les scores stocké en base de donnée
+     */
     ScoreAdapter(Cursor scores) {
         this.data = scores;
     }
@@ -64,6 +86,9 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ViewHolder> 
         return data.getCount();
     }
 
+    /**
+     * classe utilitaire qui permet de stocker un score
+     */
     class Score{
         final int lvl;
         final long score;

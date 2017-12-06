@@ -13,7 +13,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
+/**
+ * Activité qui gère tout le plateau de jeu
+ */
 public class Game extends MusicActivity implements Runnable
 {
     private ButtonBar colorsButtonsLayout;
@@ -37,7 +39,7 @@ public class Game extends MusicActivity implements Runnable
 
     @Override
     public void onBackPressed() {
-        // On ne veut pas que l'utilisateur perde sa progression si il clique accidentellement sur retour
+        // On ne veut pas que l'utilisateur perde sa progression s'il clique accidentellement sur retour
         leaveDialog(this);
     }
 
@@ -61,7 +63,7 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onResume() {
         super.onResume();
-        // On met relance le timer de temps et on met à jour fimerFromResume
+        // On relance le timer de temps et on met à jour timerFromResume
         timerFromResume = java.lang.System.currentTimeMillis();
         thread = new Thread(this);
         thread.start();
@@ -70,10 +72,10 @@ public class Game extends MusicActivity implements Runnable
     @Override
     protected void onPause() {
         super.onPause();
-        // On ajoute au temps total le temps qu'il s'est écoulé entre maintenant et le timer depuis le résume
+        // On ajoute au temps total le temps qu'il s'est écoulé entre maintenant et le timer depuis le resume
         this.timerTotal += (java.lang.System.currentTimeMillis() - timerFromResume);
 
-        // On retire les callbacks car le thread ne sert plus à rien en dehos de l'activité
+        // On retire les callbacks car le thread ne sert plus à rien en dehors de l'activité
         this.timerHandler.removeCallbacks(this);
     }
 
@@ -86,7 +88,7 @@ public class Game extends MusicActivity implements Runnable
         this.gameViewModel = GameViewModel.getInstance();
         this.colorsButtonsLayout = findViewById(R.id.colors);
 
-        // Marge dynamique en dp et placements des bouttons automatique
+        // Marge dynamique en dp et placements des boutons automatique
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -103,7 +105,7 @@ public class Game extends MusicActivity implements Runnable
         this.colorsButtonsLayout.setBtnCallback(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // On récupère le numéro du boutton cliqué
+                // On récupère le numéro du bouton cliqué
                 int pressed = (int)v.getTag(R.id.button_number);
                 if (pressed != lastPressed){
                     makeASound();
@@ -221,7 +223,7 @@ public class Game extends MusicActivity implements Runnable
     /**
      * Initialise les éléments de gameplay en fonction du niveau
      * Principale gestion de la difficulté
-     * @param currentLevel
+     * @param currentLevel niveau actuel
      */
     private void initLevel(int currentLevel){
         int size = 3+currentLevel/7;
