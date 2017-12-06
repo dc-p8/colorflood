@@ -10,6 +10,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+/**
+ * Toutes les activités souhaitant jouer un son ou/et continuer la musique en background doivent hériter de cette activité
+ */
 public class MusicActivity extends AppCompatActivity {
     private static MusicService mService;
 
@@ -24,9 +27,13 @@ public class MusicActivity extends AppCompatActivity {
         Log.d(getClass().getSimpleName(), "CREATE");
     }
 
+    /**
+     * Au démarrage, on bind l'activité au service
+     */
     @Override
     protected void onStart() {
         super.onStart();
+
         Log.d(getClass().getSimpleName(), "START");
         Intent intent = new Intent(this, MusicService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -44,6 +51,9 @@ public class MusicActivity extends AppCompatActivity {
         Log.d(getClass().getSimpleName(), "PAUSE");
     }
 
+    /**
+     * Au stop, on unbind l'activité au service
+     */
     @Override
     protected void onStop() {
         super.onStop();
@@ -62,8 +72,8 @@ public class MusicActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
             MusicService.LocalBinder binder = (MusicService.LocalBinder) service;
+            // On récupère l'instance du service auquel on vient de bind
             mService = binder.getService();
         }
 

@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Joue de la musique tant qu'une activité est bind
+ */
 public class MusicService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private AssetManager assetManager;
@@ -25,8 +28,33 @@ public class MusicService extends Service {
     private Random rnd;
 
     private GameViewModel.InfoMusic mInfoMusic;
-    final private android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer;
+    final private android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer = new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
+        @Override
+        public void onChanged(GameViewModel.InfoMusic infos) {
+            mInfoMusic = infos;
 
+            if(mInfoMusic.mute) {
+                // Si on vient d'appuyer sur mute, on arrête la musique
+                stopMusic();
+                return;
+            }
+
+            if(mInfoMusic.songName == null)
+            {
+                // Si il n'y avait pas de son définit (par exemple au lancement de l'app), on initialise un nouveau son
+                newSong();
+            }
+
+            // On démarre la lecture
+            setMusic();
+
+
+        }
+    };
+
+    /**
+     * Initialise un nouveau son
+     */
     private void newSong()
     {
         mInfoMusic.songTime = 0;
@@ -35,6 +63,10 @@ public class MusicService extends Service {
         else
             mInfoMusic.songName = null;
     }
+
+    /**
+     * Joue la musique en fonction des données
+     */
     private void setMusic()
     {
         if(mInfoMusic.mute)
@@ -49,13 +81,18 @@ public class MusicService extends Service {
                 musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                     @Override
                     public void onCompletion(MediaPlayer mp) {
+                        // Lorsque la musique est finit, on en met une nouvelle
                         newSong();
                         setMusic();
                     }
                 });
             }
             else
+            {
+                // Si on veut jouer un son alors que le player est déjà utilisé, il faut obligatoriement le reset
                 musicPlayer.reset();
+            }
+
 
             AssetFileDescriptor afd = assetManager.openFd("musics/" + mInfoMusic.songName);
             musicPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
@@ -74,6 +111,10 @@ public class MusicService extends Service {
         }
     }
 
+    /**
+     * Retourne le temps d'une musique
+     * @return
+     */
     private int getTime()
     {
         int time = 0;
@@ -82,6 +123,9 @@ public class MusicService extends Service {
         return time;
     }
 
+    /**
+     * Créer un son bref et aléatoire
+     */
     public void meuh()
     {
         if(mInfoMusic.mute)
@@ -92,6 +136,7 @@ public class MusicService extends Service {
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
+                    // Lorsque le son est finit, il faut relacher le média player. Fuite de mémoire sinon
                     mp.release();
                 }
             });
@@ -111,6 +156,7 @@ public class MusicService extends Service {
 
     }
 
+
     private void stopMusic()
     {
         if(musicPlayer != null)
@@ -121,26 +167,6 @@ public class MusicService extends Service {
     }
 
     public MusicService() {
-        this.observer = new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
-            @Override
-            public void onChanged(GameViewModel.InfoMusic infos) {
-                mInfoMusic = infos;
-
-                if(mInfoMusic.mute) {
-                    stopMusic();
-                    return;
-                }
-
-                if(mInfoMusic.songName == null)
-                {
-                    newSong();
-                }
-
-                setMusic();
-
-
-            }
-        };
     }
 
     class LocalBinder extends Binder {
