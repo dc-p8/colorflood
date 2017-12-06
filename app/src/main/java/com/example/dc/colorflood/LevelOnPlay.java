@@ -4,7 +4,6 @@ package com.example.dc.colorflood;
 import android.os.Bundle;
 import android.util.Pair;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -105,6 +104,78 @@ class LevelOnPlay {
      * Retourne la liste des cases connexes de même couleur
      * @return
      */
+
+
+
+    /**
+     * Joue un coup en fonction de la nouvelle newColor
+     * @param newColor
+     */
+    void play(int newColor) {
+        this.updateMoves();
+        int nbCaseColored = 0;
+        LinkedList<Pair<Integer,Integer>> changeFifo = new LinkedList<>();
+        LinkedList<Pair<Integer,Integer>> winFifo = new LinkedList<>();
+        HashSet<Pair<Integer,Integer>> checked = new HashSet<>();
+        Pair<Integer,Integer> currentCase = new Pair<>(0,0);
+        changeFifo.add(currentCase);
+        checked.add(currentCase);
+        int oldColor = this.lvl.getCases()[0][0];
+        while(!changeFifo.isEmpty()){
+            nbCaseColored++;
+            currentCase = changeFifo.poll();
+            this.lvl.setCase(currentCase.first, currentCase.second, newColor);
+            for(int i = -1; i<2; i++){
+                for (int j = -1; j<2 ; j++){
+                    if(Math.abs(i)==Math.abs(j))
+                        continue;
+                    Pair<Integer,Integer> nextCase = new Pair<>(currentCase.first + i, currentCase.second + j);
+                    if (nextCase.first < this.lvl.getNbCasesWidth() && nextCase.first >= 0
+                            && nextCase.second < this.lvl.getNbCasesHeight() && nextCase.second >= 0) {
+                        updateFifo(checked, changeFifo, nextCase, oldColor);
+                        updateFifo(checked, winFifo, nextCase, newColor);
+                    }
+                }
+            }
+        }
+        if (hasWon(nbCaseColored, winFifo, newColor, checked)) {
+            this.win();
+            return;
+        }
+        if (this.hasLost())
+            this.lose();
+    }
+
+
+    private boolean hasWon(int nbCaseColored, LinkedList<Pair<Integer,Integer>> winFifo, int winColor, HashSet<Pair<Integer,Integer>> checked) {
+        while(!winFifo.isEmpty()){
+            nbCaseColored++;
+            Pair<Integer,Integer> currentCase = winFifo.poll();
+            for(int i = -1; i<2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if(Math.abs(i)==Math.abs(j))
+                        continue;
+                    Pair<Integer, Integer> nextCase = new Pair<>(currentCase.first + i, currentCase.second + j);
+                    if (nextCase.first < this.lvl.getNbCasesWidth() && nextCase.first >= 0
+                            && nextCase.second < this.lvl.getNbCasesHeight() && nextCase.second >= 0) {
+                        updateFifo(checked, winFifo, nextCase, winColor);
+                    }
+                }
+            }
+        }
+        return nbCaseColored == this.lvl.getNbCasesHeight() * this.lvl.getNbCasesWidth();
+    }
+
+    private boolean hasLost() {
+        return this.nbMoves == this.lvl.getMaxNbMoves() + this.extraMoves;
+    }
+
+
+
+
+
+    /*
+
     ArrayList<Pair<Integer, Integer>> getGroup()
     {
         ArrayList<Pair<Integer, Integer>> ret = new ArrayList<>(); // groupe à retourner
@@ -135,10 +206,6 @@ class LevelOnPlay {
         return ret;
     }
 
-    /**
-     * Condition de victoire
-     * @return
-     */
     private boolean checkWin()
     {
         int color = this.lvl.getCases()[0][0];
@@ -152,21 +219,12 @@ class LevelOnPlay {
         }
         return true;
     }
-
-    /**
-     * Condition de défaite
-     * @return
-     */
     private boolean checkLost() {
         return this.nbMoves == this.lvl.getMaxNbMoves() + this.extraMoves;
     }
-
-    /**
-     * Joue un coup en fonction de la nouvelle newColor
-     * @param newColor
-     */
     void play(int newColor)
     {
+
         // on commence par actualiser le nombre de coups restant
         this.updateMoves();
 
@@ -188,6 +246,7 @@ class LevelOnPlay {
         }
 
     }
+    */
 
     private void win(){
         this.onLevelEventListener.onWin();
