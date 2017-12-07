@@ -1,6 +1,7 @@
 package com.example.dc.colorflood;
 
 import android.app.Activity;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.widget.ToggleButton;
 
 public class SystemMenu extends MusicActivity {
     private GameViewModel gameViewModel;
+    ToggleButton toggleAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,16 @@ public class SystemMenu extends MusicActivity {
             }
         });
 
-        ToggleButton toggleAudio = findViewById(R.id.toggle_audio);
+        this.toggleAudio = findViewById(R.id.toggle_audio);
 
-        // On initialise le tooglebutton en fonction des données
-        toggleAudio.setChecked(!gameViewModel.getInfosMusic().getValue().mute);
+        // On initialise le togglebutton en fonction des données
+        gameViewModel.getInfosMusic().observe(this, new Observer<GameViewModel.InfoMusic>() {
+            @Override
+            public void onChanged(GameViewModel.InfoMusic infoMusic) {
+                toggleAudio.setChecked(!infoMusic.mute);
+                removeObserver();
+            }
+        });
 
         toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,5 +71,9 @@ public class SystemMenu extends MusicActivity {
                 gameViewModel.inverseMuteMusic();
             }
         });
+    }
+
+    private void removeObserver(){
+        gameViewModel.getInfosMusic().removeObservers(this);
     }
 }
