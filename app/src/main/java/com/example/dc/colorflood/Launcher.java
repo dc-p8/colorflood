@@ -32,20 +32,20 @@ public class Launcher extends MusicActivity{
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(getClass().getSimpleName(), "TEST");
+        Log.d(getClass().getSimpleName(), "ONPAUSE");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        updateStat();
+        Log.d(getClass().getSimpleName(), "ONRESUME");
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Log.d("ONCREATE", "TEST");
+        Log.d(getClass().getSimpleName(),"ONCREATE");
 
         this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
         //this.gameViewModel = new GameViewModel(getApplication());
@@ -85,20 +85,16 @@ public class Launcher extends MusicActivity{
                 startActivity(myIntent);
             }
         });
-    }
 
-    private void updateStat()
-    {
         gameViewModel.getStats().observe(this, new Observer<Pair<Integer, Integer>>() {
             @Override
             public void onChanged(Pair<Integer, Integer> stats) {
                 currentLevel = stats.first;
                 extraTry = stats.second;
+                textExtraTry.setText(getString(R.string.extra_try, extraTry));
+                textCurrentLevel.setText(getString(R.string.actual_lvl, currentLevel));
             }
         });
-
-        textExtraTry.setText(getString(R.string.extra_try, extraTry));
-        textCurrentLevel.setText(getString(R.string.actual_lvl, currentLevel));
     }
 
     @Override
