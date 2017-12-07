@@ -1,6 +1,7 @@
 package com.example.dc.colorflood;
 
 import android.app.Service;
+import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
@@ -28,29 +29,30 @@ public class MusicService extends Service {
     private Random rnd;
 
     private GameViewModel.InfoMusic mInfoMusic;
-    final private android.arch.lifecycle.Observer<GameViewModel.InfoMusic> observer = new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
-        @Override
-        public void onChanged(GameViewModel.InfoMusic infos) {
-            mInfoMusic = infos;
+    final private Observer<GameViewModel.InfoMusic> observer = initObserver();
 
-            if(mInfoMusic.mute) {
-                // Si on vient d'appuyer sur mute, on arrête la musique
-                stopMusic();
-                return;
+    private Observer<GameViewModel.InfoMusic> initObserver(){
+        return new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
+            @Override
+            public void onChanged(GameViewModel.InfoMusic infos) {
+                mInfoMusic = infos;
+
+                if(mInfoMusic.mute) {
+                    // Si on vient d'appuyer sur mute, on arrête la musique
+                    stopMusic();
+                    return;
+                }
+
+                if(mInfoMusic.songName == null) {
+                    // Si il n'y avait pas de son définit (par exemple au lancement de l'app), on initialise un nouveau son
+                    newSong();
+                }
+
+                // On démarre la lecture
+                setMusic();
             }
-
-            if(mInfoMusic.songName == null)
-            {
-                // Si il n'y avait pas de son définit (par exemple au lancement de l'app), on initialise un nouveau son
-                newSong();
-            }
-
-            // On démarre la lecture
-            setMusic();
-
-
-        }
-    };
+        };
+    }
 
     /**
      * Initialise un nouveau son
