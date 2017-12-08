@@ -12,7 +12,7 @@ class MusicDataManager {
     private final SharedPreferences sP;
     private MutableLiveData<InfoMusic> infosMusic;
 
-    public MusicDataManager(Context context) {
+    MusicDataManager(Context context) {
         this.sP = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -44,8 +44,10 @@ class MusicDataManager {
         boolean mute;
         if (this.infosMusic == null) {
             loadInfosMusic();
+            //noinspection ConstantConditions
             mute = !this.infosMusic.getValue().mute;
         } else {
+            //noinspection ConstantConditions
             mute = !this.infosMusic.getValue().mute;
             String songName = this.infosMusic.getValue().songName;
             if(mute)

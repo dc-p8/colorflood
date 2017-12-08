@@ -1,6 +1,7 @@
 package com.example.dc.colorflood;
 
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
@@ -13,10 +14,12 @@ import android.util.Pair;
 /**
  * ViewModel qui gère les données afffichée dans l'UI
  */
+@SuppressWarnings("WeakerAccess")
 public class GameViewModel extends AndroidViewModel {
     private final SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
     private MutableLiveData<Cursor> scores;
+    @SuppressLint("StaticFieldLeak")
     private static GameViewModel instance = null;
     private final ScoresDatabaseManager scoresManager;
 

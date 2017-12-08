@@ -48,16 +48,8 @@ class LevelOnPlay {
         return this.lvl.getCases();
     }
 
-    void setCases(int[][] cases) {
-        this.lvl.setCases(cases);
-    }
-
     int[] getCasesColors() {
         return this.lvl.getCasesColors();
-    }
-
-    void setCasesColors(int[] casesColors) {
-        this.lvl.setCasesColors(casesColors);
     }
 
     int getMaxNbMoves() {

@@ -1,5 +1,6 @@
 package com.example.dc.colorflood;
 
+import android.annotation.SuppressLint;
 import android.arch.lifecycle.LiveData;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,6 +15,7 @@ import android.util.Log;
 /**
  * Toutes les activités souhaitant jouer un son et/ou continuer la musique en background doivent hériter de cette activité
  */
+@SuppressLint("Registered")
 public class MusicActivity extends AppCompatActivity {
     private static MusicService mService;
     final private static ServiceConnection mConnection = initMConnection();

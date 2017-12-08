@@ -37,28 +37,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-            <TextView
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="end|center">
+            <android.widget.TextView
                 android:id="@+id/text_try"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:text=""
-                android:textAlignment="textEnd"
-                android:layout_gravity="end|center"/>
-            <TextView
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <android.widget.TextView
                 android:id="@+id/text_extra"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
                 android:text=""
-                android:textColor="@android:color/holo_red_light" />
-        </LinearLayout>
+                android:textColor="@android:color/holo_red_light"
+                app:layout_constraintLeft_toRightOf="@+id/text_try" />
+        </android.support.constraint.ConstraintLayout>
     </LinearLayout>
 
     <com.example.dc.colorflood.GameView

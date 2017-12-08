@@ -1,11 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Colorflood</string>
     <item name="button_number" type="id">0</item>
-    <string name="app_title"><b><font color="red">C</font><font color="blue">O</font><font color="yellow">L</font><font color="cyan">O</font><font color="green">R</font><font color="green">F</font><font color="cyan">L</font><font color="yellow">O</font><font color="blue">O</font><font color="red">D</font></b></string>
+    <string name="app_title" tools:ignore="UnusedResources"><b><font color="red">C</font><font color="blue">O</font><font color="yellow">L</font><font color="cyan">O</font><font color="green">R</font><font color="green">F</font><font color="cyan">L</font><font color="yellow">O</font><font color="blue">O</font><font color="red">D</font></b></string>
     <string name="dev1_name">Julie Rymer</string>
     <string name="dev2_name">Dorian Cardinal</string>
     <string name="dev_role">Developper</string>
-    <string name="highscore_title">MEILLEURS SCORES</string>
+    <string name="highscore_title">Meilleurs scores</string>
     <string name="highscore_col1">Niveaux</string>
     <string name="highscore_col2">Temps</string>
     <string name="actual_lvl">Niveau actuel : %1$d</string>

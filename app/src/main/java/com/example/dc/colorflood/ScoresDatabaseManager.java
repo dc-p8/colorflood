@@ -1,6 +1,7 @@
 package com.example.dc.colorflood;
 
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -105,6 +106,7 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
     /**
      * Tâche asynchrone qui supprimera tous les highscores
      */
+    @SuppressLint("StaticFieldLeak")
     private class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -117,6 +119,7 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
     /**
      * Tâche asynchrone qui mettra éventuellement à jour une entrée ou en créera une nouvelle
      */
+    @SuppressLint("StaticFieldLeak")
     private class AddOrUpdateIfBetterAsyncTask extends AsyncTask<Long, Void, Void> {
 
         @Override
@@ -135,6 +138,7 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
      * (par le biais de l'interface fonctionnelle AsyncCursorResponse)
      * et notament de le fermer
      */
+    @SuppressLint("StaticFieldLeak")
     private class SelectAllAsyncTask extends AsyncTask<Void, Void, Cursor> {
         private AsyncCursorResponse delegate = null;
 

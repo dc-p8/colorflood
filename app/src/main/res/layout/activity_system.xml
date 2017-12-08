@@ -20,11 +20,11 @@
             android:text="@string/system_leave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        <Button
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/button_reset"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/holo_red_light"
+            app:backgroundTint="@android:color/holo_red_light"
             android:text="@string/system_reset_stats"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -4,6 +4,7 @@
 
     <application
         android:allowBackup="true"
+        android:fullBackupContent="@xml/my_backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,28 +18,28 @@
             android:theme="@style/AppStyle.Game">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <activity android:name=".Credits"
-            android:label="Crédits">
+            android:label="@string/credits">
 
         </activity>
 
         <activity android:name=".SystemMenu"
-            android:label="Système">
+            android:label="@string/system">
         </activity>
 
         <activity android:name=".Highscores"
-            android:label="Hightscores">
+            android:label="@string/highscore_title">
         </activity>
 
         <service
             android:name=".MusicService"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
     </application>
 

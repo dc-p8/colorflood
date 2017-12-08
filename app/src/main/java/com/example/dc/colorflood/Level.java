@@ -51,24 +51,12 @@ class Level {
         return cases;
     }
 
-    void setCases(int[][] cases) {
-        this.cases = cases;
-    }
-
-    void setCases(int x, int[] row) {
-        this.cases[x] = row;
-    }
-
     void setCase(int x, int y, int value) {
         this.cases[x][y] = value;
     }
 
     int[] getCasesColors() {
         return casesColors;
-    }
-
-    void setCasesColors(int[] casesColors) {
-        this.casesColors = casesColors;
     }
 
     int getMaxNbMoves() {
