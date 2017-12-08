@@ -9,10 +9,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 
 /**
- * Classe qui gère toutes les requêtes en base de données pour la sauvegarde des meilleurs scores
+ * Classe qui gère toutes les requêtes en base de données pour la sauvegarde des meilleurs scores de manière asynchrone
  */
 class ScoresDatabaseManager extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "highscores";
+    private static final String DATABASE_NAME = "colorflood";
     private static final String TABLE_NAME = "highscores";
     private static final int DATABASE_VERSION = 1;
     static final String ID_COLUMN = "_id";
