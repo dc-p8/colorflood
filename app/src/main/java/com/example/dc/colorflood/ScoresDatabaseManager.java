@@ -30,7 +30,7 @@ class ScoresDatabaseManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_NAME + " ("
-                +ID_COLUMN+" INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +ID_COLUMN+" INTEGER PRIMARY KEY,"
                 +TIME_TAKEN_COLUMN+" INTEGER NOT NULL"
                 +");"
         );
