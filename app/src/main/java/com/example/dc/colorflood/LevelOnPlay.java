@@ -21,6 +21,7 @@ class LevelOnPlay {
 
     LevelOnPlay(){
         this.lvl = new Level();
+        this.savedLvl = new Level();
     }
 
     void setOnLevelEventListener(OnLevelEventListener eventListener) {

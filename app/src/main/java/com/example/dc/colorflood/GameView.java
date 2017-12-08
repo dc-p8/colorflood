@@ -77,6 +77,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        Log.d(getClass().getSimpleName(), "SurfaceCreated");
     }
 
     @Override
@@ -90,21 +91,20 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
             Log.d(getClass().getSimpleName(), "SurfaceChanged : thread state : " + thread.getState().name());
         }
 
-        this.caseWidth = (float)getWidth() / (float)this.lvl.getNbCasesWidth();
-        this.caseHeight = (float)getHeight() / (float)this.lvl.getNbCasesHeight();
+        this.caseWidth = (float)width / (float)this.lvl.getNbCasesWidth();
+        this.caseHeight = (float)height / (float)this.lvl.getNbCasesHeight();
+
+        running = true;
 
         if(thread == null || thread.getState() == Thread.State.TERMINATED) {
             thread = new Thread(this);
             thread.start();
+        } else {
+            update();
         }
-
-        running = true;
-        update();
     }
 
     void initLevel(int nbCasesWidth, int nbCasesHeight, int nbColors, int maxNbCount){
-        this.caseWidth = (float)getWidth() / (float)nbCasesWidth;
-        this.caseHeight = (float)getHeight() / (float)nbCasesHeight;
         this.lvl.setNbCasesWidth(nbCasesWidth);
         this.lvl.setNbCasesHeight(nbCasesHeight);
         this.lvl.setMaxNbMoves(maxNbCount);
@@ -123,7 +123,7 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
 
         for(int i = 0; i < lvl.getNbCasesHeight(); i++)
         {
-            float y = this.caseHeight * (float)i; // Tout l'affichage se fait en flotant pour éviter les bandes noires
+            float y = this.caseHeight * (float)i; // Tout l'affichage se fait en flottant pour éviter les bandes noires
             for(int j = 0; j < lvl.getNbCasesWidth(); j++)
             {
                 float x = this.caseWidth * (float)j;
@@ -155,14 +155,10 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
     }
 
     void saveState(Bundle state) {
-        state.putFloat("caseWidth", this.caseWidth);
-        state.putFloat("caseHeight", this.caseHeight);
         this.lvl.saveState(state);
     }
 
     void restoreState(Bundle state) {
-        this.caseWidth = state.getFloat("caseWidth");
-        this.caseHeight = state.getFloat("caseHeight");
         this.lvl.restoreState(state);
     }
 }

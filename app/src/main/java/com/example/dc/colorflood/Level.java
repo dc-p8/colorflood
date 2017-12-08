@@ -100,6 +100,7 @@ class Level {
     }
 
     void saveState(Bundle state, String id) {
+        state.putInt(id+"maxNbMoves", this.maxNbMoves);
         state.putInt(id+"nbCasesWidth", this.nbCasesWidth);
         state.putInt(id+"nbCasesHeight", this.nbCasesHeight);
         state.putIntArray(id+"casesColors", this.casesColors);
@@ -109,6 +110,7 @@ class Level {
     }
 
     void restoreState(Bundle state, String id) {
+        this.maxNbMoves = state.getInt(id+"maxNbMoves");
         this.nbCasesWidth = state.getInt(id+"nbCasesWidth");
         this.nbCasesHeight = state.getInt(id+"nbCasesHeight");
         this.casesColors = state.getIntArray(id+"casesColors");
