@@ -9,7 +9,7 @@
     <string name="highscore_col1">Niveaux</string>
     <string name="highscore_col2">Temps</string>
     <string name="actual_lvl">Niveau actuel : %1$d</string>
-    <string name="extra_try">Coups extra : %1$d</string>
+    <string name="extra_try">Coups bonus : %1$d</string>
     <string name="play">Jouer</string>
     <string name="highscore">Meilleurs scores</string>
     <string name="system">Système</string>
