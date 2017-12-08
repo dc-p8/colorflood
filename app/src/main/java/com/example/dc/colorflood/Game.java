@@ -251,6 +251,7 @@ public class Game extends MusicActivity implements Runnable
         this.timerFromResume = savedInstanceState.getLong("timerFromResume");
         this.timerTotal = savedInstanceState.getLong("timerTotal");
         this.textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
+        this.lastPressed = gameView.lvl.getStartingCase();
     }
 
 
