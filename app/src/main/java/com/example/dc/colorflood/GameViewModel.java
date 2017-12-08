@@ -8,7 +8,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.Pair;
 
 /**
@@ -17,7 +16,6 @@ import android.util.Pair;
 public class GameViewModel extends AndroidViewModel {
     private final SharedPreferences sP;
     private MutableLiveData<Pair<Integer, Integer>> stats;
-    private MutableLiveData<InfoMusic> infosMusic;
     private MutableLiveData<Cursor> scores;
     private static GameViewModel instance = null;
     private final ScoresDatabaseManager scoresManager;
@@ -59,62 +57,6 @@ public class GameViewModel extends AndroidViewModel {
                 .putInt("extraTry", extraTry)
                 .putInt("currentLevel", currentLvl)
                 .apply();
-    }
-
-    LiveData<InfoMusic> getInfosMusic(){
-        if (this.infosMusic == null) {
-            loadInfosMusic();
-        }
-        return this.infosMusic;
-    }
-
-    private void loadInfosMusic() {
-        this.infosMusic = new MutableLiveData<>();
-        InfoMusic infos = new InfoMusic(sP.getInt("songTime", -1), sP.getString("songName", null), sP.getBoolean("songMute", false));
-        this.infosMusic.setValue(infos);
-    }
-
-    void updateInfosMusic(int songTime, String songName) {
-        if (this.infosMusic == null)
-            this.infosMusic = new MutableLiveData<>();
-        this.infosMusic.setValue(new InfoMusic(songTime, songName, this.infosMusic.getValue() != null && this.infosMusic.getValue().mute));
-        sP.edit()
-                .putInt("songTime", songTime)
-                .putString("idSong", songName)
-                .apply();
-    }
-
-    void inverseMuteMusic() {
-        Log.e(getClass().getSimpleName(), "inverse");
-        boolean mute;
-        if (this.infosMusic == null) {
-            loadInfosMusic();
-            mute = !this.infosMusic.getValue().mute;
-        } else {
-            mute = !this.infosMusic.getValue().mute;
-            String songName = this.infosMusic.getValue().songName;
-            if(mute)
-                songName = null;
-            this.infosMusic.setValue(new InfoMusic(this.infosMusic.getValue().songTime, songName, mute));
-        }
-        sP.edit()
-                .putBoolean("songMute", mute)
-                .apply();
-    }
-
-    /**
-     * classe utilitaire pour stocker toute info liée à la musique
-     */
-    class InfoMusic{
-        int songTime;
-        String songName;
-        boolean mute = false;
-
-        InfoMusic(int songTime, String songName, boolean mute) {
-            this.songTime = songTime;
-            this.songName = songName;
-            this.mute = mute;
-        }
     }
 
     LiveData<Cursor> getScores(){

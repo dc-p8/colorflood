@@ -19,14 +19,15 @@ public class Launcher extends MusicActivity{
     private TextView textCurrentLevel;
     private int extraTry = 0;
     private int currentLevel = 0;
-    private GameViewModel gameViewModel;
     static private final int EXIT_REQUEST = 1;
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.gameViewModel.updateInfosMusic(0, null);
         Log.d(getClass().getSimpleName(), "ONDESTROY");
+        if (isFinishing()) {
+            this.resetMusic();
+        }
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Launcher extends MusicActivity{
 
         Log.d(getClass().getSimpleName(),"ONCREATE");
 
-        this.gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
+        GameViewModel gameViewModel = ViewModelProviders.of(this).get(GameViewModel.class);
         //this.gameViewModel = new GameViewModel(getApplication());
         setContentView(R.layout.activity_launcher);
 

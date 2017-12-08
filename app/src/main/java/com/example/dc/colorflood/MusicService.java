@@ -1,6 +1,7 @@
 package com.example.dc.colorflood;
 
 import android.app.Service;
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -23,18 +24,20 @@ public class MusicService extends Service {
     private AssetManager assetManager;
     private MediaPlayer musicPlayer = null;
 
-    private GameViewModel gameViewModel;
+    private MusicDataManager musicDataManager;
     private List<String> musics = null;
     private List<String> sounds = null;
     private Random rnd;
 
-    private GameViewModel.InfoMusic mInfoMusic;
-    final private Observer<GameViewModel.InfoMusic> observer = initObserver();
+    private MusicDataManager.InfoMusic mInfoMusic;
+    final private Observer<MusicDataManager.InfoMusic> observer = initObserver();
 
-    private Observer<GameViewModel.InfoMusic> initObserver(){
-        return new android.arch.lifecycle.Observer<GameViewModel.InfoMusic>() {
+    public MusicService() {}
+
+    private Observer<MusicDataManager.InfoMusic> initObserver(){
+        return new android.arch.lifecycle.Observer<MusicDataManager.InfoMusic>() {
             @Override
-            public void onChanged(GameViewModel.InfoMusic infos) {
+            public void onChanged(MusicDataManager.InfoMusic infos) {
                 mInfoMusic = infos;
 
                 if(mInfoMusic.mute) {
@@ -157,7 +160,6 @@ public class MusicService extends Service {
 
     }
 
-
     private void stopMusic()
     {
         if(musicPlayer != null)
@@ -165,9 +167,6 @@ public class MusicService extends Service {
             musicPlayer.release();
             musicPlayer = null;
         }
-    }
-
-    public MusicService() {
     }
 
     class LocalBinder extends Binder {
@@ -195,13 +194,9 @@ public class MusicService extends Service {
             e.printStackTrace();
         }
 
-        gameViewModel = GameViewModel.getInstance();
+        this.musicDataManager = new MusicDataManager(this);
 
-        gameViewModel.getInfosMusic().observeForever(this.observer);
-
-
-
-
+        this.musicDataManager.getInfosMusic().observeForever(this.observer);
     }
 
     @Override
@@ -214,11 +209,23 @@ public class MusicService extends Service {
             musicPlayer.release();
             musicPlayer = null;
         }
-        if(gameViewModel != null)
+        if(this.musicDataManager != null)
         {
             Log.d(getClass().getSimpleName(), "putting : " + time + " " + mInfoMusic.songName);
-            gameViewModel.getInfosMusic().removeObserver(this.observer);
-            gameViewModel.updateInfosMusic(time, mInfoMusic.songName);
+            this.musicDataManager.getInfosMusic().removeObserver(this.observer);
+            this.musicDataManager.updateInfosMusic(time, mInfoMusic.songName);
         }
+    }
+
+    void inverseMute(){
+        this.musicDataManager.inverseMuteMusic();
+    }
+
+    LiveData<MusicDataManager.InfoMusic> getInfosMusic() {
+        return musicDataManager.getInfosMusic();
+    }
+
+    void resetMusic() {
+        musicDataManager.updateInfosMusic(-1, null);
     }
 }

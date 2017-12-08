@@ -13,7 +13,7 @@ import android.widget.ToggleButton;
 
 public class SystemMenu extends MusicActivity {
     private GameViewModel gameViewModel;
-    ToggleButton toggleAudio;
+    private ToggleButton toggleAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,23 +57,23 @@ public class SystemMenu extends MusicActivity {
         this.toggleAudio = findViewById(R.id.toggle_audio);
 
         // On initialise le togglebutton en fonction des données
-        gameViewModel.getInfosMusic().observe(this, new Observer<GameViewModel.InfoMusic>() {
+        this.getInfosMusic().observe(this, new Observer<MusicDataManager.InfoMusic>() {
             @Override
-            public void onChanged(GameViewModel.InfoMusic infoMusic) {
+            public void onChanged(MusicDataManager.InfoMusic infoMusic) {
                 toggleAudio.setChecked(!infoMusic.mute);
                 removeObserver();
             }
         });
 
-        toggleAudio.setOnClickListener(new View.OnClickListener() {
+        this.toggleAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gameViewModel.inverseMuteMusic();
+                inverseMute();
             }
         });
     }
 
     private void removeObserver(){
-        gameViewModel.getInfosMusic().removeObservers(this);
+        this.getInfosMusic().removeObservers(this);
     }
 }

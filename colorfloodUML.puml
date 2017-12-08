@@ -4,9 +4,7 @@ class ButtonBar
 class Credits
 class Game
 class GameView
-class GameViewModel {
-    class InfoMusic
-}
+class GameViewModel
 class Highscores
 class Launcher
 class LauncherAnimView
@@ -15,6 +13,9 @@ class LevelOnPlay {
     interface OnLevelEventListener
 }
 class MusicActivity
+class MusicDataManager {
+  class InfoMusic
+}
 class MusicService {
     class LocalBinder
 }
@@ -41,7 +42,7 @@ GameViewModel --* Launcher
 Level --* LevelOnPlay
 Level --* LevelOnPlay
 MusicService --* MusicActivity
-GameViewModel --* MusicService
+MusicDataManager --* MusicService
 GameViewModel --* SystemMenu
 
 MusicActivity <|-- Credits
