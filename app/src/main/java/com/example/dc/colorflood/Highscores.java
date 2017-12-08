@@ -16,6 +16,13 @@ public class Highscores extends MusicActivity {
     private RecyclerView mRecyclerView;
     private Cursor scores;
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+
+    }
+
     public Highscores() {
         super();
     }
@@ -23,6 +30,7 @@ public class Highscores extends MusicActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         GameViewModel.getInstance().getScores().observe(this, new Observer<Cursor>() {
             @Override
