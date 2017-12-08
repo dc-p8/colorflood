@@ -66,13 +66,17 @@ public class GameView extends SurfaceView implements Runnable, SurfaceHolder.Cal
         }
     }
 
-    public void update()
-    {
+    public void update() {
         // On est obligé de synchroniser le thread si on veut pouvoir le réveiller et l'endormir
         synchronized (this) {
             // On notifie le thread pour qu'il mette à jour l'affichage
             notify();
         }
+    }
+
+    void updateSize() {
+        this.caseWidth = (float)this.getWidth() / (float)this.lvl.getNbCasesWidth();
+        this.caseHeight = (float)this.getHeight() / (float)this.lvl.getNbCasesHeight();
     }
 
     @Override

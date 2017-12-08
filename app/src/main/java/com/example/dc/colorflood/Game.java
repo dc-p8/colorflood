@@ -143,6 +143,8 @@ public class Game extends MusicActivity implements Runnable
                     initLevel(gameView.lvl.getCurrentLevel());
                     lastPressed = gameView.lvl.getStartingCase();
                     textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
+                    gameView.update();
+                    gameView.updateSize();
                 }
             }
         });
@@ -197,7 +199,7 @@ public class Game extends MusicActivity implements Runnable
     private void nextLevel(){
         this.gameViewModel.updateStats(this.gameView.lvl.getCurrentLevel()+1,
                 this.gameView.lvl.getExtraMoves()+(this.gameView.lvl.getMaxNbMoves()-this.gameView.lvl.getNbMoves()));
-        this.startLevel();
+        this.resetTimer();
     }
 
     /**
@@ -206,18 +208,13 @@ public class Game extends MusicActivity implements Runnable
     private void restartLevel(){
         this.gameView.lvl.restart();
         this.lastPressed = this.gameView.lvl.getStartingCase();
-        this.startLevel();
+        this.resetTimer();
+        this.gameView.update();
     }
 
-    /**
-     * Démarre le niveau
-     * reset du timer et mise à jour de l'affichage
-     */
-    private void startLevel(){
-        this.textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
+    private void resetTimer(){
         this.timerTotal = 0;
         this.timerFromResume = java.lang.System.currentTimeMillis();
-        this.gameView.update();
     }
 
     /**
