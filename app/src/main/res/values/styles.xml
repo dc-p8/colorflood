@@ -1,11 +1,17 @@
 <resources>
-    <style name="Title" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+
+    <style name="TitleTheme">
+        <item name="colorControlNormal">#FFFFFF</item>
+    </style>
+
+    <style name="TitleStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">#FFFFFF</item>
 
     </style>
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="titleTextStyle">@style/Title</item>
+        <item name="titleTextStyle">@style/TitleStyle</item>
+        <item name="android:theme">@style/TitleTheme</item>
     </style>
 
 <style name="AppStyle" parent="@style/Theme.AppCompat.Light">
