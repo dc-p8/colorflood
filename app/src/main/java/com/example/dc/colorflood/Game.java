@@ -80,7 +80,7 @@ public class Game extends MusicActivity implements Runnable
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_game);
@@ -139,7 +139,7 @@ public class Game extends MusicActivity implements Runnable
                     textExtraMoves.setText("");
                 else
                     textExtraMoves.setText(getString(R.string.extra_try_prefix, gameView.lvl.getExtraMoves()));
-                if(init) {
+                if(init && savedInstanceState == null) {
                     initLevel(gameView.lvl.getCurrentLevel());
                     lastPressed = gameView.lvl.getStartingCase();
                     textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
@@ -226,9 +226,9 @@ public class Game extends MusicActivity implements Runnable
      * @param currentLevel niveau actuel
      */
     private void initLevel(int currentLevel){
-        int size = 3+currentLevel/7;
-        int nbColors = (3+(currentLevel/15))%15;
-        int maxNbMoves = (size*size*nbColors)/(size+size+nbColors);
+        final int size = 3+currentLevel/7;
+        final int nbColors = (3+(currentLevel/15))%15;
+        final int maxNbMoves = (size*size*nbColors)/(size+size+nbColors);
         this.gameView.initLevel(size, size, nbColors, maxNbMoves);
         if (nbColors != colorsButtonsLayout.getLength()){
             colorsButtonsLayout.initButtons(gameView.lvl.getCasesColors());
@@ -252,6 +252,7 @@ public class Game extends MusicActivity implements Runnable
         this.timerTotal = savedInstanceState.getLong("timerTotal");
         this.textNbMoves.setText(getString(R.string.nb_moves_left, gameView.lvl.getNbMoves(), gameView.lvl.getMaxNbMoves()));
         this.lastPressed = gameView.lvl.getStartingCase();
+        this.colorsButtonsLayout.initButtons(gameView.lvl.getCasesColors());
     }
 
 
