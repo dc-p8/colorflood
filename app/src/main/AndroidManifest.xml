@@ -8,25 +8,38 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".Game" />
-        <activity android:name=".Launcher">
+        android:theme="@style/AppStyle">
+
+        <activity android:name=".Game"
+            android:theme="@style/AppStyle.Game"/>
+
+        <activity android:name=".Launcher"
+            android:theme="@style/AppStyle.Game">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Credits" />
-        <activity android:name=".SystemMenu" />
-        <activity android:name=".Highscores" />
+
+        <activity android:name=".Credits"
+            android:label="Crédits">
+
+        </activity>
+
+        <activity android:name=".SystemMenu"
+            android:label="Système">
+        </activity>
+
+        <activity android:name=".Highscores"
+            android:label="Hightscores">
+        </activity>
 
         <service
             android:name=".MusicService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".MusicActivity"/>
     </application>
 
 </manifest>
